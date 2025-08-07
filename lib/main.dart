@@ -1,8 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+
 import 'screens/login_screen.dart';
+import 'screens/driver_screen.dart';
+import 'screens/customer_screen.dart';
+import 'screens/admin_screen.dart';
+
 import 'controllers/login_screen_controller.dart';
+import 'controllers/driver_screen_controller.dart';
+import 'controllers/customer_screen_controller.dart';
+import 'controllers/admin_screen_controller.dart';
 
 void main() async {
   // await SystemChrome.setPreferredOrientations([
@@ -14,13 +22,18 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // final LoginScreenController loginScreenController = LoginScreenController();
+  final LoginScreenController loginScreenController = LoginScreenController();
+  final DriverScreenController driverScreenController =
+      DriverScreenController();
+  final CustomerScreenController customerScreenController =
+      CustomerScreenController();
+  final AdminScreenController adminScreenController = AdminScreenController();
 
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -37,7 +50,13 @@ class MyApp extends StatelessWidget {
       initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) =>
-            LoginScreen(controller: LoginScreenController())
+            LoginScreen(controller: loginScreenController),
+        DriverScreen.id: (context) =>
+            DriverScreen(controller: driverScreenController),
+        CustomerScreen.id: (context) =>
+            CustomerScreen(controller: customerScreenController),
+        AdminScreen.id: (context) =>
+            AdminScreen(controller: adminScreenController),
       },
     );
   }
