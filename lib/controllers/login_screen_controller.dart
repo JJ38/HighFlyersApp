@@ -17,11 +17,16 @@ class LoginScreenController {
   }
 
 
-  void login(){
+  void login() async {
 
-    print(model.username);
-    print(model.password);
+    final authenticated = await model.login();
 
+    if(!authenticated){
+      print(model.errorMessage);
+      return;
+    }
+
+    print("authenticated");
 
   }
 

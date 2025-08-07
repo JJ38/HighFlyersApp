@@ -1,13 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/login_screen.dart';
 import 'controllers/login_screen_controller.dart';
 
-void main() {
+void main() async{
 
   // await SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp, // Normal Portrait
   // ]);
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(const MyApp());
 }
