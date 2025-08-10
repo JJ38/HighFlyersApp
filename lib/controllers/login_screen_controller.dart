@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:high_flyers_app/models/login_screen_model.dart';
-import 'package:high_flyers_app/screens/admin_screen.dart';
-import 'package:high_flyers_app/screens/customer_screen.dart';
-import 'package:high_flyers_app/screens/driver_screen.dart';
+import 'package:high_flyers_app/models/login_model.dart';
+import 'package:high_flyers_app/screens/admin/admin_screen.dart';
+import 'package:high_flyers_app/screens/customer/customer_screen.dart';
+import 'package:high_flyers_app/screens/driver/driver_screen.dart';
 
 class LoginScreenController {
   final model = LoginScreenModel();

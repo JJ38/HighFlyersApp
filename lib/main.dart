@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
+
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/login_screen.dart';
-import 'screens/driver_screen.dart';
-import 'screens/customer_screen.dart';
-import 'screens/admin_screen.dart';
+import 'screens/driver/driver_screen.dart';
+import 'screens/customer/customer_screen.dart';
+import 'screens/admin/admin_screen.dart';
 
 import 'controllers/login_screen_controller.dart';
 import 'controllers/driver_screen_controller.dart';
@@ -26,6 +27,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  //Look into refactoring before release. Wasteful to initialise unnecessarily. Just do it in the constructor DriverScreen(controller: DriverScreenController())
+
   final LoginScreenController loginScreenController = LoginScreenController();
   final DriverScreenController driverScreenController =
       DriverScreenController();
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
       title: 'High Flyers App',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple, secondary: Color(0xFF2881FF)),
+              seedColor: Colors.white, secondary: Color(0xFF2881FF)),
           useMaterial3: true,
           textTheme: TextTheme(
               titleLarge:
