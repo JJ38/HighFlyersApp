@@ -26,48 +26,52 @@ class _LoginScreenState extends State<LoginScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        body: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/images/pigeon.png",
-                scale: screenWidth * 0.015,
-              ),
-              SizedBox(
-                width: screenWidth * 0.05,
-              ),
-              Text(
-                "High Flyers",
-                style: Theme.of(context).textTheme.titleLarge,
-              )
-            ],
-          ),
-          SizedBox(height: 50),
-          Column(
-            spacing: 20,
-            children: [
-              InputPill(
-                text: "Username",
-                onChange: widget.controller.usernameInputController,
-              ),
-              InputPill(
-                  text: "Password",
-                  obscureText: true,
-                  onChange: widget.controller.passwordInputController),
-              ButtonPill(
-                  text: "Login",
-                  buttonColor: Theme.of(context).colorScheme.secondary,
-                  action: () {
-                    setState(() {
-                      widget.controller.login(context);
-                    });
-                  })
-            ],
-          )
-        ])));
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/pigeon.png",
+                  scale: screenWidth * 0.015,
+                ),
+                SizedBox(
+                  width: screenWidth * 0.05,
+                ),
+                Text(
+                  "High Flyers",
+                  style: Theme.of(context).textTheme.titleLarge,
+                )
+              ],
+            ),
+            SizedBox(height: 50),
+            Column(
+              spacing: 20,
+              children: [
+                InputPill(
+                  text: "Username",
+                  onChange: widget.controller.usernameInputController,
+                ),
+                InputPill(
+                    text: "Password",
+                    obscureText: true,
+                    onChange: widget.controller.passwordInputController),
+                ButtonPill(
+                    text: "Login",
+                    buttonColor: Theme.of(context).colorScheme.secondary,
+                    action: () {
+                      setState(() {
+                        widget.controller.login(context);
+                      });
+                    })
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -9,7 +9,7 @@ import 'screens/customer/customer_screen.dart';
 import 'screens/admin/admin_screen.dart';
 
 import 'controllers/login_screen_controller.dart';
-import 'controllers/driver_screen_controller.dart';
+import 'controllers/driver_home_screen_controller.dart';
 import 'controllers/customer_screen_controller.dart';
 import 'controllers/admin_screen_controller.dart';
 
@@ -30,8 +30,6 @@ class MyApp extends StatelessWidget {
   //Look into refactoring before release. Wasteful to initialise unnecessarily. Just do it in the constructor DriverScreen(controller: DriverScreenController())
 
   final LoginScreenController loginScreenController = LoginScreenController();
-  final DriverScreenController driverScreenController =
-      DriverScreenController();
   final CustomerScreenController customerScreenController =
       CustomerScreenController();
   final AdminScreenController adminScreenController = AdminScreenController();
@@ -54,8 +52,7 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginScreen.id: (context) =>
             LoginScreen(controller: loginScreenController),
-        DriverScreen.id: (context) =>
-            DriverScreen(controller: driverScreenController),
+        DriverScreen.id: (context) => DriverScreen(),
         CustomerScreen.id: (context) =>
             CustomerScreen(controller: customerScreenController),
         AdminScreen.id: (context) =>
