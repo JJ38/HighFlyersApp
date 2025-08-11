@@ -10,34 +10,39 @@ class DriverModel {
   String? nextStop;
   String? runName;
   int? stopRemaining;
-  DocumentReference<Map<String, dynamic>>? driverDoc;
+  DocumentSnapshot<Map<String, dynamic>>? driverDoc;
 
   DriverModel();
 
-  bool initialiseDriver() {
+  Future<bool> initialiseDriver() async {
     if (FirebaseAuth.instance.currentUser == null) {
       return false;
     }
 
-    fetchDriverDoc();
+    final successful = await fetchDriverDoc();
+
+    if(!successful){
+      return false;
+    } 
 
     return true;
   }
 
-  bool fetchDriverDoc() {
-    final currentUser = FirebaseAuth.instance.currentUser;
+  Future<bool> fetchDriverDoc() async {
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    driverDoc = FirebaseFirestore.instanceFor(
+    DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(
             app: Firebase.app(), databaseId: "development")
         .collection('Drivers')
         .doc(uid);
 
-    if (currentUser != null) {
+    try{
+      driverDoc = await driverDocRef.get();
+    }catch(e){
       return false;
     }
 
-    return false;
+    return true;
   }
 
   Stream<QuerySnapshot> getDriverRunsQuerySnapshot() {

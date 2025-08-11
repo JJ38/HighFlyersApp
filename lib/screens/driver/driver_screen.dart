@@ -5,6 +5,7 @@ import 'package:high_flyers_app/screens/driver/driver_settings_screen.dart';
 class DriverScreen extends StatefulWidget {
   static String id = 'Driver Screen';
 
+
   const DriverScreen({super.key});
 
   @override
@@ -15,11 +16,6 @@ class _DriverScreenState extends State<DriverScreen> {
   var currentPageIndex = 0;
 
   List<Widget> screens = [DriverHomeScreen(), DriverSettingsScreen()];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

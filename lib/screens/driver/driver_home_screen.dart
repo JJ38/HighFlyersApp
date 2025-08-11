@@ -13,6 +13,23 @@ class DriverHomeScreen extends StatefulWidget {
 
 class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
+  bool initialisedDriver = false;
+
+  @override
+  void initState(){ 
+    super.initState();
+    initialiseDriver();
+    
+  }
+
+  void initialiseDriver() async{
+    initialisedDriver = await widget.controller.model.initialiseDriver();
+
+    setState(() {
+      initialisedDriver;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +37,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Padding(
+      body: initialisedDriver ? Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: screenWidth * 0.05), 
         child: SafeArea(
           child: 
@@ -63,7 +80,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             ]
           ),
         ),
-      )
+      ) : Text("Inititalising driver")
     );
   }
 }
