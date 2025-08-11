@@ -41,7 +41,6 @@ class DriverModel {
   }
 
   Stream<QuerySnapshot> getDriverRunsQuerySnapshot() {
-    print(FirebaseAuth.instance.currentUser!.uid);
 
     final Stream<QuerySnapshot> stream = FirebaseFirestore.instanceFor(
             app: Firebase.app(), databaseId: "development")

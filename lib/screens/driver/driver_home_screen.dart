@@ -12,38 +12,58 @@ class DriverHomeScreen extends StatefulWidget {
 }
 
 class _DriverHomeScreenState extends State<DriverHomeScreen> {
+
+
   @override
   Widget build(BuildContext context) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-        body: StreamBuilder<QuerySnapshot>(
-      stream: widget.controller.model.getDriverRunsQuerySnapshot(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return const Text('Something went wrong');
-        }
+      body: Padding(
+        padding: EdgeInsetsGeometry.symmetric(horizontal: screenWidth * 0.05), 
+        child: SafeArea(
+          child: 
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Your Runs", style: Theme.of(context).textTheme.titleLarge),
+              StreamBuilder<QuerySnapshot>(
+                stream: widget.controller.model.getDriverRunsQuerySnapshot(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return const Text('Something went wrong');
+                  }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading");
-        }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Text("Loading");
+                  }
 
-        return ListView(
-          children: snapshot.data!.docs
-              .map((DocumentSnapshot document) {
-                Map<String, dynamic> data =
-                    document.data()! as Map<String, dynamic>;
+                  return ListView( 
+                    shrinkWrap: true,
+                    children: snapshot.data!.docs
+                        .map((DocumentSnapshot document) {
+                          Map<String, dynamic> data =
+                              document.data()! as Map<String, dynamic>;
 
-                final runName = data['runName'].toString();
-                final runWeek = data['runWeek'].toString();
+                          final runName = data['runName'].toString();
+                          final runWeek = data['runWeek'].toString();
 
-                return ListTile(
-                  title: Text(runName),
-                  subtitle: Text(runWeek),
-                );
-              })
-              .toList()
-              .cast(),
-        );
-      },
-    ));
+                          return ListTile(
+                            title: Text(runName),
+                            subtitle: Text("Week $runWeek"),
+                            onTap: () { widget.controller.onRunTileTap(document, context); } ,
+                          );
+                        })
+                        .toList()
+                        .cast(),
+                    );
+                },
+              ),
+            ]
+          ),
+        ),
+      )
+    );
   }
 }

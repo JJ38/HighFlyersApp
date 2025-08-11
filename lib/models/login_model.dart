@@ -25,8 +25,6 @@ class LoginScreenModel {
       final jwt = await user.getIdTokenResult();
       role = jwt.claims?['role'];
 
-      print(role);
-
       if (role == null) {
         return false;
       }

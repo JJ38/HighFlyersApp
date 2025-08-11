@@ -31,6 +31,5 @@ class LoginScreenController {
       Navigator.pushNamed(context, AdminScreen.id);
     }
 
-    print("authenticated");
   }
 }

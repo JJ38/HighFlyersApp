@@ -8,8 +8,6 @@ class CustomerScreen extends StatefulWidget {
 
   final CustomerScreenController controller;
 
-  // final LoginScreenController controller;
-
   const CustomerScreen({super.key, required this.controller});
 
   //declare model here
