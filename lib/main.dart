@@ -45,10 +45,10 @@ class MyApp extends StatelessWidget {
             seedColor: Colors.white, secondary: Color(0xFF2881FF)),
         useMaterial3: true,
         textTheme: TextTheme(
-            titleLarge:
-                const TextStyle(fontSize: 40, fontWeight: FontWeight.w900, overflow: TextOverflow.ellipsis),
-            titleSmall:
-                const TextStyle(fontSize: 40, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis),
+            titleLarge: const TextStyle(fontSize: 40, fontWeight: FontWeight.w900, overflow: TextOverflow.ellipsis),
+            titleSmall: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, overflow: TextOverflow.ellipsis),
+            labelLarge: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF2881FF), overflow: TextOverflow.ellipsis),
+            labelMedium: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color.fromARGB(255, 77, 77, 77), overflow: TextOverflow.ellipsis),
             labelSmall: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Color.fromARGB(255, 77, 77, 77), overflow: TextOverflow.ellipsis),
         ),
       ),

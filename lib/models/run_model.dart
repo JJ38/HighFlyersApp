@@ -131,6 +131,7 @@ class RunModel {
 
     stopData['animalType'] = order['animalType'];
     stopData['quantity'] = order['quantity'];
+    stopData['ID'] = order['ID'];
 
     if(stopType == "collection"){
 

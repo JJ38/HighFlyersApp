@@ -120,29 +120,44 @@ class _RunScreenState extends State<RunScreen> {
                         borderRadius: BorderRadius.circular(50.0), // Uniform radius
                       ),
                       // color: Colors.white,
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        controller: scrollController,
-                        child: Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(50.0), // Uniform radius
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children:[
+                          Expanded(
+                            flex: 0,
+                            child: SingleChildScrollView(
+                              physics: const ClampingScrollPhysics(),                             
+                              controller: scrollController,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(50.0), // Uniform radius
+                                    ),
+                                    child: SizedBox(
+                                      height: 3,
+                                      width: 100,
+                                    ),
+                                  ),
+                                  Text(run["runName"], style: Theme.of(context).textTheme.titleLarge),
+                                ],
                               ),
-                              child: SizedBox(
-                                height: 3,
-                                width: 100,
-                              ),
-                            ),
-                            Text(run["runName"], style: Theme.of(context).textTheme.titleLarge),
-                            Column(
-                              spacing: 10,
-                              children: getStopCards()
-                            ),
-                          ]
-                        )
+                            )                           
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: SingleChildScrollView(                             
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              controller: scrollController,
+                              child: Column(
+                                spacing: 20,
+                                children: getStopCards(),
+                              )                                
+                            )                         
+                          )
+                        ]
                       )
                   );
                 }
@@ -153,3 +168,23 @@ class _RunScreenState extends State<RunScreen> {
       );
   }
 }
+
+// ToggleButtons(
+//                 direction: vertical ? Axis.vertical : Axis.horizontal,
+//                 onPressed: (int index) {
+//                   setState(() {
+//                     // The button that is tapped is set to true, and the others to false.
+//                     for (int i = 0; i < _selectedFruits.length; i++) {
+//                       _selectedFruits[i] = i == index;
+//                     }
+//                   });
+//                 },
+//                 borderRadius: const BorderRadius.all(Radius.circular(8)),
+//                 selectedBorderColor: Colors.red[700],
+//                 selectedColor: Colors.white,
+//                 fillColor: Colors.red[200],
+//                 color: Colors.red[400],
+//                 constraints: const BoxConstraints(minHeight: 40.0, minWidth: 80.0),
+//                 isSelected: _selectedFruits,
+//                 children: fruits,
+//               ),
