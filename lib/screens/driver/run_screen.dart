@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/controllers/run_screen_controller.dart';
@@ -23,12 +22,12 @@ class RunScreen extends StatefulWidget {
 class _RunScreenState extends State<RunScreen> {
 
   late Map<String, dynamic> run;
-  List<StopCard> stopCards = [];
   bool error = false;
   bool loaded = false;
 
   @override
   void initState(){
+
     super.initState();
     run = widget.runDocument.data()! as Map<String, dynamic>;
 
@@ -68,6 +67,9 @@ class _RunScreenState extends State<RunScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("running build");
+    Key _scaffoldKey = UniqueKey();
+
 
     final Completer<GoogleMapController> controller =
         Completer<GoogleMapController>();
@@ -75,27 +77,21 @@ class _RunScreenState extends State<RunScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    List<StopCard> getStopCards(){
-
-      List<StopCard> stopCards = [];
-
-      print(run['stops']);
-
-      run['stops'].forEach((stop) {
-        stopCards.add(StopCard(stop: stop, width: screenWidth));
+    void _rebuildScreen() {
+      setState(() {
+        // By creating a new UniqueKey, we are telling Flutter that the
+        // Scaffold widget is no longer the same widget.
+        _scaffoldKey = UniqueKey();
       });
-
-      return stopCards;
-
     }
-  
 
     return Scaffold(
+      key: _scaffoldKey,
       body: loaded ? error ? Center(child: Text("Error Loading Run")) :
         Stack(
           children: [
             SizedBox(
-              height: screenHeight* 0.9,
+              height: screenHeight * 0.9,
               width: screenWidth,
               child: GoogleMap(
                 mapType: MapType.terrain,
@@ -146,6 +142,27 @@ class _RunScreenState extends State<RunScreen> {
                               ),
                             )                           
                           ),
+                          ToggleButtons(
+                            direction: Axis.horizontal,
+                            onPressed:(int index) {  
+                              widget.controller.toggleRunViewButtonsController(index); 
+                              setState(() {
+                                widget.controller.selectedToggleView;
+                              }); 
+                            },
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            selectedBorderColor: Colors.blue[900],
+                            selectedColor: Colors.white,
+                            fillColor: Color(0xFF2881FF),
+                            color: const Color.fromARGB(255, 0, 0, 0),
+                            constraints: BoxConstraints(minHeight: 40.0, minWidth: (screenWidth * 0.8) / widget.controller.selectedToggleView.length) ,
+                            isSelected: widget.controller.selectedToggleView,
+                            children: [
+                              Text('Assigned'),
+                              Text('Pending'),
+                              Text('Completed'),
+                            ],
+                          ),
                           Expanded(
                             flex: 1,
                             child: SingleChildScrollView(                             
@@ -153,7 +170,7 @@ class _RunScreenState extends State<RunScreen> {
                               controller: scrollController,
                               child: Column(
                                 spacing: 20,
-                                children: getStopCards(),
+                                children: widget.controller.getStopCards(screenWidth),
                               )                                
                             )                         
                           )

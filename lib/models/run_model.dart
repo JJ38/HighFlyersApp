@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, DocumentSnapshot;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 
 class RunModel {
 
   Map<String, dynamic>? run; 
   dynamic orders;
+  Key scaffoldKey = UniqueKey();
 
 
-  RunModel();
+  RunModel(){print("init model");}
 
   void setRun(run){
     this.run = run;

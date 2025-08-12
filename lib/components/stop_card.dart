@@ -32,13 +32,13 @@ class StopCard extends StatelessWidget {
           Row(
             spacing: 20,
             children: [
-              Text(stop['stopNumber'].toString(), style: Theme.of(context).textTheme.labelLarge, selectionColor: Color(0xFF2881FF),),
+              Text(stop['stopNumber'].toString(), style: Theme.of(context).textTheme.labelLarge, selectionColor: Color(0xFF2881FF)),
               //give the width of the row to the columnn to make sure it doenst overflow and text overflow works
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(stop['stopData']['address1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 1,),
+                    Text(stop['stopData']['address1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 1),
                     Row(
                       children: [
                         Text(stop['stopData']['address2'].trim() + ", ", style: Theme.of(context).textTheme.labelSmall),
