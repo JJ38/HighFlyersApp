@@ -10,15 +10,36 @@ class StopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.hardEdge,
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       width: width,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(color: Color.fromARGB(64, 0, 0, 0), blurRadius: 10, spreadRadius: -4)
         ]
       ),
-      child: Text("enadoaw")
+      child: Row(
+        children: [
+          //give the width of the row to the columnn to make sure it doenst overflow and text overflow works
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(stop['stopData']['address1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 1,),
+                Row(
+                  children: [
+                    Text(stop['stopData']['address2'].trim() + ", ", style: Theme.of(context).textTheme.labelSmall),
+                    Text(stop['stopData']['address3'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                  ],
+                ),
+                Text(stop['stopData']['postcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+              ]
+            )
+          )
+        ],
+      )
     );
   }
 }

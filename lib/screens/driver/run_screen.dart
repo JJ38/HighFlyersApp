@@ -22,24 +22,40 @@ class RunScreen extends StatefulWidget {
 
 class _RunScreenState extends State<RunScreen> {
 
-  dynamic runData;
-  dynamic stopData = false;
+  late Map<String, dynamic> run;
   List<StopCard> stopCards = [];
+  bool error = false;
+  bool loaded = false;
 
   @override
   void initState(){
     super.initState();
-    runData = widget.runDocument.data()! as Map<String, dynamic>;
-    fetchStopsForRun();
+    run = widget.runDocument.data()! as Map<String, dynamic>;
+
+    if(run.isEmpty){
+      return;
+    }
+
+    widget.controller.model.setRun(run);
+    getStopsForRun();
 
   }
 
-  void fetchStopsForRun() async {
+  void getStopsForRun() async {
 
-    stopData = await widget.controller.model.fetchStopsForRun(runData);
+    final successful = await widget.controller.model.getStopsForRun();
+
+    if(!successful){
+      setState(() {
+        error = true;
+        loaded = true;
+      });
+      return;
+    }
 
     setState(() {
-      stopData;
+      run['stops'];
+      loaded = true;
     });
   }
 
@@ -58,76 +74,82 @@ class _RunScreenState extends State<RunScreen> {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    List<StopCard> getStopCards(){
+
+      List<StopCard> stopCards = [];
+
+      print(run['stops']);
+
+      run['stops'].forEach((stop) {
+        stopCards.add(StopCard(stop: stop, width: screenWidth));
+      });
+
+      return stopCards;
+
+    }
   
 
     return Scaffold(
-      body: stopData? Stack(
-        children: [
-          SizedBox(
-            height: screenHeight* 0.9,
-            width: screenWidth,
-            child: GoogleMap(
-              mapType: MapType.terrain,
-              initialCameraPosition: _kGooglePlex,
-              onMapCreated: (GoogleMapController mapController) {
-                controller.complete(mapController);
-              },
+      body: loaded ? error ? Center(child: Text("Error Loading Run")) :
+        Stack(
+          children: [
+            SizedBox(
+              height: screenHeight* 0.9,
+              width: screenWidth,
+              child: GoogleMap(
+                mapType: MapType.terrain,
+                initialCameraPosition: _kGooglePlex,
+                onMapCreated: (GoogleMapController mapController) {
+                  controller.complete(mapController);
+                },
+              ),
             ),
-          ),
-          SafeArea(
-            child: DraggableScrollableSheet(
-              builder: (controller, scrollController) {
-                return 
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
+            SafeArea(
+              child: DraggableScrollableSheet(
+                builder: (controller, scrollController) {
+                  return 
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
                         color: Colors.white,
-                        width: 1,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(50.0), // Uniform radius
                       ),
-                      borderRadius: BorderRadius.circular(50.0), // Uniform radius
-                    ),
-                    // color: Colors.white,
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      controller: scrollController,
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(50.0), // Uniform radius
+                      // color: Colors.white,
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        controller: scrollController,
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(50.0), // Uniform radius
+                              ),
+                              child: SizedBox(
+                                height: 3,
+                                width: 100,
+                              ),
                             ),
-                            child: SizedBox(
-                              height: 3,
-                              width: 100,
+                            Text(run["runName"], style: Theme.of(context).textTheme.titleLarge),
+                            Column(
+                              spacing: 10,
+                              children: getStopCards()
                             ),
-                          ),
-                          Text(runData["runName"], style: Theme.of(context).textTheme.titleLarge),
-                          Column(
-                          spacing: 10,
-                            children: [
-                              StopCard(stop: "daohdawd", width: screenWidth),
-                              Text("stop name"),
-                              Text("stop name"),
-                              Text("stop name"),
-                              Text("stop name"),
-                            ],
-                          ),
-                          
-                        ]
+                          ]
+                        )
                       )
-                        
-                      
-                    )
-                  
-                );
-              }
+                  );
+                }
+              )
             )
-          )
-        ]
-      ) : Center(child: Text("Error loading run"))
-    );
+          ]
+        ) : Center(child: Text("Loading"))
+      );
   }
 }

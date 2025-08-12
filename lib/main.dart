@@ -41,12 +41,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'High Flyers App',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.white, secondary: Color(0xFF2881FF)),
-          useMaterial3: true,
-          textTheme: TextTheme(
-              titleLarge:
-                  const TextStyle(fontSize: 40, fontWeight: FontWeight.bold))),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.white, secondary: Color(0xFF2881FF)),
+        useMaterial3: true,
+        textTheme: TextTheme(
+            titleLarge:
+                const TextStyle(fontSize: 40, fontWeight: FontWeight.w900, overflow: TextOverflow.ellipsis),
+            titleSmall:
+                const TextStyle(fontSize: 40, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis),
+            labelSmall: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Color.fromARGB(255, 77, 77, 77), overflow: TextOverflow.ellipsis),
+        ),
+      ),
       initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) =>
