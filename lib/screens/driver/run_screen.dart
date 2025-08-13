@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:core';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:high_flyers_app/components/assigned_stops.dart';
+import 'package:high_flyers_app/components/completed_stops.dart';
+import 'package:high_flyers_app/components/pending_stops.dart';
 import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/controllers/run_screen_controller.dart';
 
@@ -21,6 +24,7 @@ class _RunScreenState extends State<RunScreen> {
 
   late RunScreenController runScreenController;
   late Map<String, dynamic> run;
+  late List<Widget> runInfoView;
   bool error = false;
   bool loaded = false;
 
@@ -37,23 +41,11 @@ class _RunScreenState extends State<RunScreen> {
       return;
     }
 
+    runInfoView = [AssignedStops(run: run), PendingStops(), CompletedStops()];
     runScreenController.model.setRun(run);
     getStopsForRun();
 
   }
-
-  // //see if can refactor to make this not necessary
-  // @override
-  // void didUpdateWidget(covariant RunScreen oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-
-  //   // Check if the controller instance has changed
-  //   if (widget.controller != oldWidget.controller) {
-  //     // Re-initialize your controller-dependent logic here
-  //     widget.controller.model.setRun(run);
-  //     getStopsForRun();
-  //   }
-  // }
 
   void getStopsForRun() async {
 
@@ -166,19 +158,7 @@ class _RunScreenState extends State<RunScreen> {
                               Text('Completed'),
                             ],
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: ListView.builder(
-                              padding: const EdgeInsets.all(8),
-                              itemCount: runScreenController.model.run!['stops'].length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return StopCard(
-                                  stop: runScreenController.model.run!['stops'][index],
-                                  width: screenWidth,
-                                );
-                              }
-                            )                       
-                          )
+                          runInfoView[runScreenController.currentSelectedIndex]
                         ]
                       )
                   );
