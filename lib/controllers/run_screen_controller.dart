@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/models/run_model.dart';
 
 class RunScreenController {
@@ -17,20 +15,5 @@ class RunScreenController {
     }
     
   }
-
-  List<StopCard> getStopCards(screenWidth){
-
-      List<StopCard> stopCards = [];
-      if(model.run == null){
-        return stopCards;
-      }
-
-      model.run!['stops'].forEach((stop) {
-        stopCards.add(StopCard(stop: stop, width: screenWidth));
-      });
-
-      return stopCards;
-
-    }
 
 }

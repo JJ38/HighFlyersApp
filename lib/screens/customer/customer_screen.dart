@@ -6,9 +6,8 @@ import 'package:high_flyers_app/screens/customer/customer_profile_screen.dart';
 class CustomerScreen extends StatefulWidget {
   static String id = "Customer Screen";
 
-  final CustomerScreenController controller;
 
-  const CustomerScreen({super.key, required this.controller});
+  const CustomerScreen({super.key});
 
   //declare model here
 
@@ -17,9 +16,18 @@ class CustomerScreen extends StatefulWidget {
 }
 
 class _CustomerScreenState extends State<CustomerScreen> {
+
+  late CustomerScreenController customerScreenController;
+
   var currentPageIndex = 0;
 
   List<Widget> screens = [CustomerOrderScreen(), CustomerProfileScreen()];
+
+  @override
+  void initState() {
+    super.initState();
+    customerScreenController = CustomerScreenController();
+  }
 
   @override
   Widget build(BuildContext context) {

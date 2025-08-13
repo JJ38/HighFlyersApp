@@ -9,11 +9,9 @@ class RunScreen extends StatefulWidget {
 
   static String id = "Run Screen";
 
-  final RunScreenController controller = RunScreenController();
-
   final dynamic runDocument;
 
-  RunScreen({super.key, required this.runDocument});
+  const RunScreen({super.key, required this.runDocument});
 
   @override
   State<RunScreen> createState() => _RunScreenState();
@@ -21,6 +19,7 @@ class RunScreen extends StatefulWidget {
 
 class _RunScreenState extends State<RunScreen> {
 
+  late RunScreenController runScreenController;
   late Map<String, dynamic> run;
   bool error = false;
   bool loaded = false;
@@ -29,20 +28,36 @@ class _RunScreenState extends State<RunScreen> {
   void initState(){
 
     super.initState();
+
+    runScreenController = RunScreenController();
+
     run = widget.runDocument.data()! as Map<String, dynamic>;
 
     if(run.isEmpty){
       return;
     }
 
-    widget.controller.model.setRun(run);
+    runScreenController.model.setRun(run);
     getStopsForRun();
 
   }
 
+  // //see if can refactor to make this not necessary
+  // @override
+  // void didUpdateWidget(covariant RunScreen oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+
+  //   // Check if the controller instance has changed
+  //   if (widget.controller != oldWidget.controller) {
+  //     // Re-initialize your controller-dependent logic here
+  //     widget.controller.model.setRun(run);
+  //     getStopsForRun();
+  //   }
+  // }
+
   void getStopsForRun() async {
 
-    final successful = await widget.controller.model.getStopsForRun();
+    final successful = await runScreenController.model.getStopsForRun();
 
     if(!successful){
       setState(() {
@@ -67,26 +82,14 @@ class _RunScreenState extends State<RunScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("running build");
-    Key _scaffoldKey = UniqueKey();
-
-
-    final Completer<GoogleMapController> controller =
+   print("run screen build");
+    final Completer<GoogleMapController> gmcontroller =
         Completer<GoogleMapController>();
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    void _rebuildScreen() {
-      setState(() {
-        // By creating a new UniqueKey, we are telling Flutter that the
-        // Scaffold widget is no longer the same widget.
-        _scaffoldKey = UniqueKey();
-      });
-    }
-
     return Scaffold(
-      key: _scaffoldKey,
       body: loaded ? error ? Center(child: Text("Error Loading Run")) :
         Stack(
           children: [
@@ -97,7 +100,7 @@ class _RunScreenState extends State<RunScreen> {
                 mapType: MapType.terrain,
                 initialCameraPosition: _kGooglePlex,
                 onMapCreated: (GoogleMapController mapController) {
-                  controller.complete(mapController);
+                  gmcontroller.complete(mapController);
                 },
               ),
             ),
@@ -145,9 +148,9 @@ class _RunScreenState extends State<RunScreen> {
                           ToggleButtons(
                             direction: Axis.horizontal,
                             onPressed:(int index) {  
-                              widget.controller.toggleRunViewButtonsController(index); 
+                              runScreenController.toggleRunViewButtonsController(index); 
                               setState(() {
-                                widget.controller.selectedToggleView;
+                                runScreenController.selectedToggleView;
                               }); 
                             },
                             borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -155,8 +158,8 @@ class _RunScreenState extends State<RunScreen> {
                             selectedColor: Colors.white,
                             fillColor: Color(0xFF2881FF),
                             color: const Color.fromARGB(255, 0, 0, 0),
-                            constraints: BoxConstraints(minHeight: 40.0, minWidth: (screenWidth * 0.8) / widget.controller.selectedToggleView.length) ,
-                            isSelected: widget.controller.selectedToggleView,
+                            constraints: BoxConstraints(minHeight: 40.0, minWidth: (screenWidth * 0.8) / runScreenController.selectedToggleView.length) ,
+                            isSelected: runScreenController.selectedToggleView,
                             children: [
                               Text('Assigned'),
                               Text('Pending'),
@@ -165,14 +168,16 @@ class _RunScreenState extends State<RunScreen> {
                           ),
                           Expanded(
                             flex: 1,
-                            child: SingleChildScrollView(                             
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              controller: scrollController,
-                              child: Column(
-                                spacing: 20,
-                                children: widget.controller.getStopCards(screenWidth),
-                              )                                
-                            )                         
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(8),
+                              itemCount: runScreenController.model.run!['stops'].length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return StopCard(
+                                  stop: runScreenController.model.run!['stops'][index],
+                                  width: screenWidth,
+                                );
+                              }
+                            )                       
                           )
                         ]
                       )
@@ -185,23 +190,3 @@ class _RunScreenState extends State<RunScreen> {
       );
   }
 }
-
-// ToggleButtons(
-//                 direction: vertical ? Axis.vertical : Axis.horizontal,
-//                 onPressed: (int index) {
-//                   setState(() {
-//                     // The button that is tapped is set to true, and the others to false.
-//                     for (int i = 0; i < _selectedFruits.length; i++) {
-//                       _selectedFruits[i] = i == index;
-//                     }
-//                   });
-//                 },
-//                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-//                 selectedBorderColor: Colors.red[700],
-//                 selectedColor: Colors.white,
-//                 fillColor: Colors.red[200],
-//                 color: Colors.red[400],
-//                 constraints: const BoxConstraints(minHeight: 40.0, minWidth: 80.0),
-//                 isSelected: _selectedFruits,
-//                 children: fruits,
-//               ),

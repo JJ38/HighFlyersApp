@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:high_flyers_app/controllers/driver_home_screen_controller.dart';
 
 class DriverHomeScreen extends StatefulWidget {
-  final DriverHomeScreenController controller = DriverHomeScreenController();
 
-  DriverHomeScreen({super.key});
+  const DriverHomeScreen({super.key});
 
   @override
   State<DriverHomeScreen> createState() => _DriverHomeScreenState();
@@ -13,17 +12,20 @@ class DriverHomeScreen extends StatefulWidget {
 
 class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
+  late DriverHomeScreenController driverHomeScreenController;
+
   bool initialisedDriver = false;
 
   @override
   void initState(){ 
     super.initState();
+    driverHomeScreenController = DriverHomeScreenController();
     initialiseDriver();
     
   }
 
   void initialiseDriver() async{
-    initialisedDriver = await widget.controller.model.initialiseDriver();
+    initialisedDriver = await driverHomeScreenController.model.initialiseDriver();
 
     setState(() {
       initialisedDriver;
@@ -46,7 +48,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             children: [
               Text("Your Runs", style: Theme.of(context).textTheme.titleLarge),
               StreamBuilder<QuerySnapshot>(
-                stream: widget.controller.model.getDriverRunsQuerySnapshot(),
+                stream: driverHomeScreenController.model.getDriverRunsQuerySnapshot(),
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     return const Text('Something went wrong');
@@ -69,7 +71,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                           return ListTile(
                             title: Text(runName),
                             subtitle: Text("Week $runWeek"),
-                            onTap: () { widget.controller.onRunTileTap(document, context); } ,
+                            onTap: () { driverHomeScreenController.onRunTileTap(document, context); } ,
                           );
                         })
                         .toList()

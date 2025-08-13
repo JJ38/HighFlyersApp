@@ -5,18 +5,26 @@ import 'package:high_flyers_app/screens/admin/admin_manage_orders_screen.dart';
 class AdminScreen extends StatefulWidget {
   static String id = "Admin Screen";
 
-  final AdminScreenController controller;
-
-  const AdminScreen({super.key, required this.controller});
+  const AdminScreen({super.key});
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();
 }
 
 class _AdminScreenState extends State<AdminScreen> {
+
+  late AdminScreenController adminScreenController;
+
   var currentPageIndex = 0;
 
   List<Widget> screens = [AdminManageOrdersScreen(), AdminManageOrdersScreen()];
+
+  @override
+  void initState(){
+    super.initState();
+    adminScreenController = AdminScreenController();
+
+  }
 
   @override
   Widget build(BuildContext context) {

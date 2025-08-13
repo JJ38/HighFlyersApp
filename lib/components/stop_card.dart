@@ -12,6 +12,7 @@ class StopCard extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      margin: EdgeInsets.all(10),
       width: width,
       decoration: BoxDecoration(
         color: Colors.white,

@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:high_flyers_app/controllers/driver_home_screen_controller.dart';
 
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -26,18 +27,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  //Look into refactoring before release. Wasteful to initialise unnecessarily. Just do it in the constructor DriverScreen(controller: DriverScreenController())
 
-  final LoginScreenController loginScreenController = LoginScreenController();
-  final CustomerScreenController customerScreenController =
-      CustomerScreenController();
-  final AdminScreenController adminScreenController = AdminScreenController();
-
-  MyApp({super.key});
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print("build main");
     return MaterialApp(
       title: 'High Flyers App',
       theme: ThemeData(
@@ -54,13 +50,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes: {
-        LoginScreen.id: (context) =>
-            LoginScreen(controller: loginScreenController),
+        LoginScreen.id: (context) => LoginScreen(),
         DriverScreen.id: (context) => DriverScreen(),
-        CustomerScreen.id: (context) =>
-            CustomerScreen(controller: customerScreenController),
-        AdminScreen.id: (context) =>
-            AdminScreen(controller: adminScreenController),
+        CustomerScreen.id: (context) => CustomerScreen(),
+        AdminScreen.id: (context) => AdminScreen(),
       },
     );
   }

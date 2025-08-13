@@ -8,11 +8,7 @@ import 'package:high_flyers_app/components/input_pill.dart';
 class LoginScreen extends StatefulWidget {
   static String id = 'Login Screen';
 
-  final LoginScreenController controller;
-
-  //declare model here
-
-  const LoginScreen({super.key, required this.controller});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -20,6 +16,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   //<a href="https://www.flaticon.com/free-icons/peace" title="peace icons">Peace icons created by Freepik - Flaticon</a>
+
+  late LoginScreenController loginScreenController;
+
+  @override
+  void initState(){
+    super.initState();
+    loginScreenController = LoginScreenController();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,18 +58,18 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 InputPill(
                   text: "Username",
-                  onChange: widget.controller.usernameInputController,
+                  onChange: loginScreenController.usernameInputController,
                 ),
                 InputPill(
                     text: "Password",
                     obscureText: true,
-                    onChange: widget.controller.passwordInputController),
+                    onChange: loginScreenController.passwordInputController),
                 ButtonPill(
                     text: "Login",
                     buttonColor: Theme.of(context).colorScheme.secondary,
                     action: () {
                       setState(() {
-                        widget.controller.login(context);
+                        loginScreenController.login(context);
                       });
                     })
               ],
