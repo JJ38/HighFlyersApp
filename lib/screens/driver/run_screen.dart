@@ -28,7 +28,6 @@ class _RunScreenState extends State<RunScreen> {
   @override
   void initState() {
     super.initState();
-
     runScreenController = RunScreenController();
 
     run = widget.runDocument.data()! as Map<String, dynamic>;
@@ -39,10 +38,10 @@ class _RunScreenState extends State<RunScreen> {
 
     runInfoView = [AssignedStops(run: run), PendingStops(), CompletedStops()];
     runScreenController.model.setRun(run);
-    getStopsForRun();
+    _getStopsForRun();
   }
 
-  void getStopsForRun() async {
+  void _getStopsForRun() async {
     final successful = await runScreenController.model.getStopsForRun();
 
     if (!successful) {
@@ -84,6 +83,7 @@ class _RunScreenState extends State<RunScreen> {
                       child: GoogleMap(
                         mapType: MapType.terrain,
                         initialCameraPosition: _kGooglePlex,
+                        compassEnabled: false,
                         onMapCreated: (GoogleMapController mapController) {
                           gmcontroller.complete(mapController);
                         },

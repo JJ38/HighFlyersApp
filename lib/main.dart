@@ -1,21 +1,30 @@
 import 'package:firebase_core/firebase_core.dart';
-
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 
 import 'screens/login_screen.dart';
 import 'screens/driver/driver_screen.dart';
 import 'screens/customer/customer_screen.dart';
 import 'screens/admin/admin_screen.dart';
 
-<<<<<<< HEAD
-=======
+//com.example.highFlyersApp
+//FE:1F:E9:0A:F7:3E:CE:05:51:A4:4D:4F:83:4F:39:3E:F0:EC:67:1D
 
->>>>>>> 2ba85186ca17ef3f254523417606f1760435a548
 void main() async {
   // await SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp, // Normal Portrait
   // ]);
+
+  // Require Hybrid Composition mode on Android.
+  final GoogleMapsFlutterPlatform mapsImplementation =
+      GoogleMapsFlutterPlatform.instance;
+  if (mapsImplementation is GoogleMapsFlutterAndroid) {
+    // Force Hybrid Composition mode.
+    mapsImplementation.useAndroidViewSurface = true;
+  }
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
