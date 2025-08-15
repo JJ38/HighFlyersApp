@@ -17,10 +17,10 @@ class InputPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.of(context).size.width;
 
-    double pillWidth = screenWidth * 0.8;
-    double pillHeight = pillWidth * (1 / 6);
+    final double pillWidth = screenWidth * 0.8;
+    final double pillHeight = pillWidth * (1 / 6);
 
     return Stack(
       children: [
@@ -45,22 +45,22 @@ class InputPill extends StatelessWidget {
               SizedBox(
                 width: pillWidth * 0.035,
               ),
-              // Text(
-              //   //Icon in the form of text to allow shadow.
-              //   String.fromCharCode(iconData.codePoint),
-              //   style: TextStyle(
-              //     color: Color(0xFF898989),
-              //     fontFamily: iconData.fontFamily,
-              //     fontSize: pillHeight * 0.75,
-              //     shadows: [
-              //       BoxShadow(
-              //         blurRadius: 5,
-              //         offset: Offset(0, 2),
-              //         color: Color(0x44000000),
-              //       )
-              //     ],
-              //   ),
-              // ),
+              iconData != null ? Text(
+                //Icon in the form of text to allow shadow.
+                String.fromCharCode(iconData!.codePoint),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontFamily: iconData!.fontFamily,
+                  fontSize: pillHeight * 0.5,
+                  shadows: [
+                    BoxShadow(
+                      blurRadius: 4,
+                      offset: Offset(0, 0),
+                      color: Theme.of(context).colorScheme.secondary,
+                    )
+                  ],
+                ),
+              ) : SizedBox(width: 0, height: 0,),
               SizedBox(
                 width: pillWidth * 0.02,
               ),

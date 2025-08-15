@@ -8,6 +8,10 @@ import 'screens/driver/driver_screen.dart';
 import 'screens/customer/customer_screen.dart';
 import 'screens/admin/admin_screen.dart';
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2ba85186ca17ef3f254523417606f1760435a548
 void main() async {
   // await SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp, // Normal Portrait
