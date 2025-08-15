@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/assigned_stops.dart';
 import 'package:high_flyers_app/components/completed_stops.dart';
 import 'package:high_flyers_app/components/pending_stops.dart';
-import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/controllers/run_screen_controller.dart';
 
 class RunScreen extends StatefulWidget {
-
   static String id = "Run Screen";
 
   final dynamic runDocument;
@@ -21,7 +19,6 @@ class RunScreen extends StatefulWidget {
 }
 
 class _RunScreenState extends State<RunScreen> {
-
   late RunScreenController runScreenController;
   late Map<String, dynamic> run;
   late List<Widget> runInfoView;
@@ -29,29 +26,26 @@ class _RunScreenState extends State<RunScreen> {
   bool loaded = false;
 
   @override
-  void initState(){
-
+  void initState() {
     super.initState();
 
     runScreenController = RunScreenController();
 
     run = widget.runDocument.data()! as Map<String, dynamic>;
 
-    if(run.isEmpty){
+    if (run.isEmpty) {
       return;
     }
 
     runInfoView = [AssignedStops(run: run), PendingStops(), CompletedStops()];
     runScreenController.model.setRun(run);
     getStopsForRun();
-
   }
 
   void getStopsForRun() async {
-
     final successful = await runScreenController.model.getStopsForRun();
 
-    if(!successful){
+    if (!successful) {
       setState(() {
         error = true;
         loaded = true;
@@ -65,16 +59,14 @@ class _RunScreenState extends State<RunScreen> {
     });
   }
 
-
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
 
-
   @override
   Widget build(BuildContext context) {
-   print("run screen build");
+    print("run screen build");
     final Completer<GoogleMapController> gmcontroller =
         Completer<GoogleMapController>();
 
@@ -82,91 +74,96 @@ class _RunScreenState extends State<RunScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: loaded ? error ? Center(child: Text("Error Loading Run")) :
-        Stack(
-          children: [
-            SizedBox(
-              height: screenHeight * 0.9,
-              width: screenWidth,
-              child: GoogleMap(
-                mapType: MapType.terrain,
-                initialCameraPosition: _kGooglePlex,
-                onMapCreated: (GoogleMapController mapController) {
-                  gmcontroller.complete(mapController);
-                },
-              ),
-            ),
-            SafeArea(
-              child: DraggableScrollableSheet(
-                builder: (controller, scrollController) {
-                  return 
-                    Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(50.0), // Uniform radius
+        body: loaded
+            ? error
+                ? Center(child: Text("Error Loading Run"))
+                : Stack(children: [
+                    SizedBox(
+                      height: screenHeight * 0.9,
+                      width: screenWidth,
+                      child: GoogleMap(
+                        mapType: MapType.terrain,
+                        initialCameraPosition: _kGooglePlex,
+                        onMapCreated: (GoogleMapController mapController) {
+                          gmcontroller.complete(mapController);
+                        },
                       ),
-                      // color: Colors.white,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children:[
-                          Expanded(
-                            flex: 0,
-                            child: SingleChildScrollView(
-                              physics: const ClampingScrollPhysics(),                             
-                              controller: scrollController,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.all(15),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(50.0), // Uniform radius
-                                    ),
-                                    child: SizedBox(
-                                      height: 3,
-                                      width: 100,
-                                    ),
+                    ),
+                    SafeArea(child: DraggableScrollableSheet(
+                        builder: (controller, scrollController) {
+                      return Container(
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 1,
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(50.0), // Uniform radius
+                          ),
+                          // color: Colors.white,
+                          child:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
+                            Expanded(
+                                flex: 0,
+                                child: SingleChildScrollView(
+                                  physics: const ClampingScrollPhysics(),
+                                  controller: scrollController,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.all(15),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius: BorderRadius.circular(
+                                              50.0), // Uniform radius
+                                        ),
+                                        child: SizedBox(
+                                          height: 3,
+                                          width: 100,
+                                        ),
+                                      ),
+                                      Text(run["runName"],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge),
+                                    ],
                                   ),
-                                  Text(run["runName"], style: Theme.of(context).textTheme.titleLarge),
-                                ],
-                              ),
-                            )                           
-                          ),
-                          ToggleButtons(
-                            direction: Axis.horizontal,
-                            onPressed:(int index) {  
-                              runScreenController.toggleRunViewButtonsController(index); 
-                              setState(() {
-                                runScreenController.selectedToggleView;
-                              }); 
-                            },
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
-                            selectedBorderColor: Colors.blue[900],
-                            selectedColor: Colors.white,
-                            fillColor: Color(0xFF2881FF),
-                            color: const Color.fromARGB(255, 0, 0, 0),
-                            constraints: BoxConstraints(minHeight: 40.0, minWidth: (screenWidth * 0.8) / runScreenController.selectedToggleView.length) ,
-                            isSelected: runScreenController.selectedToggleView,
-                            children: [
-                              Text('Assigned'),
-                              Text('Pending'),
-                              Text('Completed'),
-                            ],
-                          ),
-                          runInfoView[runScreenController.currentSelectedIndex]
-                        ]
-                      )
-                  );
-                }
-              )
-            )
-          ]
-        ) : Center(child: Text("Loading"))
-      );
+                                )),
+                            ToggleButtons(
+                              direction: Axis.horizontal,
+                              onPressed: (int index) {
+                                runScreenController
+                                    .toggleRunViewButtonsController(index);
+                                setState(() {
+                                  runScreenController.selectedToggleView;
+                                });
+                              },
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8)),
+                              selectedBorderColor: Colors.blue[900],
+                              selectedColor: Colors.white,
+                              fillColor: Color(0xFF2881FF),
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              constraints: BoxConstraints(
+                                  minHeight: 40.0,
+                                  minWidth: (screenWidth * 0.8) /
+                                      runScreenController
+                                          .selectedToggleView.length),
+                              isSelected:
+                                  runScreenController.selectedToggleView,
+                              children: [
+                                Text('Assigned'),
+                                Text('Pending'),
+                                Text('Completed'),
+                              ],
+                            ),
+                            runInfoView[
+                                runScreenController.currentSelectedIndex]
+                          ]));
+                    }))
+                  ])
+            : Center(child: Text("Loading")));
   }
 }
