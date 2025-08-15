@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:high_flyers_app/controllers/driver_home_screen_controller.dart';
 
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +8,6 @@ import 'screens/driver/driver_screen.dart';
 import 'screens/customer/customer_screen.dart';
 import 'screens/admin/admin_screen.dart';
 
-import 'controllers/login_screen_controller.dart';
-import 'controllers/customer_screen_controller.dart';
-import 'controllers/admin_screen_controller.dart';
 
 void main() async {
   // await SystemChrome.setPreferredOrientations([

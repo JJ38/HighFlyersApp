@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:high_flyers_app/controllers/driver_home_screen_controller.dart';
 import 'package:high_flyers_app/screens/driver/driver_home_screen.dart';
 import 'package:high_flyers_app/screens/driver/driver_settings_screen.dart';
 

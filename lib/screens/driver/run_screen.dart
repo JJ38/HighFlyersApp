@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/assigned_stops.dart';
 import 'package:high_flyers_app/components/completed_stops.dart';
 import 'package:high_flyers_app/components/pending_stops.dart';
-import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/controllers/run_screen_controller.dart';
 
 class RunScreen extends StatefulWidget {
