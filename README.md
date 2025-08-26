@@ -14,3 +14,13 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+
+todo:
+
+
+-add loading symobol for you runs screen.
+    -keep your runs title and put loading symbol below. If theres nothing to load or error show mesage below title where list would be
+
+-

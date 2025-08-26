@@ -10,9 +10,6 @@ import 'screens/driver/driver_screen.dart';
 import 'screens/customer/customer_screen.dart';
 import 'screens/admin/admin_screen.dart';
 
-//com.example.highFlyersApp
-//FE:1F:E9:0A:F7:3E:CE:05:51:A4:4D:4F:83:4F:39:3E:F0:EC:67:1D
-
 void main() async {
   // await SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp, // Normal Portrait

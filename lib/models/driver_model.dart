@@ -10,20 +10,61 @@ class DriverModel {
   String? nextStop;
   String? runName;
   int? stopRemaining;
-  DocumentSnapshot<Map<String, dynamic>>? driverDoc;
+  late Map<String, dynamic> driverDoc;
+  late List driverRunDocs = [];
+
 
   DriverModel();
 
   Future<bool> initialiseDriver() async {
+
     if (FirebaseAuth.instance.currentUser == null) {
       return false;
     }
 
     final successful = await fetchDriverDoc();
 
-    if(!successful){
+    if (!successful) {
       return false;
-    } 
+    }
+
+    return true;
+  }
+
+  Future<bool> fetchDriverRuns() async {
+
+    final assignedRuns = driverDoc['assignedRuns'];
+
+    List<Future<DocumentSnapshot<Map<String, dynamic>>>> futureDriverRunDocs = [];
+
+
+    try {
+      for (var i = 0; i < assignedRuns.length; i++) {
+
+        DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Runs').doc(assignedRuns[i]['runID']);
+        Future<DocumentSnapshot<Map<String, dynamic>>> futureDriverDoc = driverDocRef.get();
+
+        futureDriverRunDocs.add(futureDriverDoc);
+  
+      }
+
+      Future.wait(futureDriverRunDocs);
+
+      for(var i = 0; i < futureDriverRunDocs.length; i++){
+
+        final doc = await futureDriverRunDocs[i];
+        print(doc.data());
+
+        driverRunDocs.add(doc);
+
+      }
+  
+    } catch (e) {
+
+      print(e);
+
+      return false;
+    }
 
     return true;
   }
@@ -31,29 +72,36 @@ class DriverModel {
   Future<bool> fetchDriverDoc() async {
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(
-            app: Firebase.app(), databaseId: "development")
-        .collection('Drivers')
-        .doc(uid);
+    DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Drivers').doc(uid);
 
-    try{
-      driverDoc = await driverDocRef.get();
-    }catch(e){
+    try {
+
+      final response = await driverDocRef.get();
+
+      if (response.data() == null) {
+        return false;
+      }
+
+      driverDoc = response.data()!;
+
+    } catch (e) {
+
       return false;
+
     }
 
     return true;
   }
 
-  Stream<QuerySnapshot> getDriverRunsQuerySnapshot() {
+  // Stream<QuerySnapshot> getDriverRunsQuerySnapshot() {
 
-    final Stream<QuerySnapshot> stream = FirebaseFirestore.instanceFor(
-            app: Firebase.app(), databaseId: "development")
-        .collection('Runs')
-        .where("assignedDriver",
-            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .snapshots();
+  //   final Stream<QuerySnapshot> stream = FirebaseFirestore.instanceFor(
+  //           app: Firebase.app(), databaseId: "development")
+  //       .collection('Runs')
+  //       .where("assignedDriver",
+  //           isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+  //       .snapshots();
 
-    return stream;
-  }
+  //   return stream;
+  // }
 }

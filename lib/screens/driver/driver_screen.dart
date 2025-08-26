@@ -18,13 +18,13 @@ class _DriverScreenState extends State<DriverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("driver screen build");
+ 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: screens[currentPageIndex],
       bottomNavigationBar: NavigationBar(
         destinations: [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+          NavigationDestination(icon: Icon(Icons.home), label: "Home"), 
           NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
         ],
         selectedIndex: currentPageIndex,
