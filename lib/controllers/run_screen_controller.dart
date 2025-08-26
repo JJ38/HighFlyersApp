@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:high_flyers_app/models/run_model.dart';
 
 class RunScreenController {
@@ -6,7 +9,7 @@ class RunScreenController {
   final List<bool> selectedToggleView = <bool>[true, false, false];
   int currentSelectedIndex = 0;
 
-  RunScreenController(){print("init controller");}
+  RunScreenController();
 
   void toggleRunViewButtonsController(selectedIndex){
 
@@ -24,6 +27,23 @@ class RunScreenController {
 
     }
     
+  }
+
+  void startRun() async{
+
+    //write to document to say run has started
+
+    final bool runStarted = await model.startRun();
+
+    if(!runStarted){
+      print("errorStartingRun");
+    }
+
+    
+
+    //update stop screen to shjow details of first stop. This can show another button saying start stop
+
+
   }
 
 }

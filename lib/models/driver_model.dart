@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:high_flyers_app/models/firebase_model.dart';
 
 enum Status { offline, online, skipped, completed, enroute }
 
@@ -35,34 +36,24 @@ class DriverModel {
 
     final assignedRuns = driverDoc['assignedRuns'];
 
-    List<Future<DocumentSnapshot<Map<String, dynamic>>>> futureDriverRunDocs = [];
+    List<DocumentReference<Map<String, dynamic>>> documentReferences = [];
 
+    for (var i = 0; i < assignedRuns.length; i++) {
 
-    try {
-      for (var i = 0; i < assignedRuns.length; i++) {
+      DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Runs').doc(assignedRuns[i]['runID']);
+      documentReferences.add(driverDocRef);
 
-        DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Runs').doc(assignedRuns[i]['runID']);
-        Future<DocumentSnapshot<Map<String, dynamic>>> futureDriverDoc = driverDocRef.get();
+    }
 
-        futureDriverRunDocs.add(futureDriverDoc);
-  
-      }
+    try{
 
-      Future.wait(futureDriverRunDocs);
+      driverRunDocs = await FirebaseModel.fetchMultipleDocuments(documentReferences);
 
-      for(var i = 0; i < futureDriverRunDocs.length; i++){
+    }catch(e){
 
-        final doc = await futureDriverRunDocs[i];
-
-        driverRunDocs.add(doc);
-
-      }
-  
-    } catch (e) {
-
-      print(e);
-
+      print("Error fetching run documents");
       return false;
+
     }
 
     return true;

@@ -1,15 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, DocumentSnapshot;
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, DocumentSnapshot, DocumentReference;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:high_flyers_app/components/marker_label.dart';
+import 'package:widget_to_marker/widget_to_marker.dart';
+
 
 class RunModel {
 
   Map<String, dynamic>? run; 
   dynamic orders;
   Key scaffoldKey = UniqueKey();
+  Set<Marker> markers = {};
 
 
-  RunModel(){print("init model");}
+  RunModel();
 
   void setRun(run){
     this.run = run;
@@ -35,9 +41,66 @@ class RunModel {
       return false;
     } 
 
-    print(run!['stops']);
     
     return true;
+  }
+
+  Future<bool> getMarkerForRun() async {
+
+    if(run!['stops'].isEmpty){
+      return false;
+    }
+
+    List<Future<BitmapDescriptor>> customMarkers = [];
+
+    for(var i = 0; i < run!['stops'].length; i++){
+
+      customMarkers.add(customMarker(run!['stops'][i]['stopNumber'].toString()));
+
+    }
+
+    for(var i = 0; i < customMarkers.length; i++){
+
+      markers.add(
+        Marker(
+          markerId: MarkerId(run!['stops'][i]['orderID'] + "_" + run!['stops'][i]['stopType']),
+          position: LatLng(run!['stops'][i]['coordinates']['lat'], run!['stops'][i]['coordinates']['lng']),
+          icon: await customMarkers[i],
+        )
+      );
+
+    }
+
+    return true;
+
+  }
+
+  String getNumberOfStops(){
+
+    return run!['stops'].length.toString();
+
+  }
+
+  String getEstimatedRunTime(){
+
+    final trimmedRunTimeSeconds = run!['runTime'].replaceAll("s", "");
+
+    final timeSeconds = int.parse(trimmedRunTimeSeconds)/60;
+
+    final timeMinutes = (timeSeconds / 60).floor();
+
+    final numberOfHours = timeMinutes.floor();
+    final numberOfRemainingMinutes = timeMinutes % 60;
+
+
+    return "${numberOfHours}h ${numberOfRemainingMinutes}m";
+  }
+
+  Future<BitmapDescriptor> customMarker(String label) async {
+    return await MarkerLabel(label: label).toBitmapDescriptor(
+      logicalSize: Size(50, 50),
+      imageSize: Size(150, 150),
+    );
   }
 
   Future<bool> fetchOrdersForRun() async {
@@ -159,7 +222,67 @@ class RunModel {
 
   }
 
+  Future<bool> startRun() async {
+
+    try {
+      
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final User? currentUser = auth.currentUser;
+      
+      if (currentUser == null) {
+        return false;
+      }
+
+      DocumentReference driverDocument = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development")
+          .collection('Drivers')
+          .doc(currentUser.uid);
+
+      final driverDoc = await driverDocument.get();
+
+ 
+      if(!driverDoc.exists){
+        return false;
+      }
+
+      if(driverDoc.data() == null){
+        return false;
+      } 
+
+      final Map<String, dynamic> driverData = driverDoc.data() as Map<String, dynamic>;
+
+      // print(driverData);
+      // print(run!['stops']);
+
+      //copies value of run['stops]
+      final List<dynamic> newRunCopy = [...run!['stops']];
+
+      //fetch all foreign key data to be stored in new document now run is about to be underway to stop issues with orders not being fetch and bad signal.
+      
+
+      for(var i = 0; i < newRunCopy.length; i++){
+
+        print(newRunCopy[i]);
+
+      }
+
+      // await userDocument.update({
+      //   'driverStatus': "Online",
+      //   'updated_at': FieldValue.serverTimestamp(), // Optional: use a server timestamp
+      // });
+      
+     
+    } catch (e) {
+      print("Error updating document: $e");
+      return false;
+    }
+
+    return true;
+
+  }
+
 }
+
+
 
 
 

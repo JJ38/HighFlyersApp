@@ -21,5 +21,15 @@ todo:
 
 
 -add loading symobol for you runs screen.
-    -keep your runs title and put loading symbol below. If theres nothing to load or error show mesage below title where list would be
+    -keep your runs title and put loading symbol below. If theres nothing to load or error show message below title where list would be
 
+-add feedback to login screen
+
+-update flash/startup screen to bird logo
+
+-When start run is clicked show first run
+
+-create view that shows preview of stop that allows drivers to navigate to stop.
+-screen should show button that says "arrived"
+-when "arrived" is clicked a form should show up asking for basic information like did they collection payment, Did they pick up the correct quantity etc.
+-form should show button saying "submit" or "complete". This will release the next stop.
