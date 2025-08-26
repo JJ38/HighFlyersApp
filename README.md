@@ -23,4 +23,3 @@ todo:
 -add loading symobol for you runs screen.
     -keep your runs title and put loading symbol below. If theres nothing to load or error show mesage below title where list would be
 
--

@@ -53,7 +53,6 @@ class DriverModel {
       for(var i = 0; i < futureDriverRunDocs.length; i++){
 
         final doc = await futureDriverRunDocs[i];
-        print(doc.data());
 
         driverRunDocs.add(doc);
 
