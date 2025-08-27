@@ -9,13 +9,15 @@ import 'package:high_flyers_app/components/pending_stops.dart';
 import 'package:high_flyers_app/components/stop.dart';
 import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/controllers/run_screen_controller.dart';
+import 'package:high_flyers_app/screens/driver/stop_screen.dart';
 
 class RunScreen extends StatefulWidget {
   static String id = "Run Screen";
 
   final dynamic runDocument;
+  final bool runStatus;
 
-  const RunScreen({super.key, required this.runDocument});
+  const RunScreen({super.key, required this.runDocument, required this.runStatus});
 
   @override
   State<RunScreen> createState() => _RunScreenState();
@@ -25,6 +27,7 @@ class _RunScreenState extends State<RunScreen> {
 
   late RunScreenController runScreenController;
   late Map<String, dynamic> run;
+  late String runID;
   late List<Widget> runInfoView;
   late CameraPosition _initialCameraPositon;
   bool error = false;
@@ -37,13 +40,20 @@ class _RunScreenState extends State<RunScreen> {
     runScreenController = RunScreenController();
 
     run = widget.runDocument.data()! as Map<String, dynamic>;
+    runID = widget.runDocument.id;
+    print(run);
 
     if (run.isEmpty) {
       return;
     }
 
-    runInfoView = [AssignedStops(run: run), PendingStops(), CompletedStops()];
+    // runInfoView = [AssignedStops(run: run), PendingStops(), CompletedStops()];
     runScreenController.model.setRun(run);
+    runScreenController.model.setRunID(runID);
+
+    //has run started
+    runStarted = widget.runStatus;
+
     _getStopsForRun();
   }
 
@@ -156,34 +166,35 @@ class _RunScreenState extends State<RunScreen> {
                                   ),
                                 ...runStarted ? 
                                   [
-                                    ToggleButtons(
-                                      direction: Axis.horizontal,
-                                      onPressed: (int index) {
-                                        runScreenController
-                                            .toggleRunViewButtonsController(index);
-                                        setState(() {
-                                          runScreenController.selectedToggleView;
-                                        });
-                                      },
-                                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                      selectedBorderColor: Colors.blue[900],
-                                      selectedColor: Colors.white,
-                                      fillColor: Color(0xFF2881FF),
-                                      color: const Color.fromARGB(255, 0, 0, 0),
-                                      constraints: BoxConstraints(
-                                          minHeight: 40.0,
-                                          minWidth: (screenWidth * 0.8) /
-                                              runScreenController
-                                                  .selectedToggleView.length),
-                                      isSelected:
-                                          runScreenController.selectedToggleView,
-                                      children: [
-                                        Text('Assigned'),
-                                        Text('Pending'),
-                                        Text('Completed'),
-                                      ],
-                                    ),
-                                    runInfoView[runScreenController.currentSelectedIndex],
+                                    StopScreen(stop: runScreenController.model.run?['stops'][0]),
+                                    // ToggleButtons(
+                                    //   direction: Axis.horizontal,
+                                    //   onPressed: (int index) {
+                                    //     runScreenController
+                                    //         .toggleRunViewButtonsController(index);
+                                    //     setState(() {
+                                    //       runScreenController.selectedToggleView;
+                                    //     });
+                                    //   },
+                                    //   borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                    //   selectedBorderColor: Colors.blue[900],
+                                    //   selectedColor: Colors.white,
+                                    //   fillColor: Color(0xFF2881FF),
+                                    //   color: const Color.fromARGB(255, 0, 0, 0),
+                                    //   constraints: BoxConstraints(
+                                    //       minHeight: 40.0,
+                                    //       minWidth: (screenWidth * 0.8) /
+                                    //           runScreenController
+                                    //               .selectedToggleView.length),
+                                    //   isSelected:
+                                    //       runScreenController.selectedToggleView,
+                                    //   children: [
+                                    //     Text('Assigned'),
+                                    //     Text('Pending'),
+                                    //     Text('Completed'),
+                                    //   ],
+                                    // ),
+                                    // runInfoView[runScreenController.currentSelectedIndex],
                                   ]
                                  :          
                                   [           
@@ -221,7 +232,13 @@ class _RunScreenState extends State<RunScreen> {
                                       shadowColor: Color(0x00000000),                                
                                       borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                                       child: MaterialButton(
-                                        onPressed: (){ runScreenController.startRun(context); },
+                                        onPressed: () async { 
+                                          if(await runScreenController.startRun(context)){ 
+                                            setState(() {
+                                              runStarted = true;
+                                            });
+                                          } 
+                                        },
                                         minWidth: screenWidth * 0.8,
                                         height: screenWidth * 0.1,
                                         child: Text("Start Run", style: TextStyle(color: Colors.white)),

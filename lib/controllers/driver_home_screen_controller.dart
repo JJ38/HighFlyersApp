@@ -8,11 +8,12 @@ class DriverHomeScreenController {
 
   DriverHomeScreenController();
 
-  void onRunTileTap(DocumentSnapshot<Object?> runDocument, context) {
+  void onRunTileTap(DocumentSnapshot<Object?> runDocument, bool runStatus, context) {
+
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => RunScreen(runDocument: runDocument),
+            builder: (context) => RunScreen(runDocument: runDocument, runStatus: runStatus),
             settings: RouteSettings(name: '/Run Screen')));
   }
 }

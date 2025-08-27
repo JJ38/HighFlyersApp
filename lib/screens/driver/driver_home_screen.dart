@@ -77,15 +77,23 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         padding: const EdgeInsets.all(8),
                         itemCount: driverHomeScreenController.model.driverDoc['assignedRuns'].length,
                         itemBuilder: (BuildContext context, int i) {
-                          return ListTile(
-                            title: Text(driverHomeScreenController.model.driverDoc['assignedRuns'][i]['shipmentName']),
-                            subtitle: Text(driverHomeScreenController.model.driverRunDocs[i]['runName']),
-                            onTap: () { driverHomeScreenController.onRunTileTap(driverHomeScreenController.model.driverRunDocs[i], context);},
+                          return GestureDetector(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: 
+                                Column(                        
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(driverHomeScreenController.model.driverDoc['assignedRuns'][i]['shipmentName'], style: Theme.of(context).textTheme.titleMedium,),
+                                    Text(driverHomeScreenController.model.driverRunDocs[i]['runName'], style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
+                                  ]
+                                ),
+                            ),                      
+                            onTap: () { driverHomeScreenController.onRunTileTap(driverHomeScreenController.model.driverRunDocs[i], driverHomeScreenController.model.runStatuses[i], context);},
                           );
                         },
                       )
                   :
-
                     isLoading ? 
 
                       Center(

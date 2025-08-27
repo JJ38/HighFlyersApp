@@ -12,6 +12,8 @@ class DriverModel {
   String? runName;
   int? stopRemaining;
   late Map<String, dynamic> driverDoc;
+  List<Map<String, dynamic>> driverRuns = [];
+  List<bool> runStatuses = [];
   late List driverRunDocs = [];
 
 
@@ -37,11 +39,23 @@ class DriverModel {
     final assignedRuns = driverDoc['assignedRuns'];
 
     List<DocumentReference<Map<String, dynamic>>> documentReferences = [];
+    runStatuses = [];
 
     for (var i = 0; i < assignedRuns.length; i++) {
+      
+      if(driverDoc['assignedRuns'][i]['progressedRun'] == true){
 
-      DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Runs').doc(assignedRuns[i]['runID']);
-      documentReferences.add(driverDocRef);
+        DocumentReference<Map<String, dynamic>> progressedRunDoc = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns').doc(assignedRuns[i]['progressedRunID']);
+        documentReferences.add(progressedRunDoc);
+        runStatuses.add(true);
+
+      }else{
+
+        DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Runs').doc(assignedRuns[i]['runID']);
+        documentReferences.add(driverDocRef);
+        runStatuses.add(false);
+
+      }
 
     }
 

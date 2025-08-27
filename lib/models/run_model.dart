@@ -1,15 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, DocumentSnapshot, DocumentReference;
+import 'package:cloud_firestore/cloud_firestore.dart' show CollectionReference, DocumentReference, DocumentSnapshot, FirebaseFirestore, FieldValue;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:high_flyers_app/components/marker_label.dart';
+import 'package:high_flyers_app/models/firebase_model.dart';
 import 'package:widget_to_marker/widget_to_marker.dart';
 
 
 class RunModel {
 
   Map<String, dynamic>? run; 
+  String? runID;
   dynamic orders;
   Key scaffoldKey = UniqueKey();
   Set<Marker> markers = {};
@@ -19,6 +21,10 @@ class RunModel {
 
   void setRun(run){
     this.run = run;
+  }
+
+  void setRunID(runID){
+    this.runID = runID;
   }
 
   Map<String, dynamic>? getRun(){
@@ -40,7 +46,6 @@ class RunModel {
       print('error merging stop and order data');
       return false;
     } 
-
     
     return true;
   }
@@ -91,7 +96,6 @@ class RunModel {
 
     final numberOfHours = timeMinutes.floor();
     final numberOfRemainingMinutes = timeMinutes % 60;
-
 
     return "${numberOfHours}h ${numberOfRemainingMinutes}m";
   }
@@ -233,13 +237,11 @@ class RunModel {
         return false;
       }
 
-      DocumentReference driverDocument = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development")
+      DocumentReference driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development")
           .collection('Drivers')
           .doc(currentUser.uid);
 
-      final driverDoc = await driverDocument.get();
-
-      return false;
+      final driverDoc = await driverDocRef.get();
 
       if(!driverDoc.exists){
         return false;
@@ -252,31 +254,107 @@ class RunModel {
       final Map<String, dynamic> driverData = driverDoc.data() as Map<String, dynamic>;
 
       //copies value of run['stops]
-      final List<dynamic> newRunCopy = [...run!['stops']];
+      final List<dynamic> newStopsCopy = [...run!['stops']];
+
+      newStopsCopy.sort((a, b) => a['stopNumber'].compareTo(b['stopNumber']));
 
       //fetch all foreign key data to be stored in new document now run is about to be underway to stop issues with orders not being fetch and bad signal.
       
+      List<DocumentReference<Map<String, dynamic>>> documentReferences = [];
 
-      for(var i = 0; i < newRunCopy.length; i++){
+      for(var i = 0; i < newStopsCopy.length; i++){
 
-        print(newRunCopy[i]);
+        DocumentReference<Map<String, dynamic>> orderDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Orders').doc(newStopsCopy[i]['orderID']);
+        documentReferences.add(orderDocRef);
 
       }
 
-      // await userDocument.update({
-      //   'driverStatus': "Online",
-      //   'updated_at': FieldValue.serverTimestamp(), // Optional: use a server timestamp
-      // });
+      List<dynamic> orderDocuments =  await FirebaseModel.fetchMultipleDocuments(documentReferences);
+
+      //merge stop and order data
+      for(var i = 0; i < orderDocuments.length; i++){
+        
+        if(!mergeStopAndOrder(newStopsCopy, orderDocuments[i])){
+          return false;
+        }
+
+      }
+
+      Map<String, dynamic> progressedRunDocument = {
+        'driverID': driverDocRef.id,
+        'runName': run!['runName'],
+        'runTime': run!['runTime'],
+        'optimisedRun': run!['optimisedRoute'],
+        'stops': newStopsCopy,
+      };
+
+      //add document to progress documents collection and add progressed doc ref to assigned runs in driver doc
+
+      CollectionReference progressedRunCollectionRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns');
       
-     
+      DocumentReference progressedRunDocRef = progressedRunCollectionRef.doc();
+
+      final newAssignedRuns = [...driverData['assignedRuns']];
+
+      for(var i = 0; i < newAssignedRuns.length; i++){
+
+        if(newAssignedRuns[i]['runID'] == runID){
+          
+          newAssignedRuns[i]['progressedRunID'] = progressedRunDocRef.id;
+          newAssignedRuns[i]['progressedRun'] = true;
+
+        }
+
+      }
+
+      print(newAssignedRuns);
+
+      FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").runTransaction((transaction) async {
+
+        final driverDoc = await transaction.get(driverDocRef);
+
+        if (!driverDoc.exists) {
+          return false;
+        }
+
+        transaction.set(progressedRunDocRef, progressedRunDocument);
+
+        transaction.update(driverDocRef, {
+          'assignedRuns': newAssignedRuns,
+          'driverStatus': "Online",
+          'updated_at': FieldValue.serverTimestamp(), // Optional: use a server timestamp
+        });
+
+      });
+
     } catch (e) {
+
       print("Error updating document: $e");
       return false;
+
     }
 
     return true;
 
   }
+
+  bool mergeStopAndOrder(stops, order){
+
+    for(var i = 0; i < stops.length; i++){
+
+      if(stops[i]['orderID'] == order.id){
+
+        stops[i]['orderData'] = order.data();
+        return true;
+
+      }
+
+    }
+
+    return false;
+
+  }
+
 
 }
 

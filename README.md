@@ -19,6 +19,9 @@ samples, guidance on mobile development, and a full API reference.
 
 todo:
 
+-make sure that a driver is only assigned a run if it is optimised. Maybe store optimised route in the assignedRuns in driver doc.
+-when assigning run add is progressed field to know if a driver has started run or not
+-When navigation back to the your runs page. Make sure the driver docs are refetched as the status of a run might have changed
 
 -update flash/startup screen to bird logo
 

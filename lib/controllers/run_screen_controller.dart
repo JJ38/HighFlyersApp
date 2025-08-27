@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/run_model.dart';
+import 'package:high_flyers_app/screens/driver/stop_screen.dart';
 
 class RunScreenController {
 
@@ -32,7 +33,7 @@ class RunScreenController {
     
   }
 
-  void startRun(context) async{
+  Future<bool> startRun(context) async{
 
     //write to document to say run has started
 
@@ -45,9 +46,13 @@ class RunScreenController {
         context: context
       );
 
+      return false;
+
     }
 
-    //update stop screen to shjow details of first stop. This can show another button saying start stop
+    //update stop screen to show details of first stop. This can show another button saying start stop 
+
+    return true;
 
   }
 
