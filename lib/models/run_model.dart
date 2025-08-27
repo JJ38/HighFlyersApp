@@ -239,7 +239,8 @@ class RunModel {
 
       final driverDoc = await driverDocument.get();
 
- 
+      return false;
+
       if(!driverDoc.exists){
         return false;
       }
@@ -249,9 +250,6 @@ class RunModel {
       } 
 
       final Map<String, dynamic> driverData = driverDoc.data() as Map<String, dynamic>;
-
-      // print(driverData);
-      // print(run!['stops']);
 
       //copies value of run['stops]
       final List<dynamic> newRunCopy = [...run!['stops']];

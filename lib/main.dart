@@ -1,11 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
-
 import 'screens/login_screen.dart';
 import 'screens/driver/driver_screen.dart';
 import 'screens/customer/customer_screen.dart';
@@ -38,52 +37,63 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    print("build main");
-    return MaterialApp(
-      title: 'High Flyers App',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        fontFamily: GoogleFonts.hankenGrotesk().fontFamily,
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.white, secondary: Color(0xFF2881FF)),
-        useMaterial3: true,
-        textTheme: TextTheme(
-          titleLarge: const TextStyle(
-              fontSize: 38,
-              fontWeight: FontWeight.w900,
-              overflow: TextOverflow.ellipsis),
-          titleMedium: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w800,
-            overflow: TextOverflow.ellipsis),
-          titleSmall: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              overflow: TextOverflow.ellipsis),
-          labelLarge: const TextStyle(
-              fontSize: 22,
+   
+    return StyledToast(
+      locale: const Locale('en', 'UK'), // Set your app's locale
+      duration: const Duration(seconds: 3),
+      animDuration: const Duration(milliseconds: 10),
+      toastPositions: StyledToastPosition.top,
+      toastAnimation: StyledToastAnimation.slideFromRight,
+      reverseAnimation: StyledToastAnimation.fade,
+      child: MaterialApp(
+        title: 'High Flyers App',
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          fontFamily: GoogleFonts.hankenGrotesk().fontFamily,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.white, secondary: Color(0xFF2881FF),
+            error: Colors.red[700],
+            errorContainer: Colors.red[300]
+          ),
+          useMaterial3: true,
+          textTheme: TextTheme(
+            titleLarge: const TextStyle(
+                fontSize: 38,
+                fontWeight: FontWeight.w900,
+                overflow: TextOverflow.ellipsis),
+            titleMedium: const TextStyle(
+              fontSize: 24,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF2881FF),
               overflow: TextOverflow.ellipsis),
-          labelMedium: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: Color.fromARGB(255, 77, 77, 77),
-              overflow: TextOverflow.ellipsis),
-          labelSmall: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              color: Color.fromARGB(255, 126, 126, 126),
-              overflow: TextOverflow.ellipsis),
+            titleSmall: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                overflow: TextOverflow.ellipsis),
+            labelLarge: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF2881FF),
+                overflow: TextOverflow.ellipsis),
+            labelMedium: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 77, 77, 77),
+                overflow: TextOverflow.ellipsis),
+            labelSmall: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 126, 126, 126),
+                overflow: TextOverflow.ellipsis),
+          ),
         ),
-      ),
-      initialRoute: LoginScreen.id,
-      routes: {
-        LoginScreen.id: (context) => LoginScreen(),
-        DriverScreen.id: (context) => DriverScreen(),
-        CustomerScreen.id: (context) => CustomerScreen(),
-        AdminScreen.id: (context) => AdminScreen(),
-      },
+        initialRoute: LoginScreen.id,
+        routes: {
+          LoginScreen.id: (context) => LoginScreen(),
+          DriverScreen.id: (context) => DriverScreen(),
+          CustomerScreen.id: (context) => CustomerScreen(),
+          AdminScreen.id: (context) => AdminScreen(),
+        },
+      )
     );
   }
 }

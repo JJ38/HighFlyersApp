@@ -221,7 +221,7 @@ class _RunScreenState extends State<RunScreen> {
                                       shadowColor: Color(0x00000000),                                
                                       borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                                       child: MaterialButton(
-                                        onPressed: (){ runScreenController.startRun(); },
+                                        onPressed: (){ runScreenController.startRun(context); },
                                         minWidth: screenWidth * 0.8,
                                         height: screenWidth * 0.1,
                                         child: Text("Start Run", style: TextStyle(color: Colors.white)),

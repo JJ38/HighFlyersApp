@@ -6,12 +6,15 @@ class LoginScreenModel {
   String? errorMessage;
   String? role;
 
-  Future<dynamic> login() async {
-    if (username == null && password == null) {
+  Future<bool> login() async {
+
+    if (username == null || password == null) {
+      errorMessage = "Invalid Credentials";
       return false;
     }
 
     try {
+
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: "${username!}@placeholder.com", password: password!);
@@ -26,26 +29,35 @@ class LoginScreenModel {
       role = jwt.claims?['role'];
 
       if (role == null) {
+        errorMessage = "Invalid Credentials";
         return false;
       }
 
       return true;
+
     } on FirebaseAuthException catch (e) {
+
       getFirebaseErrorMessage(e.code);
       return false;
+
     } catch (e) {
-      errorMessage = "Unknown Error";
+
+      errorMessage = "Invalid Credentials";
       return false;
+
     }
   }
 
   void getFirebaseErrorMessage(errorType) {
+
     switch (errorType) {
+
       case 'invalid-credentials':
         errorMessage = "Invalid Credentials";
         break;
 
       case 'user-disabled':
+      
         errorMessage = 'This account has been disabled';
         break;
 

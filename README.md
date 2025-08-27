@@ -20,11 +20,6 @@ samples, guidance on mobile development, and a full API reference.
 todo:
 
 
--add loading symobol for you runs screen.
-    -keep your runs title and put loading symbol below. If theres nothing to load or error show message below title where list would be
-
--add feedback to login screen
-
 -update flash/startup screen to bird logo
 
 -When start run is clicked show first run
