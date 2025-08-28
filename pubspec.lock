@@ -333,6 +333,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
+  map_launcher:
+    dependency: "direct main"
+    description:
+      name: map_launcher
+      sha256: "7f69f0ac7559f46e75b70b75c0de9b0fcb4bef46ff28dc5756e3ed568b2a13ec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.1"
   matcher:
     dependency: transitive
     description:
@@ -547,5 +555,5 @@ packages:
     source: hosted
     version: "1.1.0"
 sdks:
-  dart: ">=3.7.0 <4.0.0"
+  dart: ">=3.8.1 <4.0.0"
   flutter: ">=3.29.0"

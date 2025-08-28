@@ -2,6 +2,7 @@ import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/icon_label.dart';
+import 'package:high_flyers_app/components/stop_form.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/controllers/stop_screen_controller.dart';
 
@@ -21,6 +22,7 @@ class _StopScreenState extends State<StopScreen> {
 
   late final Map<String, dynamic> stop;
   late final StopScreenController stopScreenController;
+  bool showStopForm = false;
 
   @override
   void initState() {
@@ -28,6 +30,15 @@ class _StopScreenState extends State<StopScreen> {
     super.initState();
     stop = widget.stop;
     stopScreenController = StopScreenController();
+
+  }
+
+
+  void closeStopForm(){
+    
+    setState(() {
+      showStopForm = false;
+    });
 
   }
 
@@ -114,6 +125,8 @@ class _StopScreenState extends State<StopScreen> {
               ]
             ),
             SizedBox(height: 10),
+            Divider(height: 1,),
+            SizedBox(height: 10),
             Container(
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -145,32 +158,57 @@ class _StopScreenState extends State<StopScreen> {
               ),
             ),
             SizedBox(height: 10),
-            
-            Center(
-              child: Material(
-                color: Theme.of(context).colorScheme.secondary,
-                shadowColor: Color(0x00000000),                                
-                borderRadius: BorderRadius.all(Radius.circular(8)),                                     
-                child: MaterialButton(
-                  onPressed: () { 
-                  },
-                  minWidth: screenWidth * 0.9,
-                  height: screenWidth * 0.1,
-                  child: Text("Navigate", style: TextStyle(color: Colors.white)),
-                ),
-              ),
-            ),      
+            Divider(height: 1,),
             SizedBox(height: 10),
-            Center(
-              child: ActionSlider.standard(
-                toggleColor: Theme.of(context).colorScheme.secondary,
-                backgroundColor: const Color.fromARGB(255, 246, 246, 246),
-                boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
-                borderWidth: 4,
-                child: Text("Slide to confirm delivery", style: TextStyle(color: Colors.black),),
-                action: (controller) { stopScreenController.confirmOrder(controller);}
-              )
-            )                 
+
+            ...showStopForm ? 
+
+              [
+                StopForm(closeStopForm)
+              ]
+
+            :
+              [
+                Center(
+                  child: Material(
+                    color: Theme.of(context).colorScheme.secondary,
+                    shadowColor: Color(0x00000000),                                
+                    borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                    child: MaterialButton(
+                      onPressed: () { stopScreenController.navigate(stop);},
+                      minWidth: screenWidth * 0.9,
+                      height: screenWidth * 0.1,
+                      child: Text("Navigate", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ),      
+                SizedBox(height: 10),
+                Center(
+                  child: Material(
+                    color: Colors.black,
+                    shadowColor: Color(0x00000000),                                
+                    borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                    child: MaterialButton(
+                      onPressed: () { setState(() { showStopForm = true; });},
+                      minWidth: screenWidth * 0.9,
+                      height: screenWidth * 0.1,
+                      child: Text("Stop Form", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ),      
+                SizedBox(height: 20),
+                Center(
+                  child: ActionSlider.standard(
+                    icon: Icon(Icons.skip_next),
+                    toggleColor: const Color.fromARGB(255, 255, 209, 44),
+                    backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+                    boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
+                    borderWidth: 4,
+                    child: Text("Slide to skip stop", style: TextStyle(color: Colors.black),),
+                    action: (controller) { stopScreenController.confirmOrder(controller);}
+                  )
+                )
+              ]
           ]
         )
       );

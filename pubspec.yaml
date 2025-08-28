@@ -42,6 +42,7 @@ dependencies:
   google_fonts: ^6.3.0
   flutter_styled_toast: ^2.2.1
   action_slider: ^0.7.0
+  map_launcher: ^4.4.1
 
 dev_dependencies:
   flutter_test:
