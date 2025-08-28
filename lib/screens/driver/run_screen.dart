@@ -156,10 +156,13 @@ class _RunScreenState extends State<RunScreen> {
                                               width: 100,
                                             ),
                                           ),
+                                          !runStarted ? 
                                           Text(run["runName"],
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .titleLarge),
+                                                  .titleLarge)
+                                          :
+                                            SizedBox()
                                         ],
                                       ),
                                     ),
@@ -197,7 +200,7 @@ class _RunScreenState extends State<RunScreen> {
                                     // runInfoView[runScreenController.currentSelectedIndex],
                                   ]
                                  :          
-                                  [           
+                                  [   
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [

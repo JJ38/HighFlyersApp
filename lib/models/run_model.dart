@@ -80,6 +80,18 @@ class RunModel {
 
   }
 
+  String getStopNumber(){
+
+    return "1";
+
+  }
+
+  // String getStopType(){
+
+  //   return run!['stops'].length.toString();
+
+  // }
+
   String getNumberOfStops(){
 
     return run!['stops'].length.toString();
@@ -204,6 +216,7 @@ class RunModel {
 
     if(stopType == "collection"){
 
+      stopData['name'] = order['collectionName'];
       stopData['address1'] = order['collectionAddress1'];
       stopData['address2'] = order['collectionAddress2'];
       stopData['address3'] = order['collectionAddress3'];
@@ -213,6 +226,7 @@ class RunModel {
 
     }else if(stopType == 'delivery'){
       
+      stopData['name'] = order['deliveryName'];
       stopData['address1'] = order['deliveryAddress1'];
       stopData['address2'] = order['deliveryAddress2'];
       stopData['address3'] = order['deliveryAddress3'];
