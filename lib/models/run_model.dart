@@ -50,7 +50,23 @@ class RunModel {
     return true;
   }
 
-  Future<bool> getMarkerForRun() async {
+  Future<bool> getMarkerForStop(Map<String, dynamic> stopData) async{
+
+    markers = {};
+
+    markers.add(
+      Marker(
+        markerId: MarkerId(stopData['orderID'] + "_" + stopData['stopType']),
+        position: LatLng(stopData['coordinates']['lat'],stopData['coordinates']['lng']),
+        icon: await customMarker(stopData['stopNumber'].toString()),
+      )
+    );
+
+    return true;
+
+  }
+
+  Future<bool> getMarkersForRun() async {
 
     if(run!['stops'].isEmpty){
       return false;
@@ -77,12 +93,6 @@ class RunModel {
     }
 
     return true;
-
-  }
-
-  String getStopNumber(){
-
-    return "1";
 
   }
 
@@ -143,6 +153,7 @@ class RunModel {
     return true;
 
   }
+
 
   Future<DocumentSnapshot<Map<String, dynamic>>> fetchOrder(id) async {
 
@@ -299,6 +310,7 @@ class RunModel {
         'runName': run!['runName'],
         'runTime': run!['runTime'],
         'optimisedRun': run!['optimisedRoute'],
+        'currentStopNumber': 1,
         'stops': newStopsCopy,
       };
 
@@ -361,6 +373,20 @@ class RunModel {
         stops[i]['orderData'] = order.data();
         return true;
 
+      }
+
+    }
+
+    return false;
+
+  }
+
+  dynamic getStopByStopNumber(int stopNumber){
+
+    for(int i = 0; i < run!['stops'].length; i++){
+
+      if(stopNumber == run!['stops'][i]['stopNumber']){
+        return run!['stops'][i];
       }
 
     }

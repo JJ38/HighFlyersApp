@@ -33,7 +33,6 @@ class _StopScreenState extends State<StopScreen> {
 
   }
 
-
   void closeStopForm(){
     
     setState(() {
@@ -41,7 +40,6 @@ class _StopScreenState extends State<StopScreen> {
     });
 
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -6,14 +6,21 @@ import 'package:high_flyers_app/screens/driver/run_screen.dart';
 class DriverHomeScreenController {
   final DriverModel model = DriverModel();
 
-  DriverHomeScreenController();
+  final Function() initialiseDriver;
 
-  void onRunTileTap(DocumentSnapshot<Object?> runDocument, bool runStatus, context) {
+  DriverHomeScreenController(this.initialiseDriver);
 
-    Navigator.push(
+  void onRunTileTap(DocumentSnapshot<Object?> runDocument, bool runStatus, context) async {
+
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => RunScreen(runDocument: runDocument, runStatus: runStatus),
             settings: RouteSettings(name: '/Run Screen')));
+
+    // reinitialisePage
+
+    initialiseDriver.call();
+
   }
 }

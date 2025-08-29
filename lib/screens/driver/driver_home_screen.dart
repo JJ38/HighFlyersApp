@@ -20,7 +20,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   @override
   void initState() {
     super.initState();
-    driverHomeScreenController = DriverHomeScreenController();
+    driverHomeScreenController = DriverHomeScreenController(initialiseDriver);
+
     initialiseDriver();
 
   }

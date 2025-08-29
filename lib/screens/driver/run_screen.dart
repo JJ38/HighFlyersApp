@@ -53,11 +53,54 @@ class _RunScreenState extends State<RunScreen> {
 
     //has run started
     runStarted = widget.runStatus;
+    // runStarted = false;
+    print(runStarted);
 
-    _getStopsForRun();
+    if(!runStarted){
+      _initialiseStartRunPage();
+      return;
+    }
+
+    _initialiseCurrentStopPage();
+
   }
 
-  void _getStopsForRun() async {
+  void _initialiseCurrentStopPage() async{
+
+    //find out what stop user is currently on
+
+    int currentStopNumber = run['currentStopNumber'];
+
+    //load stop (in model as current stop maybe)
+    final currentStopData = runScreenController.model.getStopByStopNumber(currentStopNumber);
+
+    if(currentStopData == false){
+      print("error getting current stop data");
+      setState(() {
+        error = true;
+        loaded = true;
+      });
+      return;
+    }
+
+    //show marker on map for current stop 
+    await runScreenController.model.getMarkerForStop(currentStopData);
+
+    final initialCameraCoordinates = currentStopData['coordinates'];
+
+    _initialCameraPositon = CameraPosition(
+      target: LatLng(initialCameraCoordinates['lat'], initialCameraCoordinates['lng']),
+      zoom: 8,
+    );
+
+    setState(() {
+      run['stops'];
+      loaded = true;
+    });
+  
+  }
+
+  void _initialiseStartRunPage() async {
     final successful = await runScreenController.model.getStopsForRun();
 
     if (!successful) {
@@ -69,7 +112,7 @@ class _RunScreenState extends State<RunScreen> {
     }
 
     //get markers for map
-    final successfullyCreatedMarkers = await runScreenController.model.getMarkerForRun();
+    final successfullyCreatedMarkers = await runScreenController.model.getMarkersForRun();
 
     if(!successfullyCreatedMarkers){
       setState(() {
@@ -169,7 +212,7 @@ class _RunScreenState extends State<RunScreen> {
                                   ),
                                 ...runStarted ? 
                                   [
-                                    StopScreen(stop: runScreenController.model.run?['stops'][0]),
+                                    StopScreen(stop: runScreenController.model.getStopByStopNumber(run['currentStopNumber'])),
                                     // ToggleButtons(
                                     //   direction: Axis.horizontal,
                                     //   onPressed: (int index) {

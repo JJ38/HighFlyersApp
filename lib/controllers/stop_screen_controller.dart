@@ -23,9 +23,9 @@ class StopScreenController {
     final availableMaps = await MapLauncher.installedMaps;
     print(availableMaps);
 
-    if (await MapLauncher.isMapAvailable(MapType.waze)) {
+    if (await MapLauncher.isMapAvailable(MapType.google)) {
       await MapLauncher.showMarker(
-        mapType: MapType.waze,
+        mapType: MapType.google,
         coords: Coords(coordinates['lat'], coordinates['lng']),
         title: "Order: ${stop['orderData']['ID']} ${stop['stopType']}",
         description: "${stop['stopData']['address1']}, ${stop['stopData']['address2']}, ${stop['stopData']['address3']}, ${stop['stopData']['postcode']},"
