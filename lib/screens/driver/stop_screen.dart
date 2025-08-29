@@ -29,7 +29,8 @@ class _StopScreenState extends State<StopScreen> {
 
     super.initState();
     stopScreenController = StopScreenController(updateState: updateState);
-    stopScreenController.model.runDocument = widget.runDocument;
+    stopScreenController.model.runData = widget.runDocument.data() as Map<String, dynamic>;
+    stopScreenController.model.runID = widget.runDocument.id;
     stopScreenController.model.stop = widget.stop;
 
   }
@@ -189,7 +190,7 @@ class _StopScreenState extends State<StopScreen> {
                       onPressed: () { stopScreenController.showStopForm();},
                       minWidth: screenWidth * 0.9,
                       height: screenWidth * 0.1,
-                      child: Text("Stop Form", style: TextStyle(color: Colors.white)),
+                      child: Text("Arrived", style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ),      

@@ -5,7 +5,8 @@ class StopScreenModel {
 
   Map<String, dynamic> stop = {};
   bool showStopForm = false;
-  late DocumentSnapshot<Object?> runDocument;
+  late String runID;
+  late Map<String, dynamic> runData;
 
   Future<bool> skipStop() async{  
 
@@ -14,10 +15,8 @@ class StopScreenModel {
     try{
 
       //update ProgressedRun doc stops[i] with stop status to skipped
-      DocumentReference<Map<String, dynamic>> runDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns').doc(runDocument.id);
+      DocumentReference<Map<String, dynamic>> runDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns').doc(runID);
       
-      final runData = runDocument.data() as Map<String, dynamic>;
-
       final stops = runData['stops'];
 
       List<dynamic> newStops = [...stops];
@@ -53,7 +52,7 @@ class StopScreenModel {
 
       if(newStopNumber > stops.length){
         runStatus = "Completed";
-        newStopNumber =- 1;
+        newStopNumber = newStopNumber - 1;
       }
 
       runDocRef.update(

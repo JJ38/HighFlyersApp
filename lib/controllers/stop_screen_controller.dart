@@ -83,8 +83,12 @@ class StopScreenController {
       showToastWidget(ToastNotification(message: "Error skipping stop", isError: true));
       controller.reset();
     }
-    print("CONTROLLER STOP NUMBER: ${model.stop['stopNumber']}");
+
+    await Future.delayed(Duration(seconds: 1),() {  });
+    
     updateState();
+    controller.reset();
+    showToastWidget(ToastNotification(message: "Successfully skipped stop", isError: false));
 
   }
 
