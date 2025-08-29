@@ -371,6 +371,7 @@ class RunModel {
       if(stops[i]['orderID'] == order.id){
 
         stops[i]['orderData'] = order.data();
+        stops[i]['stopStatus'] = "Pending";
         return true;
 
       }

@@ -1,8 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart' show showToastWidget;
 import 'package:high_flyers_app/components/toast_notification.dart';
+import 'package:high_flyers_app/models/stop_screen_model.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 class StopScreenController {
+
+  StopScreenModel model = StopScreenModel();
+  final void Function() updateState;
+
+  StopScreenController({required this.updateState});
 
   void navigate(Map<String, dynamic> stop) async{
 
@@ -47,9 +55,36 @@ class StopScreenController {
 
   }
 
-  void closeStopForm(showStopForm, void Function(dynamic) setState){
+  void showStopForm(){
 
-    setState.call(showStopForm);
+    model.showStopForm = true;
+    updateState();
+
+  }
+
+  void hideStopFrom(){
+
+    model.showStopForm = false;
+    updateState();
+
+  }
+
+  Future<void> skipStop(controller) async {
+
+    controller.loading();
+
+    //updates document in database
+    final skippedStopSuccessfully = await model.skipStop();
+
+    print(skippedStopSuccessfully);
+
+    if(!skippedStopSuccessfully){
+
+      showToastWidget(ToastNotification(message: "Error skipping stop", isError: true));
+      controller.reset();
+    }
+    print("CONTROLLER STOP NUMBER: ${model.stop['stopNumber']}");
+    updateState();
 
   }
 

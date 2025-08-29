@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:core';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/assigned_stops.dart';
@@ -14,7 +15,7 @@ import 'package:high_flyers_app/screens/driver/stop_screen.dart';
 class RunScreen extends StatefulWidget {
   static String id = "Run Screen";
 
-  final dynamic runDocument;
+  final DocumentSnapshot<Object?> runDocument;
   final bool runStatus;
 
   const RunScreen({super.key, required this.runDocument, required this.runStatus});
@@ -28,6 +29,7 @@ class _RunScreenState extends State<RunScreen> {
   late RunScreenController runScreenController;
   late Map<String, dynamic> run;
   late String runID;
+  late DocumentSnapshot<Object?> runDocument;
   late List<Widget> runInfoView;
   late CameraPosition _initialCameraPositon;
   bool error = false;
@@ -41,6 +43,7 @@ class _RunScreenState extends State<RunScreen> {
 
     run = widget.runDocument.data()! as Map<String, dynamic>;
     runID = widget.runDocument.id;
+    runDocument = widget.runDocument;
     print(run);
 
     if (run.isEmpty) {
@@ -212,7 +215,7 @@ class _RunScreenState extends State<RunScreen> {
                                   ),
                                 ...runStarted ? 
                                   [
-                                    StopScreen(stop: runScreenController.model.getStopByStopNumber(run['currentStopNumber'])),
+                                    StopScreen(stop: runScreenController.model.getStopByStopNumber(run['currentStopNumber']), runDocument: runDocument),
                                     // ToggleButtons(
                                     //   direction: Axis.horizontal,
                                     //   onPressed: (int index) {

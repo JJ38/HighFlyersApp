@@ -19,15 +19,12 @@ samples, guidance on mobile development, and a full API reference.
 
 todo:
 
+-add feedback to the skip order and eventually submit order sliders as the screen updates to quickly and is confusing
+-update marker on map when skipping a stop
+
 -make sure that a driver is only assigned a run if it is optimised. Maybe store optimised route in the assignedRuns in driver doc.
--when assigning run add is progressed field to know if a driver has started run or not
--When navigation back to the your runs page. Make sure the driver docs are refetched as the status of a run might have changed
 
 -update flash/startup screen to bird logo
 
--When start run is clicked show first run
-
--create view that shows preview of stop that allows drivers to navigate to stop.
--screen should show button that says "arrived"
 -when "arrived" is clicked a form should show up asking for basic information like did they collection payment, Did they pick up the correct quantity etc.
 -form should show button saying "submit" or "complete". This will release the next stop.
