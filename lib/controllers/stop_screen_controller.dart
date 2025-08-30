@@ -82,6 +82,7 @@ class StopScreenController {
 
       showToastWidget(ToastNotification(message: "Error skipping stop", isError: true));
       controller.reset();
+      return;
     }
 
     await Future.delayed(Duration(seconds: 1),() {  });

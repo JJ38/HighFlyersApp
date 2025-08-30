@@ -12,6 +12,7 @@ class RunModel {
 
   Map<String, dynamic>? run; 
   String? runID;
+  String? progressedRunID;
   dynamic orders;
   Key scaffoldKey = UniqueKey();
   Set<Marker> markers = {};
@@ -95,12 +96,6 @@ class RunModel {
     return true;
 
   }
-
-  // String getStopType(){
-
-  //   return run!['stops'].length.toString();
-
-  // }
 
   String getNumberOfStops(){
 
@@ -335,7 +330,7 @@ class RunModel {
 
       print(newAssignedRuns);
 
-      FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").runTransaction((transaction) async {
+      await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").runTransaction((transaction) async {
 
         final driverDoc = await transaction.get(driverDocRef);
 
@@ -352,6 +347,9 @@ class RunModel {
         });
 
       });
+
+      progressedRunID = progressedRunDocRef.id;
+      run!['currentStopNumber'] = 1;
 
     } catch (e) {
 
@@ -383,6 +381,8 @@ class RunModel {
   }
 
   dynamic getStopByStopNumber(int stopNumber){
+
+    print(stopNumber);
 
     for(int i = 0; i < run!['stops'].length; i++){
 

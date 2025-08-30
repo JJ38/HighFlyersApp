@@ -50,14 +50,17 @@ class _RunScreenState extends State<RunScreen> {
       return;
     }
 
+    runStarted = widget.runStatus;
+
+
     // runInfoView = [AssignedStops(run: run), PendingStops(), CompletedStops()];
     runScreenController.model.setRun(run);
-    runScreenController.model.setRunID(runID);
 
-    //has run started
-    runStarted = widget.runStatus;
-    // runStarted = false;
-    print(runStarted);
+    if(runStarted){
+      runScreenController.model.progressedRunID = runID;
+    }else{
+      runScreenController.model.setRunID(runID);
+    }
 
     if(!runStarted){
       _initialiseStartRunPage();
@@ -215,7 +218,7 @@ class _RunScreenState extends State<RunScreen> {
                                   ),
                                 ...runStarted ? 
                                   [
-                                    StopScreen(stop: runScreenController.model.getStopByStopNumber(run['currentStopNumber']), runDocument: runDocument),
+                                    StopScreen(stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']), runData: runScreenController.model.run!, progressedRunID: runScreenController.model.progressedRunID),
                                     // ToggleButtons(
                                     //   direction: Axis.horizontal,
                                     //   onPressed: (int index) {
