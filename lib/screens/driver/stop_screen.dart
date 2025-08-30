@@ -230,7 +230,7 @@ class _StopScreenState extends State<StopScreen> {
               ...stopScreenController.model.showStopForm ? 
 
                 [
-                  StopForm(updateState: updateState, hideStopForm: stopScreenController.hideStopFrom, completeStop: stopScreenController.completeStop)
+                  StopForm(updateStopScreenState: updateState, hideStopForm: stopScreenController.hideStopFrom, completeStop: stopScreenController.model.completeStop)
                 ]
 
               :

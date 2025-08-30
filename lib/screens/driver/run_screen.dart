@@ -52,7 +52,6 @@ class _RunScreenState extends State<RunScreen> {
 
     runStarted = widget.runStatus;
 
-
     // runInfoView = [AssignedStops(run: run), PendingStops(), CompletedStops()];
     runScreenController.model.setRun(run);
 
@@ -81,7 +80,6 @@ class _RunScreenState extends State<RunScreen> {
     final currentStopData = runScreenController.model.getStopByStopNumber(currentStopNumber);
 
     if(currentStopData == false){
-      print("error getting current stop data");
       setState(() {
         error = true;
         loaded = true;
