@@ -1,11 +1,13 @@
+import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 
 class StopForm extends StatefulWidget {
 
   final void Function() updateState;
   final void Function() hideStopForm;
+  final Future<void> Function(dynamic) completeStop;
 
-  const StopForm(this.updateState, this.hideStopForm, {super.key});
+  const StopForm({required this.updateState, required this.hideStopForm, required this.completeStop, super.key});
 
   @override
   State<StopForm> createState() => _StopFormState();
@@ -50,6 +52,17 @@ class _StopFormState extends State<StopForm> {
             ),
           ),
         ),
+        Center(
+          child: ActionSlider.standard(
+            icon: Icon(Icons.done),
+            toggleColor: Colors.green,
+            backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+            boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
+            borderWidth: 4,
+            child: Text("Slide to complete stop", style: TextStyle(color: Colors.black),),
+            action: (controller) async { await widget.completeStop(controller);}
+          )
+        )
       ]
       
     );

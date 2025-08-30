@@ -76,8 +76,6 @@ class StopScreenController {
     //updates document in database
     final skippedStopSuccessfully = await model.skipStop();
 
-    print(skippedStopSuccessfully);
-
     if(!skippedStopSuccessfully){
 
       showToastWidget(ToastNotification(message: "Error skipping stop", isError: true));
@@ -90,6 +88,29 @@ class StopScreenController {
     updateState();
     controller.reset();
     showToastWidget(ToastNotification(message: "Successfully skipped stop", isError: false));
+
+  }
+
+  Future<void> completeStop(controller) async {
+
+    controller.loading();
+
+    //updates document in database
+    final completedStopSuccessfully = await model.completeStop();
+
+    if(!completedStopSuccessfully){
+
+      showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
+      controller.reset();
+      return;
+    }
+
+    await Future.delayed(Duration(seconds: 1),() {});
+    
+    model.showStopForm = false;
+    updateState();
+    controller.reset();
+    showToastWidget(ToastNotification(message: "Successfully completed stop", isError: false));
 
   }
 

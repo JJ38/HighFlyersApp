@@ -8,9 +8,21 @@ class StopScreenModel {
   late String progressedRunID;
   late Map<String, dynamic> runData;
 
-  Future<bool> skipStop() async{  
 
-    print("skipping stop");
+  Future<bool> skipStop() async{
+
+    return await nextStop("Skipped");
+
+  }
+
+  Future<bool> completeStop() async{
+
+    return await nextStop("Complete");
+
+  }
+
+
+  Future<bool> nextStop(String stopStatus) async{  
 
     try{
 
@@ -25,7 +37,7 @@ class StopScreenModel {
       final currentStopPrimaryKey = "${stop['orderID']}_${stop['stopType']}";
 
       bool foundStop = false; 
-      print("runData['currentStopNumber'] ${runData['currentStopNumber']}");
+
       int newStopNumber = runData['currentStopNumber'];
       bool isLastStop = true;
 
@@ -35,7 +47,7 @@ class StopScreenModel {
 
         if(stopPrimaryKey == currentStopPrimaryKey){
           
-          newStops[i]['stopStatus'] = "Skipped";
+          newStops[i]['stopStatus'] = stopStatus;
           newStopNumber += 1;
           isLastStop = false;
           foundStop = true;
@@ -55,7 +67,6 @@ class StopScreenModel {
         newStopNumber = newStopNumber - 1;
       }
 
-      print(runDocRef.id);
       await runDocRef.update(
         {
           'currentStopNumber': newStopNumber,
@@ -73,8 +84,6 @@ class StopScreenModel {
       runData['runStatus'] = runStatus;
       runData['stops'] = newStops;
 
-      print("runData['currentStopNumber']: ${runData['currentStopNumber']}");
-
       for(int i = 0; i < newStops.length; i++){
 
         if(newStopNumber == newStops[i]['stopNumber']){
@@ -84,8 +93,6 @@ class StopScreenModel {
         }
 
       }
-
-      print("Next stop wasnt found");
 
       return false;
 

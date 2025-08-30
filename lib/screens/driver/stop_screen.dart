@@ -138,7 +138,22 @@ class _StopScreenState extends State<StopScreen> {
                     )
                   ),
                 ]
+                
               ),
+              SizedBox(height: 10),
+              Center(
+                  child: Material(
+                    color: Theme.of(context).colorScheme.secondary,
+                    shadowColor: Color(0x00000000),                                
+                    borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                    child: MaterialButton(
+                      onPressed: () { stopScreenController.navigate(stopScreenController.model.stop);},
+                      minWidth: screenWidth * 0.9,
+                      height: screenWidth * 0.1,
+                      child: Text("Navigate", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ),   
               SizedBox(height: 10),
               Divider(height: 1,),
               SizedBox(height: 10),
@@ -215,24 +230,12 @@ class _StopScreenState extends State<StopScreen> {
               ...stopScreenController.model.showStopForm ? 
 
                 [
-                  StopForm(updateState, stopScreenController.hideStopFrom)
+                  StopForm(updateState: updateState, hideStopForm: stopScreenController.hideStopFrom, completeStop: stopScreenController.completeStop)
                 ]
 
               :
                 [
-                  Center(
-                    child: Material(
-                      color: Theme.of(context).colorScheme.secondary,
-                      shadowColor: Color(0x00000000),                                
-                      borderRadius: BorderRadius.all(Radius.circular(8)),                                     
-                      child: MaterialButton(
-                        onPressed: () { stopScreenController.navigate(stopScreenController.model.stop);},
-                        minWidth: screenWidth * 0.9,
-                        height: screenWidth * 0.1,
-                        child: Text("Navigate", style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                  ),      
+                 
                   SizedBox(height: 10),
                   Center(
                     child: Material(
@@ -265,4 +268,3 @@ class _StopScreenState extends State<StopScreen> {
         );
   }
 }
-
