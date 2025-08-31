@@ -4,7 +4,8 @@ class StopFormModel {
   int? quantity;
   bool? collectedPayment;
   String? notes;
-  Future<bool> Function()? completeStop;
+  Map<String, dynamic>? formDetails;
+  Future<bool> Function(Map<String, dynamic>?)? completeStop;
 
   bool isFormValid(){
 
@@ -19,6 +20,14 @@ class StopFormModel {
     if(collectedPayment == null){
       return false;
     }
+
+    formDetails = 
+    {
+      'animalType': animalType,
+      'quantity': quantity,
+      'collectedPayment': collectedPayment,
+      'notes': notes
+    };
   
     return true;
 

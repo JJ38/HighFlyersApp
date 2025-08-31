@@ -7,7 +7,7 @@ class StopForm extends StatefulWidget {
 
   final void Function() updateStopScreenState;
   final void Function() hideStopForm;
-  final Future<bool> Function() completeStop;
+  final Future<bool> Function(Map<String, dynamic>?) completeStop;
 
   const StopForm({required this.updateStopScreenState, required this.hideStopForm, required this.completeStop, super.key});
 

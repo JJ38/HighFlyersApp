@@ -47,6 +47,8 @@ class StopFormController {
 
   Future<void> completeStop(controller) async {
 
+    print("complete stop stop_from_controller");
+
     controller.loading();
 
     final isFormValid = model.isFormValid();
@@ -63,7 +65,13 @@ class StopFormController {
       return;
     }
 
-    final completedStopSuccessfully = await model.completeStop!();
+    if(model.formDetails == null){
+      showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
+      controller.reset();
+      return;
+    }
+
+    final completedStopSuccessfully = await model.completeStop!(model.formDetails);
 
     if(!completedStopSuccessfully){
       showToastWidget(ToastNotification(message: "Error completing stop", isError: true));

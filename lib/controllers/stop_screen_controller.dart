@@ -42,19 +42,6 @@ class StopScreenController {
 
   }
 
-  void confirmOrder(controller){
-
-    controller.loading();
-
-    if(false){
-      controller.success();
-    }
-
-    showToastWidget(ToastNotification(message: "Error confirming delivery", isError: true));
-    controller.reset();
-
-  }
-
   void showStopForm(){
 
     model.showStopForm = true;
@@ -88,29 +75,6 @@ class StopScreenController {
     updateState();
     controller.reset();
     showToastWidget(ToastNotification(message: "Successfully skipped stop", isError: false));
-
-  }
-
-  Future<void> completeStop(controller) async {
-
-    controller.loading();
-
-    //updates document in database
-    final completedStopSuccessfully = await model.completeStop();
-
-    if(!completedStopSuccessfully){
-
-      showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
-      controller.reset();
-      return;
-    }
-
-    await Future.delayed(Duration(seconds: 1),() {});
-    
-    model.showStopForm = false;
-    updateState();
-    controller.reset();
-    showToastWidget(ToastNotification(message: "Successfully completed stop", isError: false));
 
   }
 

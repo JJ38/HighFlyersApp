@@ -15,14 +15,14 @@ class StopScreenModel {
 
   }
 
-  Future<bool> completeStop() async{
+  Future<bool> completeStop(Map<String, dynamic>? formDetails) async{
 
-    return await nextStop("Complete");
+    return await nextStop("Complete", formDetails);
 
   }
 
 
-  Future<bool> nextStop(String stopStatus) async{  
+  Future<bool> nextStop(String stopStatus, [Map<String, dynamic>? formDetails]) async{  
 
     try{
 
@@ -41,6 +41,7 @@ class StopScreenModel {
       int newStopNumber = runData['currentStopNumber'];
       bool isLastStop = true;
 
+
       for(int i = 0; i < newStops.length; i++){
         
         final stopPrimaryKey = "${newStops[i]['orderID']}_${newStops[i]['stopType']}";
@@ -48,6 +49,8 @@ class StopScreenModel {
         if(stopPrimaryKey == currentStopPrimaryKey){
           
           newStops[i]['stopStatus'] = stopStatus;
+          newStops[i]['formDetails'] = formDetails;
+
           newStopNumber += 1;
           isLastStop = false;
           foundStop = true;
@@ -67,13 +70,15 @@ class StopScreenModel {
         newStopNumber = newStopNumber - 1;
       }
 
-      await runDocRef.update(
-        {
-          'currentStopNumber': newStopNumber,
-          'runStatus': runStatus,
-          'stops': newStops
-        }
-      );
+      Map<String, dynamic> fieldsToUpdate = 
+      {
+        'currentStopNumber': newStopNumber,
+        'runStatus': runStatus,
+        'stops': newStops
+      };
+
+
+      await runDocRef.update(fieldsToUpdate);
       
       if(isLastStop){
         print("is last stop. TODO:");
