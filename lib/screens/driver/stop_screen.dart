@@ -25,7 +25,7 @@ class _StopScreenState extends State<StopScreen> {
 
   late final StopScreenController stopScreenController;
   bool error = true;
-
+  
   @override
   void initState() {
 
@@ -147,7 +147,7 @@ class _StopScreenState extends State<StopScreen> {
                     shadowColor: Color(0x00000000),                                
                     borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                     child: MaterialButton(
-                      onPressed: () { stopScreenController.navigate(stopScreenController.model.stop);},
+                      onPressed: () { stopScreenController.navigate(stopScreenController.model.stop, context);},
                       minWidth: screenWidth * 0.9,
                       height: screenWidth * 0.1,
                       child: Text("Navigate", style: TextStyle(color: Colors.white)),
@@ -227,10 +227,11 @@ class _StopScreenState extends State<StopScreen> {
               Divider(height: 1,),
               SizedBox(height: 10),
 
-              ...stopScreenController.model.showStopForm ? 
+              ...stopScreenController.model.showStopForm ?
 
                 [
-                  StopForm(updateStopScreenState: updateState, hideStopForm: stopScreenController.hideStopFrom, completeStop: stopScreenController.model.completeStop)
+                  StopForm(updateStopScreenState: updateState, hideStopForm: stopScreenController.hideStopFrom, completeStop: stopScreenController.model.completeStop),
+
                 ]
 
               :

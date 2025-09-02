@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:map_launcher/map_launcher.dart';
 
 class StopScreenModel {
 
@@ -7,6 +8,8 @@ class StopScreenModel {
   bool showStopForm = false;
   late String progressedRunID;
   late Map<String, dynamic> runData;
+  List<AvailableMap>? availableMaps;
+  bool isDefaultMapAvailable = false;
 
 
   Future<bool> skipStop() async{
