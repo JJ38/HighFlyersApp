@@ -6,6 +6,7 @@ import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/stop_screen_model.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class StopScreenController {
@@ -31,17 +32,19 @@ class StopScreenController {
 
     // get preferred map to launch into to
 
-    final defualtMapType = MapType.google;
+    final MapType? mapPreference = await getMapPreference();
 
-    if (await MapLauncher.isMapAvailable(defualtMapType)) {
-      await launchMap(stop, defualtMapType);
-      return;
+    if(mapPreference != null){
+    
+      if (await MapLauncher.isMapAvailable(mapPreference)) {
+        await launchMap(stop, mapPreference);
+        return;
+      }
+
     }
 
     //show list of available maps to choose from as default isnt available
-
     final availableMaps = await MapLauncher.installedMaps;
-    print(availableMaps);
 
     model.availableMaps = availableMaps;
 
@@ -50,6 +53,44 @@ class StopScreenController {
     }
 
   }
+
+  Future<MapType?> getMapPreference() async {
+
+    try{
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? mapPreference = prefs.getString('maptype_preference');
+
+      if(mapPreference == null){
+        return null;
+      }
+
+      print(mapPreference);
+      
+
+      switch (mapPreference){
+
+        case "Apple Maps":
+          return MapType.apple;
+
+        case "Google Maps":
+          return MapType.google;
+
+        case "Waze":
+          return MapType.waze;
+
+      }
+
+      return null;
+
+    }catch(e){
+      print(e);
+      return null;
+    }
+
+  }
+
+
 
   static Future<void> launchMap(stop, mapType) async{
     
