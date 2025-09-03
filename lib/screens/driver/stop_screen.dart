@@ -2,9 +2,12 @@ import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:high_flyers_app/components/assigned_stops.dart';
+import 'package:high_flyers_app/components/current_stop.dart';
 import 'package:high_flyers_app/components/icon_label.dart';
 import 'package:high_flyers_app/components/stop_form.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
+import 'package:high_flyers_app/controllers/current_stop_controller.dart';
 import 'package:high_flyers_app/controllers/stop_screen_controller.dart';
 
 class StopScreen extends StatefulWidget {
@@ -25,7 +28,9 @@ class StopScreen extends StatefulWidget {
 class _StopScreenState extends State<StopScreen> {
 
   late final StopScreenController stopScreenController;
+  late List<Widget> stopView;
   bool error = true;
+
   
   @override
   void initState() {
@@ -38,19 +43,16 @@ class _StopScreenState extends State<StopScreen> {
       // showToastWidget(ToastNotification(message: "Error loading stop", isError: true));
       return;
     }
-    error = false;
-    stopScreenController.model.runData = widget.runData;
-    stopScreenController.model.progressedRunID = widget.progressedRunID!;
-    stopScreenController.model.stop = widget.stop;
 
-    print("stopScreenController.model.runData['currentStopNumber']: ${stopScreenController.model.runData['currentStopNumber']}");
+    error = false;
+    
+
+    stopView = [CurrentStop(stop: widget.stop, runData: widget.runData, progressedRunID: widget.progressedRunID, updateMapMarker: widget.updateMapMarker,), AssignedStops(run: widget.runData)];
 
   }
 
   void updateState(){
-
     setState(() {});
-
   }
 
   @override
@@ -66,205 +68,34 @@ class _StopScreenState extends State<StopScreen> {
     
       Expanded(
         child: ListView(
+          shrinkWrap: true,
           padding: const EdgeInsets.all(15),
           children:  
-            [      
-              Text("#${stopScreenController.model.stop['orderData']['ID'].toString()}", style: Theme.of(context).textTheme.titleSmall),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Stop Number: ", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                        Text(stopScreenController.model.stop['stopNumber'].toString(), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Stop type: ", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                        Text(stopScreenController.model.stop['stopType'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
-                      ],
-                    ),
-                  )
-                ]
-              ),
-              Divider(height: 1,),
-              SizedBox(height: 10),
-              Row(
-                children:[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    child: Icon(Icons.person),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                      Text(stopScreenController.model.stop['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
-                    ],
-                  ),
-                ]
-              ),
-              SizedBox(height: 10),
-              Row(
-                children:[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    child: Icon(Icons.location_on),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                        Row(
-                          children: [
-                            Text(stopScreenController.model.stop['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),  
-                          ],
-                        ),
-
-                        Row(
-                          children: [
-                            Text("${stopScreenController.model.stop['stopData']['address2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
-                            Text(stopScreenController.model.stop['stopData']['address3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
-                          ]
-                        ),
-                        Text(stopScreenController.model.stop['stopData']['postcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
-                      ]              
-                    )
-                  ),
-                ]
-                
-              ),
-              SizedBox(height: 10),
+            [ 
               Center(
-                  child: Material(
-                    color: Theme.of(context).colorScheme.secondary,
-                    shadowColor: Color(0x00000000),                                
-                    borderRadius: BorderRadius.all(Radius.circular(8)),                                     
-                    child: MaterialButton(
-                      onPressed: () { stopScreenController.navigate(stopScreenController.model.stop, context);},
-                      minWidth: screenWidth * 0.9,
-                      height: screenWidth * 0.1,
-                      child: Text("Navigate", style: TextStyle(color: Colors.white)),
-                    ),
-                  ),
-                ),   
-              SizedBox(height: 10),
-              Divider(height: 1,),
-              SizedBox(height: 10),
-              Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadiusGeometry.circular(20),
-                  color: const Color.fromARGB(255, 246, 246, 246)
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text("Animal type:",  style: Theme.of(context).textTheme.labelSmall), 
-                        ),
-                        Expanded(
-                          child: Text(stopScreenController.model.stop['stopData']['animalType'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        )
-                      ],
-                    ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text("Quantity:",  style: Theme.of(context).textTheme.labelSmall),
-                        ), 
-                        Expanded(
-                          child: Text(stopScreenController.model.stop['stopData']['quantity'].toString(), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        )                    
-                      ],
-                    ),
-
-                    Row(
-                      children:[
-                        Expanded(
-                          child: Text("Phone Number:",  style: Theme.of(context).textTheme.labelSmall), 
-                        ),
-                        Expanded(
-                          child: Text(stopScreenController.model.stop['stopData']['phoneNumber'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        ),
-                      ]
-                    ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text("Collecting payment:",  style: Theme.of(context).textTheme.labelSmall), 
-                        ),
-                        Expanded(
-                          child: Text(stopScreenController.model.stop['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 10),
-                        
-                    Text("Message:",  style: Theme.of(context).textTheme.labelSmall), 
-                        
-                    
-                    Text(stopScreenController.model.stop['orderData']['message'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
-                    
-                        
+                child: ToggleButtons(
+                  direction: Axis.horizontal,
+                  onPressed: (int index) {
+                    stopScreenController.toggleButtons(index);
+                  },
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  selectedBorderColor: Colors.blue[900],
+                  selectedColor: Colors.white,
+                  fillColor: Color(0xFF2881FF),
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                  constraints: BoxConstraints(
+                      minHeight: 40.0,
+                      minWidth: (screenWidth * 0.8) / stopScreenController.selectedToggleView.length),
+                  isSelected: stopScreenController.selectedToggleView,
+                  children: [
+                    Text('Current'),
+                    Text('Overview'),
+                    // Text('Completed'),
                   ],
                 ),
               ),
-              SizedBox(height: 10),
-              Divider(height: 1,),
-              SizedBox(height: 10),
-
-              ...stopScreenController.model.showStopForm ?
-
-                [
-                  StopForm(updateStopScreenState: updateState, hideStopForm: stopScreenController.hideStopFrom, completeStop: stopScreenController.model.completeStop),
-
-                ]
-
-              :
-                [
-                 
-                  SizedBox(height: 10),
-                  Center(
-                    child: Material(
-                      color: Colors.black,
-                      shadowColor: Color(0x00000000),                                
-                      borderRadius: BorderRadius.all(Radius.circular(8)),                                     
-                      child: MaterialButton(
-                        onPressed: () { stopScreenController.showStopForm();},
-                        minWidth: screenWidth * 0.9,
-                        height: screenWidth * 0.1,
-                        child: Text("Arrived", style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                  ),      
-                  SizedBox(height: 20),
-                  Center(
-                    child: ActionSlider.standard(
-                      icon: Icon(Icons.skip_next),
-                      toggleColor: const Color.fromARGB(255, 255, 209, 44),
-                      backgroundColor: const Color.fromARGB(255, 246, 246, 246),
-                      boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
-                      borderWidth: 4,
-                      child: Text("Slide to skip stop", style: TextStyle(color: Colors.black),),
-                      action: (controller) async { await stopScreenController.skipStop(controller);}
-                    )
-                  )
-                ]
+              SizedBox(height: 20,),
+              stopView[stopScreenController.currentSelectedToggleIndex],
             ]
           )
         );

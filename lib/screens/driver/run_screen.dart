@@ -227,34 +227,6 @@ class _RunScreenState extends State<RunScreen> {
                                       progressedRunID: runScreenController.model.progressedRunID,
                                       updateMapMarker: runScreenController.updateMapMarker
                                     ),
-                                    // ToggleButtons(
-                                    //   direction: Axis.horizontal,
-                                    //   onPressed: (int index) {
-                                    //     runScreenController
-                                    //         .toggleRunViewButtonsController(index);
-                                    //     setState(() {
-                                    //       runScreenController.selectedToggleView;
-                                    //     });
-                                    //   },
-                                    //   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                    //   selectedBorderColor: Colors.blue[900],
-                                    //   selectedColor: Colors.white,
-                                    //   fillColor: Color(0xFF2881FF),
-                                    //   color: const Color.fromARGB(255, 0, 0, 0),
-                                    //   constraints: BoxConstraints(
-                                    //       minHeight: 40.0,
-                                    //       minWidth: (screenWidth * 0.8) /
-                                    //           runScreenController
-                                    //               .selectedToggleView.length),
-                                    //   isSelected:
-                                    //       runScreenController.selectedToggleView,
-                                    //   children: [
-                                    //     Text('Assigned'),
-                                    //     Text('Pending'),
-                                    //     Text('Completed'),
-                                    //   ],
-                                    // ),
-                                    // runInfoView[runScreenController.currentSelectedIndex],
                                   ]
                                  :          
                                   [   

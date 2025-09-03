@@ -1,0 +1,250 @@
+import 'package:action_slider/action_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:high_flyers_app/components/stop_form.dart';
+import 'package:high_flyers_app/controllers/current_stop_controller.dart';
+
+class CurrentStop extends StatefulWidget {
+
+  final Map<String, dynamic> stop;
+  final Map<String, dynamic> runData;
+  final String? progressedRunID;
+  final void Function() updateMapMarker;
+
+  const CurrentStop({super.key, required this.stop, required this.runData, required this.progressedRunID, required this.updateMapMarker});
+
+  @override
+  State<CurrentStop> createState() => _CurrentStopState();
+}
+
+class _CurrentStopState extends State<CurrentStop> {
+
+  late CurrentStopController currentStopController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    currentStopController = CurrentStopController(updateState: updateState);
+
+    currentStopController.model.runData = widget.runData;
+    currentStopController.model.progressedRunID = widget.progressedRunID!;
+    currentStopController.model.stop = widget.stop;
+  }
+
+  void updateState(){
+    setState(() {
+      
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: 
+        [
+          Text("#${currentStopController.model.stop['orderData']['ID'].toString()}", style: Theme.of(context).textTheme.titleSmall),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Stop Number: ", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                    Text(currentStopController.model.stop['stopNumber'].toString(), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Stop type: ", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                    Text(currentStopController.model.stop['stopType'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                  ],
+                ),
+              )
+            ]
+          ),
+          Divider(height: 1,),
+          SizedBox(height: 10),
+          Row(
+            children:[
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Icon(Icons.person),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                  Text(currentStopController.model.stop['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                ],
+              ),
+            ]
+          ),
+          SizedBox(height: 10),
+          Row(
+            children:[
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Icon(Icons.location_on),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                    Row(
+                      children: [
+                        Text(currentStopController.model.stop['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),  
+                      ],
+                    ),
+
+                    Row(
+                      children: [
+                        Text("${currentStopController.model.stop['stopData']['address2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                        Text(currentStopController.model.stop['stopData']['address3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                      ]
+                    ),
+                    Text(currentStopController.model.stop['stopData']['postcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                  ]              
+                )
+              ),
+            ]
+            
+          ),
+          SizedBox(height: 10),
+          Center(
+              child: Material(
+                color: Theme.of(context).colorScheme.secondary,
+                shadowColor: Color(0x00000000),                                
+                borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                child: MaterialButton(
+                  onPressed: () { currentStopController.navigate(currentStopController.model.stop, context);},
+                  minWidth: screenWidth * 0.9,
+                  height: screenWidth * 0.1,
+                  child: Text("Navigate", style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ),   
+          SizedBox(height: 10),
+          Divider(height: 1,),
+          SizedBox(height: 10),
+          Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusGeometry.circular(20),
+              color: const Color.fromARGB(255, 246, 246, 246)
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text("Animal type:",  style: Theme.of(context).textTheme.labelSmall), 
+                    ),
+                    Expanded(
+                      child: Text(currentStopController.model.stop['stopData']['animalType'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                    )
+                  ],
+                ),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text("Quantity:",  style: Theme.of(context).textTheme.labelSmall),
+                    ), 
+                    Expanded(
+                      child: Text(currentStopController.model.stop['stopData']['quantity'].toString(), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                    )                    
+                  ],
+                ),
+
+                Row(
+                  children:[
+                    Expanded(
+                      child: Text("Phone Number:",  style: Theme.of(context).textTheme.labelSmall), 
+                    ),
+                    Expanded(
+                      child: Text(currentStopController.model.stop['stopData']['phoneNumber'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                    ),
+                  ]
+                ),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text("Collecting payment:",  style: Theme.of(context).textTheme.labelSmall), 
+                    ),
+                    Expanded(
+                      child: Text(currentStopController.model.stop['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 10),
+                    
+                Text("Message:",  style: Theme.of(context).textTheme.labelSmall), 
+                    
+                
+                Text(currentStopController.model.stop['orderData']['message'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
+                
+                    
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          Divider(height: 1,),
+          SizedBox(height: 10),
+
+          ...currentStopController.model.showStopForm ?
+
+            [
+              StopForm(updateStopScreenState: updateState, hideStopForm: currentStopController.hideStopFrom, completeStop: currentStopController.model.completeStop),
+
+            ]
+
+          :
+            [
+              
+              SizedBox(height: 10),
+              Center(
+                child: Material(
+                  color: Colors.black,
+                  shadowColor: Color(0x00000000),                                
+                  borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                  child: MaterialButton(
+                    onPressed: () { currentStopController.showStopForm();},
+                    minWidth: screenWidth * 0.9,
+                    height: screenWidth * 0.1,
+                    child: Text("Arrived", style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ),      
+              SizedBox(height: 20),
+              Center(
+                child: ActionSlider.standard(
+                  icon: Icon(Icons.skip_next),
+                  toggleColor: const Color.fromARGB(255, 255, 209, 44),
+                  backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+                  boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
+                  borderWidth: 4,
+                  child: Text("Slide to skip stop", style: TextStyle(color: Colors.black),),
+                  action: (controller) async { await currentStopController.skipStop(controller);}
+                )
+              )
+            ]
+        ]
+    );
+  }
+}

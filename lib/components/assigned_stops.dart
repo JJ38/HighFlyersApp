@@ -17,15 +17,13 @@ class AssignedStops extends StatelessWidget {
 
     return Expanded(
             flex: 1,
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: run['stops'].length,
-              itemBuilder: (BuildContext context, int index) {
+            child: Column(
+              children: run['stops'].map<Widget>((stop){
                 return StopCard(
-                  stop: run['stops'][index],
+                  stop: stop,
                   width: screenWidth,
                 );
-              }
+              }).toList()
             )                       
           );
   }
