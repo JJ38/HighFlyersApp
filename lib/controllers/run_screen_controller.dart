@@ -12,8 +12,9 @@ class RunScreenController {
   final RunModel model = RunModel();
   final List<bool> selectedToggleView = <bool>[true, false, false];
   int currentSelectedIndex = 0;
+  final void Function() updateState;
 
-  RunScreenController();
+  RunScreenController({required this.updateState});
 
   void toggleRunViewButtonsController(selectedIndex){
 
@@ -54,6 +55,12 @@ class RunScreenController {
 
     return true;
 
+  }
+
+  void updateMapMarker(){
+
+
+    updateState();
   }
 
 }

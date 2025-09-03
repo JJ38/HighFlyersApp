@@ -39,8 +39,8 @@ class _RunScreenState extends State<RunScreen> {
   @override
   void initState() {
     super.initState();
-    runScreenController = RunScreenController();
-
+    runScreenController = RunScreenController(updateState: updateState);
+  
     run = widget.runDocument.data()! as Map<String, dynamic>;
     runID = widget.runDocument.id;
     runDocument = widget.runDocument;
@@ -138,6 +138,11 @@ class _RunScreenState extends State<RunScreen> {
     });
   }
 
+  void updateState(){
+    setState(() {
+      
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +221,12 @@ class _RunScreenState extends State<RunScreen> {
                                   ),
                                 ...runStarted ? 
                                   [
-                                    StopScreen(stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']), runData: runScreenController.model.run!, progressedRunID: runScreenController.model.progressedRunID),
+                                    StopScreen(
+                                      stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']), 
+                                      runData: runScreenController.model.run!, 
+                                      progressedRunID: runScreenController.model.progressedRunID,
+                                      updateMapMarker: runScreenController.updateMapMarker
+                                    ),
                                     // ToggleButtons(
                                     //   direction: Axis.horizontal,
                                     //   onPressed: (int index) {

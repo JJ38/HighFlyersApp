@@ -14,8 +14,9 @@ class StopScreen extends StatefulWidget {
   final Map<String, dynamic> stop;
   final Map<String, dynamic> runData;
   final String? progressedRunID;
+  final void Function() updateMapMarker;
 
-  const StopScreen({super.key, required this.stop, required this.runData, required this.progressedRunID});
+  const StopScreen({super.key, required this.stop, required this.runData, required this.progressedRunID, required this.updateMapMarker});
 
   @override
   State<StopScreen> createState() => _StopScreenState();
