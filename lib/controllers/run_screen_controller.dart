@@ -57,9 +57,9 @@ class RunScreenController {
 
   }
 
-  void updateMapMarker(){
-
-
+  void updateMapMarker(Map<String, dynamic> stopData) async {
+    print("updateMapMarker");
+    await model.getMarkerForStop(stopData);
     updateState();
   }
 

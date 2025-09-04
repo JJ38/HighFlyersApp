@@ -8,8 +8,9 @@ class StopForm extends StatefulWidget {
   final void Function() updateStopScreenState;
   final void Function() hideStopForm;
   final Future<bool> Function(Map<String, dynamic>?) completeStop;
+  final void Function() updateMapMarker;
 
-  const StopForm({required this.updateStopScreenState, required this.hideStopForm, required this.completeStop, super.key});
+  const StopForm({required this.updateStopScreenState, required this.updateMapMarker, required this.hideStopForm, required this.completeStop, super.key});
 
   @override
   State<StopForm> createState() => _StopFormState();
@@ -23,7 +24,7 @@ class _StopFormState extends State<StopForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    stopFormController = StopFormController(updateStopScreenState: widget.updateStopScreenState, hideStopForm: widget.hideStopForm);
+    stopFormController = StopFormController(updateStopScreenState: widget.updateStopScreenState, updateMapMarker: widget.updateMapMarker, hideStopForm: widget.hideStopForm);
     stopFormController.model.completeStop = widget.completeStop;
   }
 

@@ -62,6 +62,8 @@ class RunModel {
         icon: await customMarker(stopData['stopNumber'].toString()),
       )
     );
+    
+    print(markers);
 
     return true;
 

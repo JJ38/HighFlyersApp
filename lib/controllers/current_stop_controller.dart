@@ -13,8 +13,9 @@ class CurrentStopController {
 
   CurrentStopModel model = CurrentStopModel();
   final void Function() updateState;
+  final void Function(Map<String, dynamic>) updateMapMarker;
 
-  CurrentStopController({required this.updateState});
+  CurrentStopController({required this.updateState, required this.updateMapMarker});
 
   void navigate(Map<String, dynamic> stop, BuildContext context) async{
 
@@ -89,8 +90,6 @@ class CurrentStopController {
     }
 
   }
-
-
 
   static Future<void> launchMap(stop, mapType) async{
     
@@ -177,12 +176,19 @@ class CurrentStopController {
     }
 
     await Future.delayed(Duration(seconds: 1),() {  });
-    
+
+
+    //update map marker
+    // model.stop['coordinates'];
+    updateMapMarkerNextStop();
     updateState();
     controller.reset();
     showToastWidget(ToastNotification(message: "Successfully skipped stop", isError: false));
 
   }
 
+  void updateMapMarkerNextStop(){
+    updateMapMarker(model.stop);
+  }
 
 }

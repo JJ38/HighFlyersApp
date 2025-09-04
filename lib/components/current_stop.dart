@@ -8,7 +8,7 @@ class CurrentStop extends StatefulWidget {
   final Map<String, dynamic> stop;
   final Map<String, dynamic> runData;
   final String? progressedRunID;
-  final void Function() updateMapMarker;
+  final void Function(Map<String, dynamic>) updateMapMarker;
 
   const CurrentStop({super.key, required this.stop, required this.runData, required this.progressedRunID, required this.updateMapMarker});
 
@@ -25,11 +25,12 @@ class _CurrentStopState extends State<CurrentStop> {
     // TODO: implement initState
     super.initState();
 
-    currentStopController = CurrentStopController(updateState: updateState);
+    currentStopController = CurrentStopController(updateState: updateState, updateMapMarker: widget.updateMapMarker);
 
     currentStopController.model.runData = widget.runData;
     currentStopController.model.progressedRunID = widget.progressedRunID!;
     currentStopController.model.stop = widget.stop;
+
   }
 
   void updateState(){
@@ -210,7 +211,7 @@ class _CurrentStopState extends State<CurrentStop> {
           ...currentStopController.model.showStopForm ?
 
             [
-              StopForm(updateStopScreenState: updateState, hideStopForm: currentStopController.hideStopFrom, completeStop: currentStopController.model.completeStop),
+              StopForm(updateStopScreenState: updateState, updateMapMarker: currentStopController.updateMapMarkerNextStop, hideStopForm: currentStopController.hideStopFrom, completeStop: currentStopController.model.completeStop),
 
             ]
 

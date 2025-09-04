@@ -7,9 +7,10 @@ class StopFormController {
   StopFormModel model = StopFormModel();
   final void Function() updateStopScreenState;
   final void Function() hideStopForm;
+  final void Function() updateMapMarker;
 
 
-  StopFormController({required this.updateStopScreenState, required this.hideStopForm});
+  StopFormController({required this.updateStopScreenState, required this.updateMapMarker, required this.hideStopForm});
 
   void onAnimalTypeSelect(String? animalType){
 
@@ -82,6 +83,7 @@ class StopFormController {
 
     showToastWidget(ToastNotification(message: "Successfully completed stop", isError: false));
 
+    updateMapMarker();
     hideStopForm();
     updateStopScreenState();
 

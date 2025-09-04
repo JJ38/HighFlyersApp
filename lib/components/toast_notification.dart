@@ -20,7 +20,7 @@ class ToastNotification extends StatelessWidget {
           color: isError ? Theme.of(context).colorScheme.error : Colors.green[700]!,
           width: 1.0, 
         ),
-        borderRadius: BorderRadiusGeometry.all(Radius.circular(3))
+        borderRadius: BorderRadius.all(Radius.circular(3))
       ),
       child: Padding(
         padding: EdgeInsets.all(8),
@@ -39,7 +39,12 @@ class ToastNotification extends StatelessWidget {
                 size: 30.0,
                 color: Colors.white,
               ),
-            Text(message, style: TextStyle(fontSize: 16.0, color: Colors.white)),
+            
+          
+            Expanded(
+              child: Text(message, style: TextStyle(fontSize: 16.0, color: Colors.white), softWrap: true, maxLines: 2,)
+            )
+            
           ]
         )
       )

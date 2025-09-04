@@ -14,7 +14,17 @@ class CurrentStopModel {
 
   Future<bool> skipStop() async{
 
-    return await nextStop("Skipped");
+    final bool successfullySkippedStop = await nextStop("Skipped");
+
+    if(!successfullySkippedStop){
+      return false;
+    }
+
+    //update map marker
+
+    
+
+    return true;
 
   }
 
@@ -96,11 +106,13 @@ class CurrentStopModel {
 
         if(newStopNumber == newStops[i]['stopNumber']){
           stop = newStops[i];
-          print(stop);
+          print(stop['coordinates']);
           return true;
         }
 
       }
+
+      //completed run
 
       return false;
 
