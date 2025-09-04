@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreenModel {
+
+  bool isLoading = false;
   String? username;
   String? password;
   String? errorMessage;

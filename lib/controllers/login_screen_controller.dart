@@ -8,7 +8,11 @@ import 'package:high_flyers_app/screens/customer/customer_screen.dart';
 import 'package:high_flyers_app/screens/driver/driver_screen.dart';
 
 class LoginScreenController {
+
   final model = LoginScreenModel();
+  final void Function() updateState;
+
+  LoginScreenController({required this.updateState});
 
   void usernameInputController(String username) {
     model.username = username;
@@ -20,7 +24,14 @@ class LoginScreenController {
 
   void login(context) async {
 
+    model.isLoading = true;
+    updateState();
+
     final authenticated = await model.login();
+
+    model.isLoading = false;
+    updateState();
+
 
     if (!authenticated) {
       

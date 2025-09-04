@@ -20,8 +20,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState(){
     super.initState();
-    loginScreenController = LoginScreenController();
+    loginScreenController = LoginScreenController(updateState: updateState);
 
+  }
+
+  void updateState(){
+    setState(() {
+      
+    });
   }
 
   @override
@@ -62,14 +68,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: "Password",
                     obscureText: true,
                     onChange: loginScreenController.passwordInputController),
-                ButtonPill(
+
+                loginScreenController.model.isLoading ?
+
+                  Center(
+                    child: CircularProgressIndicator(color: Theme.of(context).colorScheme.secondary,)
+                  )
+
+                :
+                 
+                  ButtonPill(
                     text: "Login",
                     buttonColor: Theme.of(context).colorScheme.secondary,
-                    action: () {
-                      setState(() {
-                        loginScreenController.login(context);
-                      });
-                    })
+                    action: () {loginScreenController.login(context);},
+                  )
               ],
             )
           ],
