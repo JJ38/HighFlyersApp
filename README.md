@@ -19,6 +19,8 @@ samples, guidance on mobile development, and a full API reference.
 
 todo:
 
+- check if is mounted on all updateState functions
+
 -add location being written to database periodically for order tracking and live logistics manager in the future
 
 -make sure that a driver is only assigned a run if it is optimised. Maybe store optimised route in the assignedRuns in driver doc.

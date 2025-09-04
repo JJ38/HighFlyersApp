@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/controllers/login_screen_controller.dart';
 import 'package:high_flyers_app/components/button_pill.dart';
@@ -40,6 +41,10 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            ElevatedButton(
+              onPressed: () => FirebaseCrashlytics.instance.crash(),
+              child: const Text('Crash'),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
