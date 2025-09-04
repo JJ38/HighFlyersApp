@@ -59,7 +59,26 @@ class RunScreenController {
 
   void updateMapMarker(Map<String, dynamic> stopData) async {
     print("updateMapMarker");
-    await model.getMarkerForStop(stopData);
+    final successfullyUpdatedMarker = await model.getMarkerForStop(stopData);
+
+    if(!successfullyUpdatedMarker){
+      showToastWidget(ToastNotification(message: "Error updating map marker", isError: true));
+      return;
+    }
+
+    updateState();
+  }
+
+  void updateRunMapMarkers() async {
+    
+    print("updateMapRunMarker");
+    final successfullyUpdatedRunMarkers = await model.getMarkersForRun();
+
+    if(!successfullyUpdatedRunMarkers){
+      showToastWidget(ToastNotification(message: "Error updating map marker", isError: true));
+      return;
+    }
+
     updateState();
   }
 

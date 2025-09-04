@@ -225,7 +225,9 @@ class _RunScreenState extends State<RunScreen> {
                                       stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']), 
                                       runData: runScreenController.model.run!, 
                                       progressedRunID: runScreenController.model.progressedRunID,
-                                      updateMapMarker: runScreenController.updateMapMarker
+                                      updateMapMarker: runScreenController.updateMapMarker,
+                                      updateRunMapMarkers: runScreenController.updateRunMapMarkers,
+
                                     ),
                                   ]
                                  :          

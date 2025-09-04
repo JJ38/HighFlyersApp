@@ -5,12 +5,14 @@ import 'package:high_flyers_app/controllers/current_stop_controller.dart';
 
 class CurrentStop extends StatefulWidget {
 
-  final Map<String, dynamic> stop;
   final Map<String, dynamic> runData;
   final String? progressedRunID;
   final void Function(Map<String, dynamic>) updateMapMarker;
+  final void Function(Map<String, dynamic>) updateCurrentStop;
+  final Map<String, dynamic> Function() getStop;
 
-  const CurrentStop({super.key, required this.stop, required this.runData, required this.progressedRunID, required this.updateMapMarker});
+
+  const CurrentStop({super.key, required this.getStop, required this.runData, required this.progressedRunID, required this.updateMapMarker, required this.updateCurrentStop});
 
   @override
   State<CurrentStop> createState() => _CurrentStopState();
@@ -19,17 +21,23 @@ class CurrentStop extends StatefulWidget {
 class _CurrentStopState extends State<CurrentStop> {
 
   late CurrentStopController currentStopController;
+  bool firstShown = false;
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
 
+    debugPrint("initstate current stop");
+  
     currentStopController = CurrentStopController(updateState: updateState, updateMapMarker: widget.updateMapMarker);
 
     currentStopController.model.runData = widget.runData;
     currentStopController.model.progressedRunID = widget.progressedRunID!;
-    currentStopController.model.stop = widget.stop;
+    currentStopController.model.stop = widget.getStop();
+    currentStopController.model.updateCurrentStop = widget.updateCurrentStop;
+
+    widget.updateMapMarker(currentStopController.model.stop);
 
   }
 

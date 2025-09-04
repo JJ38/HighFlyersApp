@@ -14,6 +14,7 @@ class CurrentStopController {
   CurrentStopModel model = CurrentStopModel();
   final void Function() updateState;
   final void Function(Map<String, dynamic>) updateMapMarker;
+  
 
   CurrentStopController({required this.updateState, required this.updateMapMarker});
 

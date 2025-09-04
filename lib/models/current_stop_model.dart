@@ -10,6 +10,7 @@ class CurrentStopModel {
   late Map<String, dynamic> runData;
   List<AvailableMap>? availableMaps;
   bool isDefaultMapAvailable = false;
+  late void Function(Map<String, dynamic>) updateCurrentStop;
 
 
   Future<bool> skipStop() async{
@@ -19,10 +20,6 @@ class CurrentStopModel {
     if(!successfullySkippedStop){
       return false;
     }
-
-    //update map marker
-
-    
 
     return true;
 
@@ -106,6 +103,7 @@ class CurrentStopModel {
 
         if(newStopNumber == newStops[i]['stopNumber']){
           stop = newStops[i];
+          updateCurrentStop(stop);
           print(stop['coordinates']);
           return true;
         }

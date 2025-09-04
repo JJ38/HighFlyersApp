@@ -18,8 +18,9 @@ class StopScreen extends StatefulWidget {
   final Map<String, dynamic> runData;
   final String? progressedRunID;
   final void Function(Map<String, dynamic>) updateMapMarker;
+  final void Function() updateRunMapMarkers;
 
-  const StopScreen({super.key, required this.stop, required this.runData, required this.progressedRunID, required this.updateMapMarker});
+  const StopScreen({super.key, required this.stop, required this.runData, required this.progressedRunID, required this.updateMapMarker, required this.updateRunMapMarkers});
 
   @override
   State<StopScreen> createState() => _StopScreenState();
@@ -36,18 +37,33 @@ class _StopScreenState extends State<StopScreen> {
   void initState() {
 
     super.initState();
+
+    print("init state stop screen");
     
-    stopScreenController = StopScreenController(updateState: updateState);
+    stopScreenController = StopScreenController(updateState: updateState, updateMapRunMarkers: widget.updateRunMapMarkers);
 
     if(widget.progressedRunID == null){
-      // showToastWidget(ToastNotification(message: "Error loading stop", isError: true));
+      showToastWidget(ToastNotification(message: "Error loading stop", isError: true));
       return;
     }
 
     error = false;
-    
 
-    stopView = [CurrentStop(stop: widget.stop, runData: widget.runData, progressedRunID: widget.progressedRunID, updateMapMarker: widget.updateMapMarker,), AssignedStops(run: widget.runData)];
+    stopScreenController.model.currentStop = widget.stop;
+    
+    print("stopScreenController.model.currentStop['stopNumber']");
+    print(stopScreenController.model.currentStop['stopNumber']);
+
+    stopView = [
+      CurrentStop(
+        getStop: stopScreenController.model.getCurrentStop, 
+        runData: widget.runData, 
+        progressedRunID: widget.progressedRunID, 
+        updateMapMarker: widget.updateMapMarker, 
+        updateCurrentStop: stopScreenController.model.updateCurrentStop
+      ),
+      AssignedStops(run: widget.runData,)
+    ];
 
   }
 
