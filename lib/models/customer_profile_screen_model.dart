@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 class CustomerProfileScreenModel {
 
+  late Map<String, dynamic> customerProfileData;
   String? name;
   String? email;
   String? addressLine1;
@@ -13,6 +14,13 @@ class CustomerProfileScreenModel {
   String? phoneNumber;
   bool isLoaded = false;
   bool isSuccessfullyLoaded = false;
+  bool showUpdateButton = false;
+
+  bool getShowUpdateButton(){
+
+    return showUpdateButton;
+
+  }
 
   Future<bool> fetchProfile() async {
 
@@ -36,7 +44,7 @@ class CustomerProfileScreenModel {
         return false;
       }
 
-      Map<String, dynamic> customerProfileData = response.data()!;
+      customerProfileData = response.data()!;
 
       name = customerProfileData['collectionName'];
       email = customerProfileData['email'];

@@ -131,18 +131,18 @@ class _CurrentStopState extends State<CurrentStop> {
           ),
           SizedBox(height: 10),
           Center(
-              child: Material(
-                color: Theme.of(context).colorScheme.secondary,
-                shadowColor: Color(0x00000000),                                
-                borderRadius: BorderRadius.all(Radius.circular(8)),                                     
-                child: MaterialButton(
-                  onPressed: () { currentStopController.navigate(currentStopController.model.stop, context);},
-                  minWidth: screenWidth * 0.9,
-                  height: screenWidth * 0.1,
-                  child: Text("Navigate", style: TextStyle(color: Colors.white)),
-                ),
+            child: Material(
+              color: Theme.of(context).colorScheme.secondary,
+              shadowColor: Color(0x00000000),                                
+              borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+              child: MaterialButton(
+                onPressed: () { currentStopController.navigate(currentStopController.model.stop, context);},
+                minWidth: screenWidth * 0.9,
+                height: screenWidth * 0.1,
+                child: Text("Navigate", style: TextStyle(color: Colors.white)),
               ),
-            ),   
+            ),
+          ),   
           SizedBox(height: 10),
           Divider(height: 1,),
           SizedBox(height: 10),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/input_pill.dart';
 import 'package:high_flyers_app/components/squared_input.dart';
+import 'package:high_flyers_app/components/stateful_button.dart';
 import 'package:high_flyers_app/controllers/customer_profile_screen_controller.dart';
 
 class CustomerProfileScreen extends StatefulWidget {
@@ -28,7 +29,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
 
   void updateState(){
     print("setstate");
-    print("is loaded: ${customerProfileScreenController.model.isLoaded}");
+    print("showUpdateButton: ${customerProfileScreenController.model.showUpdateButton}");
     setState(() {
       
     });
@@ -56,20 +57,22 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   Expanded(
                     child: ListView(
                       children: [
-                        SquaredInput(label: "Name", value: customerProfileScreenController.model.name, icon: Icons.person, onChange: (input){}),
+                        SquaredInput(label: "Name", value: customerProfileScreenController.model.name, icon: Icons.person_outline_outlined, onChange: customerProfileScreenController.nameOnChange),
                         SizedBox(height: 20,),
-                        SquaredInput(label: "Email", value: customerProfileScreenController.model.email, icon: Icons.person_outline, keyboardType: TextInputType.emailAddress, onChange: (input){}),
+                        SquaredInput(label: "Email", value: customerProfileScreenController.model.email, icon: Icons.alternate_email_outlined, keyboardType: TextInputType.emailAddress, onChange: customerProfileScreenController.emailOnChange),
                         SizedBox(height: 20,),
-                        SquaredInput(label: "Address line 1", value: customerProfileScreenController.model.addressLine1, icon: Icons.local_post_office_outlined, onChange: (input){}),
+                        SquaredInput(label: "Address line 1", value: customerProfileScreenController.model.addressLine1, icon: Icons.local_post_office_outlined, onChange: customerProfileScreenController.addressOneOnChange),
                         SizedBox(height: 20,),
-                        SquaredInput(label: "Address line 2", value: customerProfileScreenController.model.addressLine2, icon: Icons.local_post_office_outlined, onChange: (input){}),
+                        SquaredInput(label: "Address line 2", value: customerProfileScreenController.model.addressLine2, icon: Icons.local_post_office_outlined, onChange: customerProfileScreenController.addressTwoOnChange),
                         SizedBox(height: 20,),
-                        SquaredInput(label: "Address line 3", value: customerProfileScreenController.model.addressLine3, icon: Icons.local_post_office_outlined, onChange: (input){}),
+                        SquaredInput(label: "Address line 3", value: customerProfileScreenController.model.addressLine3, icon: Icons.local_post_office_outlined, onChange: customerProfileScreenController.addressThreeOnChange),
                         SizedBox(height: 20,),
-                        SquaredInput(label: "Postcode", value: customerProfileScreenController.model.postcode, icon: Icons.local_post_office_outlined, onChange: (input){}),
+                        SquaredInput(label: "Postcode", value: customerProfileScreenController.model.postcode, icon: Icons.local_post_office_outlined, onChange: customerProfileScreenController.postcodeOnChange),
                         SizedBox(height: 20,),
-                        SquaredInput(label: "Phone number", value: customerProfileScreenController.model.phoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: (input){}),
+                        SquaredInput(label: "Phone number", value: customerProfileScreenController.model.phoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: customerProfileScreenController.phoneNumberOnChange),
                         SizedBox(height: 20,),
+
+                        StatefulButton(controller: customerProfileScreenController)
                       ],
                     )
                   )
