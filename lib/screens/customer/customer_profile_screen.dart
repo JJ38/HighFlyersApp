@@ -71,7 +71,6 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         SizedBox(height: 20,),
                         SquaredInput(label: "Phone number", value: customerProfileScreenController.model.phoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: customerProfileScreenController.phoneNumberOnChange),
                         SizedBox(height: 20,),
-
                         StatefulButton(controller: customerProfileScreenController)
                       ],
                     )

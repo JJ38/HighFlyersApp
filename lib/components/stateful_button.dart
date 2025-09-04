@@ -44,7 +44,7 @@ class _StatefulButtonState extends State<StatefulButton> {
           shadowColor: Color(0x00000000),                                
           borderRadius: BorderRadius.all(Radius.circular(8)),                                     
           child: MaterialButton(
-            onPressed: (){},
+            onPressed: controller.updateProfile,
             minWidth: screenWidth * 0.9,
             height: screenWidth * 0.1,
             child: Text("Update", style: TextStyle(color: Colors.white)),

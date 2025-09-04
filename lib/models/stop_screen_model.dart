@@ -7,12 +7,8 @@ class StopScreenModel {
   }
 
   void updateCurrentStop(Map<String, dynamic> stop){
-    print("Update current stop");
-
+    
     currentStop = stop;
-
-    print(currentStop);
-
 
   }
 

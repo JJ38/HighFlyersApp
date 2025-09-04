@@ -130,4 +130,25 @@ class CustomerProfileScreenController {
 
   }
 
+  void updateProfile() async {
+
+    final isValidForm = model.validateProfileForm();
+
+    if(!isValidForm){
+      showToastWidget(ToastNotification(message: model.validationErrorMessage, isError: true));
+      return;
+    }
+
+    final successfullyUpdatedProfile = await model.updateProfile();
+
+    if(!successfullyUpdatedProfile){
+      showToastWidget(ToastNotification(message: "Error updating profile", isError: true));
+      return;
+    }
+
+    showToastWidget(ToastNotification(message: "Successfully updated profile", isError: false));
+    updateState();
+
+  }
+
 }
