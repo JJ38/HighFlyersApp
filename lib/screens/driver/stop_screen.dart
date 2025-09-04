@@ -17,10 +17,11 @@ class StopScreen extends StatefulWidget {
   final Map<String, dynamic> stop;
   final Map<String, dynamic> runData;
   final String? progressedRunID;
+  final ScrollController scrollController;
   final void Function(Map<String, dynamic>) updateMapMarker;
   final void Function() updateRunMapMarkers;
 
-  const StopScreen({super.key, required this.stop, required this.runData, required this.progressedRunID, required this.updateMapMarker, required this.updateRunMapMarkers});
+  const StopScreen({super.key, required this.stop, required this.runData, required this.progressedRunID, required this.updateMapMarker, required this.updateRunMapMarkers, required this.scrollController});
 
   @override
   State<StopScreen> createState() => _StopScreenState();
@@ -84,6 +85,7 @@ class _StopScreenState extends State<StopScreen> {
     
       Expanded(
         child: ListView(
+          controller: widget.scrollController,
           shrinkWrap: true,
           padding: const EdgeInsets.all(15),
           children:  

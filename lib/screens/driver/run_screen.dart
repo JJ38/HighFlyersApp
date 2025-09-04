@@ -227,6 +227,7 @@ class _RunScreenState extends State<RunScreen> {
                                       progressedRunID: runScreenController.model.progressedRunID,
                                       updateMapMarker: runScreenController.updateMapMarker,
                                       updateRunMapMarkers: runScreenController.updateRunMapMarkers,
+                                      scrollController: scrollController,
 
                                     ),
                                   ]
