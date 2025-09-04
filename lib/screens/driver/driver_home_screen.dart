@@ -14,16 +14,20 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   late DriverHomeScreenController driverHomeScreenController;
 
-  bool driverLoadedSuccessfully = false;
-  bool isLoading = true;
-
   @override
   void initState() {
+    print("init state driver home screen");
     super.initState();
-    driverHomeScreenController = DriverHomeScreenController(initialiseDriver);
+    driverHomeScreenController = DriverHomeScreenController(initialiseDriver: initialiseDriver, updateState: updateState);
 
     initialiseDriver();
 
+  }
+
+  void updateState(){
+    setState(() {
+      
+    });
   }
 
   void initialiseDriver() async {
@@ -36,16 +40,16 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
       if (driverRunsFetched) {
 
-        driverLoadedSuccessfully = true;
+        driverHomeScreenController.model.driverLoadedSuccessfully = true;
 
       }
     }
 
-    isLoading = false;
+    driverHomeScreenController.model.isLoading = false;
 
     setState(() {
-      driverLoadedSuccessfully;
-      isLoading;
+      driverHomeScreenController.model.driverLoadedSuccessfully;
+      driverHomeScreenController.model.isLoading;
     });
 
   }
@@ -65,7 +69,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 children: [
                   Text("Your Runs", style: Theme.of(context).textTheme.titleLarge),
 
-                  driverLoadedSuccessfully ? 
+                  driverHomeScreenController.model.driverLoadedSuccessfully ? 
 
                     driverHomeScreenController.model.driverRunDocs.isEmpty ? 
 
@@ -95,7 +99,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         },
                       )
                   :
-                    isLoading ? 
+                    driverHomeScreenController.model.isLoading ? 
 
                       Center(
                         child: CircularProgressIndicator(color: Theme.of(context).colorScheme.secondary,),
@@ -103,7 +107,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     
                     :
 
-                      Center(child: Text(driverLoadedSuccessfully.toString())),
+                      Center(child: Text(driverHomeScreenController.model.driverLoadedSuccessfully.toString())),
                 ],
               ),
             ),

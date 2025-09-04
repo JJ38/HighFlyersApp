@@ -7,8 +7,9 @@ class DriverHomeScreenController {
   final DriverModel model = DriverModel();
 
   final Function() initialiseDriver;
+  final Function() updateState;
 
-  DriverHomeScreenController(this.initialiseDriver);
+  DriverHomeScreenController({required this.initialiseDriver, required this.updateState});
 
   void onRunTileTap(DocumentSnapshot<Object?> runDocument, bool runStatus, context) async {
 
@@ -20,7 +21,11 @@ class DriverHomeScreenController {
 
     // reinitialisePage
 
-    initialiseDriver.call();
+    model.isLoading = true;
+    model.driverLoadedSuccessfully = false;
+
+    updateState();
+    initialiseDriver();
 
   }
 }

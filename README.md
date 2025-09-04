@@ -19,26 +19,11 @@ samples, guidance on mobile development, and a full API reference.
 
 todo:
 
--update marker on map when skipping a stop
-
 -add location being written to database periodically for order tracking and live logistics manager in the future
 
 -make sure that a driver is only assigned a run if it is optimised. Maybe store optimised route in the assignedRuns in driver doc.
 
 -update flash/startup screen to bird logo
-
--when "arrived" is clicked a form should show up asking for basic information like did they collection payment, Did they pick up the correct quantity etc.
--form should show button saying "submit" or "complete". This will release the next stop.
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -6,11 +6,9 @@ import 'package:high_flyers_app/models/firebase_model.dart';
 enum Status { offline, online, skipped, completed, enroute }
 
 class DriverModel {
-  String? driverName;
-  Enum? driverStatus;
-  String? nextStop;
-  String? runName;
-  int? stopRemaining;
+
+  bool isLoading = true;
+  bool driverLoadedSuccessfully = false;
   late Map<String, dynamic> driverDoc;
   List<Map<String, dynamic>> driverRuns = [];
   List<bool> runStatuses = [];
