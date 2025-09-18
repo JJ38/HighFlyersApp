@@ -17,6 +17,7 @@ class _DriverSettingsScreenState extends State<DriverSettingsScreen> {
   late DriverSettingsScreenController driverSettingsScreenController;
   bool loaded = true;
   bool successFullyLoaded = true;
+  String? test;
 
   @override
   void initState() {
@@ -47,6 +48,11 @@ class _DriverSettingsScreenState extends State<DriverSettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Settings", style: Theme.of(context).textTheme.titleLarge),
+
+                TextButton(
+    onPressed: () => {test!.length},
+    child: const Text("Throw Test Exception"),
+),
 
               ...driverSettingsScreenController.model.loaded ?
 

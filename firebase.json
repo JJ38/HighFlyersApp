@@ -1,1 +1,41 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"highflyersukcouriers-a9c17","appId":"1:970355130070:android:5c36e091b84d9697339377","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"highflyersukcouriers-a9c17","appId":"1:970355130070:ios:7aa3e4c916c4b50c339377","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"highflyersukcouriers-a9c17","appId":"1:970355130070:ios:7aa3e4c916c4b50c339377","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"highflyersukcouriers-a9c17","configurations":{"android":"1:970355130070:android:5c36e091b84d9697339377","ios":"1:970355130070:ios:7aa3e4c916c4b50c339377","macos":"1:970355130070:ios:7aa3e4c916c4b50c339377","web":"1:970355130070:web:b2ff0ee62b6b9ac2339377","windows":"1:970355130070:web:9ed543f533f38b39339377"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "highflyersukcouriers-a9c17",
+                    "appId": "1:970355130070:android:5c36e091b84d9697339377",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "ios": {
+                "default": {
+                    "projectId": "highflyersukcouriers-a9c17",
+                    "appId": "1:970355130070:ios:7aa3e4c916c4b50c339377",
+                    "uploadDebugSymbols": false,
+                    "fileOutput": "ios/Runner/GoogleService-Info.plist"
+                }
+            },
+            "macos": {
+                "default": {
+                    "projectId": "highflyersukcouriers-a9c17",
+                    "appId": "1:970355130070:ios:7aa3e4c916c4b50c339377",
+                    "uploadDebugSymbols": false,
+                    "fileOutput": "macos/Runner/GoogleService-Info.plist"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "highflyersukcouriers-a9c17",
+                    "configurations": {
+                        "android": "1:970355130070:android:5c36e091b84d9697339377",
+                        "ios": "1:970355130070:ios:7aa3e4c916c4b50c339377",
+                        "macos": "1:970355130070:ios:7aa3e4c916c4b50c339377",
+                        "web": "1:970355130070:web:b2ff0ee62b6b9ac2339377",
+                        "windows": "1:970355130070:web:9ed543f533f38b39339377"
+                    }
+                }
+            }
+        }
+    }
+}

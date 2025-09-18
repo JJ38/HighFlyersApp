@@ -1,3 +1,4 @@
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/controllers/login_screen_controller.dart';
@@ -17,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //<a href="https://www.flaticon.com/free-icons/peace" title="peace icons">Peace icons created by Freepik - Flaticon</a>
 
   late LoginScreenController loginScreenController;
+  String? test;
 
   @override
   void initState(){
@@ -41,10 +43,10 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () => FirebaseCrashlytics.instance.crash(),
-              child: const Text('Crash'),
-            ),
+            TextButton(
+    onPressed: () => {test!.length},
+    child: const Text("Throw Test Exception"),
+),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

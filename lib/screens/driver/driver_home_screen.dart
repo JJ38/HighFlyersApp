@@ -69,6 +69,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 children: [
                   Text("Your Runs", style: Theme.of(context).textTheme.titleLarge),
 
+                  TextButton(
+    onPressed: () => throw Exception(),
+    child: const Text("Throw Test Exception"),
+),
+
                   driverHomeScreenController.model.driverLoadedSuccessfully ? 
 
                     driverHomeScreenController.model.driverRunDocs.isEmpty ? 

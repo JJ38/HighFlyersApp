@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
@@ -30,15 +32,20 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
 
+  // FlutterError.onError = (onError) { FirebaseCrashlytics.instance.recordFlutterFatalError; };
 
-  runZonedGuarded(() {
-    runApp(const MyApp());
-  }, (error, stackTrace) {
-    FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
-  });
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
 
+    return true;
+  };
+
+  runApp(const MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {
