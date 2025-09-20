@@ -4,12 +4,14 @@ import 'package:high_flyers_app/models/customer_profile_screen_model.dart';
 
 class CustomerProfileScreenController {
 
-  final CustomerProfileScreenModel model = CustomerProfileScreenModel();
+  late final CustomerProfileScreenModel model;
   final void Function() updateState;
   Function()? updateStatefulButtonState;
 
 
-  CustomerProfileScreenController({required this.updateState});
+  CustomerProfileScreenController({required this.updateState, required validator}){
+    model = CustomerProfileScreenModel(validator: validator);
+  }
 
 
   void setStatefulButtonUpdateState(updateButtonState){
@@ -135,7 +137,7 @@ class CustomerProfileScreenController {
     final isValidForm = model.validateProfileForm();
 
     if(!isValidForm){
-      showToastWidget(ToastNotification(message: model.validationErrorMessage, isError: true));
+      showToastWidget(ToastNotification(message: model.validator.validationErrorMessage, isError: true));
       return;
     }
 
@@ -145,6 +147,8 @@ class CustomerProfileScreenController {
       showToastWidget(ToastNotification(message: "Error updating profile", isError: true));
       return;
     }
+
+    model.showUpdateButton = false;
 
     showToastWidget(ToastNotification(message: "Successfully updated profile", isError: false));
     updateState();

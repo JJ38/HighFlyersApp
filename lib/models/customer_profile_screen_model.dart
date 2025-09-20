@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:high_flyers_app/models/validator.dart';
 
 class CustomerProfileScreenModel {
 
-  final emailRegex = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  final RegExp digitRegex = RegExp(r'^\d+$');
+  Validator validator;
   late Map<String, dynamic> customerProfileData;
   String validationErrorMessage = "";
   String? name;
@@ -18,6 +18,10 @@ class CustomerProfileScreenModel {
   bool isLoaded = false;
   bool isSuccessfullyLoaded = false;
   bool showUpdateButton = false;
+
+
+  CustomerProfileScreenModel({required this.validator});
+
 
   bool getShowUpdateButton(){
 
@@ -97,11 +101,21 @@ class CustomerProfileScreenModel {
       };
 
       await customerDocRef.update(fieldsToUpdate);
+      
 
     }catch(e){
       print(e);
       return false;
     }
+    
+    //update client = 
+    customerProfileData['collectionName'] = name;
+    customerProfileData['email'] = email;
+    customerProfileData['collectionAddress1'] = addressLine1;
+    customerProfileData['collectionAddress2'] = addressLine2;
+    customerProfileData['collectionAddress3'] = addressLine3;
+    customerProfileData['collectionPostcode'] = postcode;
+    customerProfileData['collectionPhoneNumber'] = phoneNumber;
 
     return true;
 
@@ -110,74 +124,25 @@ class CustomerProfileScreenModel {
   bool validateProfileForm(){
 
     if(addressLine1 == null){
-      validationErrorMessage = "Invalid Address Line 1";
+      validator.validationErrorMessage = "Invalid Address Line 1";
       return false;
     }
 
-    if(!isValidEmail(email)){
+    if(!validator.isValidEmail(email)){
       return false;
     }
 
-    if(!isValidPhoneNumber(phoneNumber)){
+    if(!validator.isValidPhoneNumber(phoneNumber)){
       return false;
     }
 
-    if(!isValidPostcode(postcode)){
+    if(!validator.isValidPostcode(postcode)){
       return false;
     }
 
 
     return true;
 
-  }
-
-  bool isValidEmail(String? email){
-
-    if(email == null){
-      validationErrorMessage = "Please enter an email address";
-      return false;
-    }
- 
-    if(!emailRegex.hasMatch(email)){
-      validationErrorMessage = "Invalid Email";
-      return false;
-    }
-    
-    
-    return true;
-  }
-
-  bool isValidPhoneNumber(String? phoneNumberInput){
-
-    if(phoneNumberInput == null){
-      validationErrorMessage = "Please enter a phone number";
-      return false;
-    }
-
-    if(phoneNumberInput.length != 11 || !digitRegex.hasMatch(phoneNumberInput)){
-      validationErrorMessage = "Invalid Phone Number";
-      return false;
-    }
-
-    return true;
-
-  }
-
-  bool isValidPostcode(String? postcodeInput){
-
-    if(postcodeInput == null){
-      validationErrorMessage = "Please enter a postcode";
-      return false;
-    }
-
-    postcodeInput = postcodeInput.replaceAll(" ", "");
-
-    if(postcodeInput.length < 2 || postcodeInput.length > 7){
-      validationErrorMessage = "Invalid Postcode";
-      return false;
-    }
-
-    return true;
   }
 
 }

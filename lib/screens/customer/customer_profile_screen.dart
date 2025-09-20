@@ -3,6 +3,7 @@ import 'package:high_flyers_app/components/input_pill.dart';
 import 'package:high_flyers_app/components/squared_input.dart';
 import 'package:high_flyers_app/components/stateful_button.dart';
 import 'package:high_flyers_app/controllers/customer_profile_screen_controller.dart';
+import 'package:high_flyers_app/models/validator.dart';
 
 class CustomerProfileScreen extends StatefulWidget {
   const CustomerProfileScreen({super.key});
@@ -20,8 +21,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     // TODO: implement initState
     super.initState();
     print("init state customer profile screen");
-
-    customerProfileScreenController = CustomerProfileScreenController(updateState: updateState);
+    
+    customerProfileScreenController = CustomerProfileScreenController(updateState: updateState, validator: Validator());
     customerProfileScreenController.loadProfile();
     print("customerProfileScreenController.loadProfile();");
 
