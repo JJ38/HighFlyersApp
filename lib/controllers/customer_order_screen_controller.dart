@@ -1,3 +1,5 @@
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/customer_order_model.dart';
 
 class CustomerOrderScreenController{
@@ -122,6 +124,27 @@ class CustomerOrderScreenController{
   void deliveryPhoneNumberOnChange(String input){
 
     model.deliveryPhoneNumber = input;
+
+  }
+
+  void loadForm() async {
+
+    //fetch animal types
+    final bool successfullyFetchedProfile = await model.fetchBirdSpecies();
+
+
+    //parse birdSpecies
+    model.parseBirdSpecies();
+
+    updateState();
+
+    if(!successfullyFetchedProfile){
+      showToastWidget(ToastNotification(message: "Failed to load form", isError: true));
+      return;
+    }
+
+
+    //fetch postcodes
 
   }
 

@@ -19,12 +19,15 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
     // TODO: implement initState
     super.initState();
     customerOrderScreenController = CustomerOrderScreenController(updateState: updateState);
+    customerOrderScreenController.loadForm();
   } 
 
   void updateState(){
-    setState(() {
-      
-    });
+    if(mounted){
+      setState(() {
+        
+      });
+    }
   }
 
   @override
@@ -42,9 +45,10 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
             children: [
               Text("Order", style: Theme.of(context).textTheme.titleLarge),
 
-              // customerOrderScreenController.model.isLoaded ? 
+              customerOrderScreenController.model.isLoaded ? 
 
-              //   customerOrderScreenController.model.isSuccessfullyLoaded ? 
+                customerOrderScreenController.model.isSuccessfullyLoaded ? 
+
                   Expanded(
                     child: ListView(
                       children: [
@@ -53,7 +57,33 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                         Expanded(
                           child: Column(
                             children: [
-                              SquaredInput(label: "Animal Type", value: customerOrderScreenController.model.animalType, icon: Icons.pets_outlined, onChange: customerOrderScreenController.animalTypeOnChange),
+                              DropdownButtonFormField(
+                                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
+                                decoration: InputDecoration(
+                                  icon: Icon(Icons.pets),
+                                  label: Text("Animal Type"),
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                                  fillColor: Colors.grey,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      width: 2.0, 
+                                    ),
+                                  ),
+                                ),
+                                onChanged: (value){},
+                                items:  customerOrderScreenController.model.birdSpeciesSet.toList().map((bird) {
+                                            return DropdownMenuItem(
+                                              value: bird,
+                                              child: Text(bird),
+                                            );
+                                          },
+                                        ).toList()
+                              ),
                               SizedBox(height: 20,),
                               SquaredInput(label: "Quantity", value: customerOrderScreenController.model.quantity, icon: Icons.numbers_outlined, onChange: customerOrderScreenController.quantityOnChange),
                               SizedBox(height: 20,),
@@ -64,6 +94,10 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                             ]
                           )
                         ),
+
+                        SizedBox(height: 10, width: 0,),
+                        Divider(height: 1,),
+                        SizedBox(height: 10, width: 0,),
                         
                         Material(
                           color: Colors.white,
@@ -93,9 +127,8 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                             ),
                           ),
                         ),
-
+                       
                         SizedBox(height: 10, width: 0,),
-
 
                         customerOrderScreenController.model.showCollectionDetails ? 
                             
@@ -170,20 +203,20 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
 
                       ]
                     ),
-                  ),
+                  )
                   
                 
-              //   :
+                :
 
-              //     Center(
-              //       child: Text("Error loading profile")
-              //     )
+                  Center(
+                    child: Text("Error loading profile")
+                  )
 
-              // :
+              :
 
-              //   Center(
-              //     child: CircularProgressIndicator()
-              //   )
+                Center(
+                  child: CircularProgressIndicator()
+                )
               
             ],
           ),
