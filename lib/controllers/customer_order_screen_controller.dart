@@ -40,10 +40,9 @@ class CustomerOrderScreenController{
 
   }
 
-  void collectionEmailOnChange(String input){
+  void emailOnChange(String input){
 
-    model.collectionEmail = input;
-
+    model.email = input;
 
   }
 
@@ -90,13 +89,6 @@ class CustomerOrderScreenController{
 
   }
 
-  void deliveryEmailOnChange(String input){
-
-    model.deliveryEmail = input;
-
-
-  }
-
   void deliveryAddressOneOnChange(String input){
 
     model.deliveryAddressLine1 = input;
@@ -129,22 +121,41 @@ class CustomerOrderScreenController{
 
   void loadForm() async {
 
-    //fetch animal types
-    final bool successfullyFetchedProfile = await model.fetchBirdSpecies();
+    List<Future> futures = [];
 
+    //fetch animal types
+    futures.add(model.fetchBirdSpecies());
+    futures.add(model.fetchProfile());
+
+    await Future.wait(futures);
+
+    model.isLoaded = true;
 
     //parse birdSpecies
     model.parseBirdSpecies();
 
     updateState();
 
-    if(!successfullyFetchedProfile){
+    if(model.birdSpeciesData.isEmpty){
       showToastWidget(ToastNotification(message: "Failed to load form", isError: true));
       return;
     }
-
+    
+    if(model.customerProfileData.isEmpty){
+      showToastWidget(ToastNotification(message: "Failed to load profile", isError: true));
+    }
 
     //fetch postcodes
+
+  }
+
+  void loadProfile() async {
+ 
+    
+
+    updateState();
+
+    
 
   }
 
