@@ -49,10 +49,10 @@ class _DriverSettingsScreenState extends State<DriverSettingsScreen> {
             children: [
               Text("Settings", style: Theme.of(context).textTheme.titleLarge),
 
-                TextButton(
-    onPressed: () => {test!.length},
-    child: const Text("Throw Test Exception"),
-),
+              // TextButton(
+              //     onPressed: () => {test!.length},
+              //     child: const Text("Throw Test Exception"),
+              // ),
 
               ...driverSettingsScreenController.model.loaded ?
 

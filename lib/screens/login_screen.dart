@@ -43,10 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
-    onPressed: () => {test!.length},
-    child: const Text("Throw Test Exception"),
-),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
