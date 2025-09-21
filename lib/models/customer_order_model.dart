@@ -37,6 +37,7 @@ class CustomerOrderModel {
   bool isLoaded = false;
   bool isSuccessfullyLoaded = false;
   bool showCollectionDetails = false;
+  bool showBasket = false;
 
   Future<bool> fetchProfile() async {
 

@@ -203,4 +203,18 @@ class CustomerOrderScreenController{
 
   }
 
+  void onBasketTap(){
+
+    model.showBasket = !model.showBasket;
+    updateState();
+
+  }
+
+  void onCloseBasketTap(){
+
+    model.showBasket = !model.showBasket;
+    updateState();
+
+  }
+
 }

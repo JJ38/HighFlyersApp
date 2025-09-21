@@ -34,76 +34,105 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
   Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(screenWidth * 0.05),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 10,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(
+          children: [
+
+            Padding(
+              padding: EdgeInsets.all(screenWidth * 0.05),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 10,
                 children: [
-                  Text("Order", style: Theme.of(context).textTheme.titleLarge),
-                  Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.topRight,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.shopping_cart_outlined, size: 35,),
-
-                      customerOrderScreenController.model.basket.isNotEmpty ? 
-
-                          Transform.translate(
-                            offset: Offset(2, -12),
-                            child: Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.red
-                              ),
-                              child: Text(customerOrderScreenController.model.basket.length.toString(), style: TextStyle(color: Colors.white),),
-                            ),
-                          )
-                        
-                        :
-
-                          SizedBox(height: 0, width: 0,)
-
+                      Text("Order", style: Theme.of(context).textTheme.titleLarge),
+                      GestureDetector(
+                        onTap: (){customerOrderScreenController.onBasketTap();},
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.topRight,
+                          children: [
+                            Icon(Icons.shopping_cart_outlined, size: 35,),
+                              customerOrderScreenController.model.basket.isNotEmpty ? 
+                                  Transform.translate(
+                                  offset: Offset(2, -12),
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.red
+                                    ),
+                                    child: Text(customerOrderScreenController.model.basket.length.toString(), style: TextStyle(color: Colors.white),),
+                                  ),
+                                )
+                              
+                              :
+                                  SizedBox(height: 0, width: 0,)
+                            ],
+                        )
+                      )
                     ],
-                  )
+                  ),
+                    customerOrderScreenController.model.isLoaded ? 
+                      customerOrderScreenController.model.isSuccessfullyLoaded ? 
+                        Expanded(
+                        child: ListView(
+                          children: [
+                            Expanded(child: OrderForm(customerOrderScreenController: customerOrderScreenController))
+                          ]
+                        ),
+                      )
+                    
+                    :
+                        Center(
+                        child: Text("Error loading profile")
+                      )
+                    :
+                      Center(
+                      child: CircularProgressIndicator()
+                    )
+                  
                 ],
               ),
+            ),
 
-              customerOrderScreenController.model.isLoaded ? 
+            customerOrderScreenController.model.showBasket ? 
 
-                customerOrderScreenController.model.isSuccessfullyLoaded ? 
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white
+                ),
+                height: screenHeight,
+                width: screenWidth,
+                child: Padding(
+                  padding: EdgeInsets.all(screenWidth * 0.05),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: customerOrderScreenController.onCloseBasketTap,
+                            child: Icon(Icons.close, size: 35,),
+                          ),
+                          SizedBox(width: 10,),
+                          Text("Basket", style: Theme.of(context).textTheme.titleLarge,)
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              )
 
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        Expanded(child: OrderForm(customerOrderScreenController: customerOrderScreenController))
-                      ]
-                    ),
-                  )
-                
-                :
+            :
 
-                  Center(
-                    child: Text("Error loading profile")
-                  )
-
-              :
-
-                Center(
-                  child: CircularProgressIndicator()
-                )
-              
-            ],
-          ),
+              SizedBox(height: 0),
+          ]
         ),
-
       ),
     );
   }
