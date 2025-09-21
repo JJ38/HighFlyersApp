@@ -3,6 +3,36 @@ class Validator {
   final emailRegex = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   final RegExp digitRegex = RegExp(r'^\d+$');
   String validationErrorMessage = "";
+
+  bool isValidString(String? value){
+
+    if(value == null || value == ""){
+      validationErrorMessage = "Please enter a value";
+      return false;
+    }
+
+    return true;
+
+  }
+
+  
+  bool isValidPositiveNumber(String? number){
+
+
+    if(number == null || number == ""){
+      validationErrorMessage = "Please enter a value";
+      return false;
+    }
+
+    if(int.parse(number) < 0){
+      validationErrorMessage = "Please enter a value greater than 0";
+      return false;
+    }
+
+    return true;
+
+  }
+
   
   bool isValidEmail(String? email){
 
@@ -51,6 +81,23 @@ class Validator {
     }
 
     return true;
+  }
+
+  bool isValidValueInList(String? value, List<dynamic> list){
+
+    if(value == null){
+      print("isValidValueInList - null");
+      validationErrorMessage = "Please select a value";
+      return false;
+    }
+
+    if(!list.contains(value)){
+      validationErrorMessage = "Please select a valid value";
+      return false;
+    }
+
+    return true;
+
   }
 
 }

@@ -69,8 +69,8 @@ class MyApp extends StatelessWidget {
           fontFamily: GoogleFonts.hankenGrotesk().fontFamily,
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.white, secondary: Color(0xFF2881FF),
-            error: Colors.red[700],
-            errorContainer: Colors.red[300]
+            error: Colors.red[700]!,
+            errorContainer: Colors.red[300]!
           ),
           useMaterial3: true,
           textTheme: TextTheme(

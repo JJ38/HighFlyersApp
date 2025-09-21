@@ -29,11 +29,13 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   }
 
   void updateState(){
-    print("setstate");
-    print("showUpdateButton: ${customerProfileScreenController.model.showUpdateButton}");
-    setState(() {
+    
+    if(mounted){
+      setState(() {
       
-    });
+      });
+    }
+    
   }
 
   @override

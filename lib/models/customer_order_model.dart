@@ -1,15 +1,19 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:high_flyers_app/models/validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerOrderModel {
 
+  final Validator validator = Validator();
   late Map<String, dynamic> birdSpeciesData;
   late Map<String, dynamic> postcodes;
   Map<String, dynamic> customerProfileData = {};
   Set<String> birdSpeciesSet = {};
-  List<dynamic> orders = [];
-  String validationErrorMessage = "";
+  List<dynamic> basket = [];
   String? animalType;
   String? quantity;
   String? code;
@@ -27,6 +31,9 @@ class CustomerOrderModel {
   String? deliveryAddressLine3;
   String? deliveryPostcode;
   String? deliveryPhoneNumber;
+  String? payment;
+  String? message;
+  String errorMessage = "";
   bool isLoaded = false;
   bool isSuccessfullyLoaded = false;
   bool showCollectionDetails = false;
@@ -87,7 +94,6 @@ class CustomerOrderModel {
       }
 
       birdSpeciesData = response.data()!;
-      print(birdSpeciesData);
 
       isSuccessfullyLoaded = true;
 
@@ -117,7 +123,190 @@ class CustomerOrderModel {
 
     }
 
-    print(birdSpeciesSet);
+  }
+
+  bool validateOrder(){
+
+    //order details
+
+    if(!validator.isValidValueInList(animalType, birdSpeciesSet.toList())){
+      errorMessage = "${validator.validationErrorMessage} - Animal Type";
+      print("INVLAID ANIMAL TYPE");
+      return false;
+    }
+
+    if(!validator.isValidPositiveNumber(quantity)){
+      errorMessage = "${validator.validationErrorMessage} - Quantity";
+      return false;
+    }
+
+    if(!validator.isValidPositiveNumber(boxes)){
+      errorMessage = "${validator.validationErrorMessage} - Boxes";
+      return false;
+    }
+
+
+    //collection
+
+    if(!validator.isValidString(collectionName)){
+      errorMessage = "${validator.validationErrorMessage} - Collection Name";
+      return false;
+    }
+
+    if(!validator.isValidString(collectionAddressLine1)){
+      errorMessage = "${validator.validationErrorMessage} - Collection Address 1";
+      return false;
+    }
+
+    if(!validator.isValidPostcode(collectionPostcode)){
+      errorMessage = "${validator.validationErrorMessage} - Collection Postcode";
+      return false;
+    }
+
+    if(!validator.isValidPhoneNumber(collectionPhoneNumber)){
+      errorMessage = "${validator.validationErrorMessage} - Collection Phonenumber";
+      return false;
+    }
+
+
+    //delivery
+
+    if(!validator.isValidString(deliveryName)){
+      errorMessage = "${validator.validationErrorMessage} - Delivery Name";
+      return false;
+    }
+
+    if(!validator.isValidString(deliveryAddressLine1)){
+      errorMessage = "${validator.validationErrorMessage} - Delivery Address 1";
+      return false;
+    }
+
+    if(!validator.isValidPostcode(deliveryPostcode)){
+      errorMessage = "${validator.validationErrorMessage} - Delivery Postcode";
+      return false;
+    }
+
+    if(!validator.isValidPhoneNumber(deliveryPhoneNumber)){
+      errorMessage = "${validator.validationErrorMessage} - Delivery Phonenumber";
+      return false;
+    }
+
+    //payment
+
+    if(!validator.isValidValueInList(payment, ["Collection", "Delivery", "Account"])){
+      errorMessage = "${validator.validationErrorMessage} - Payment";
+      return false;
+    }
+    
+    return true;
+
+  }
+
+  Future<bool> addOrderToBasket() async {
+
+   
+    final Map<String, dynamic> order = {
+      "animalType": animalType,
+      "quantity": quantity,
+      "code": code,
+      "boxes": boxes,
+      "email": email,
+      "collectionName": collectionName,
+      "collectionAddressLine1": collectionAddressLine1,
+      "collectionAddressLine2": collectionAddressLine2,
+      "collectionAddressLine3": collectionAddressLine3,
+      "collectionPostcode": collectionPostcode,
+      "collectionPhoneNumber": collectionPhoneNumber,
+      "deliveryName": deliveryName,
+      "deliveryAddressLine1": deliveryAddressLine1,
+      "deliveryAddressLine2": deliveryAddressLine2,
+      "deliveryAddressLine3": deliveryAddressLine3,
+      "deliveryPostcode": deliveryPostcode,
+      "deliveryPhoneNumber": deliveryPhoneNumber,
+      "payment": payment,
+      "message": message
+    }; 
+
+
+    //load basket
+    final successfullyLoadedBasket = await loadBasket();
+    
+    if(!successfullyLoadedBasket){
+      return false;
+    }
+
+    //add order to list
+    basket.add(order);
+    //save json as basket
+    final successfullySavedBasket = await saveBasket();
+
+    if(!successfullySavedBasket){
+      return false;
+    }
+
+
+    return true;
+
+  }
+
+
+  Future<bool> loadBasket() async {
+
+    try{
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      //use for manual reset 
+      // await prefs.setString('basket', '{"basket": []}');
+
+      // Read values, providing a default if the key does not exist
+      String? basketJSON = prefs.getString('basket');
+
+      //if basket is null
+      basketJSON ??= '{"basket": []}';
+
+      // print("--------------------------------------------------------------");
+      // print("loadBasket");
+      // print(basketJSON);
+      // print("--------------------------------------------------------------");
+
+
+      basket = json.decode(basketJSON)['basket'];
+
+    }catch(e){
+      print(e);
+      return false;
+    }
+
+    return true;
+
+  }
+
+  Future<bool> saveBasket() async {
+
+    try{
+
+      String basketJSON = json.encode(basket);
+
+      basketJSON = '{"basket": $basketJSON}';
+
+      // print("--------------------------------------------------------------");
+      // print("saveBasket");
+      // print(basketJSON);
+      // print("--------------------------------------------------------------");
+
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      // Set the values with a key and a value
+      await prefs.setString('basket', basketJSON);
+
+    }catch(e){
+      print(e);
+      return false;
+    }
+
+    return true;
 
   }
 

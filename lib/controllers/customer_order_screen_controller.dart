@@ -10,9 +10,10 @@ class CustomerOrderScreenController{
 
   CustomerOrderScreenController({required this.updateState});
 
-  void animalTypeOnChange(String input){
+  void animalTypeOnChange(String? input){
 
     model.animalType = input;
+    print(model.animalType);
 
   }
 
@@ -119,6 +120,18 @@ class CustomerOrderScreenController{
 
   }
 
+  void paymentOnChange(String? input){
+
+    model.payment = input;
+
+  }
+
+  void messageOnChange(String input){
+
+    model.message = input;
+
+  }
+
   void loadForm() async {
 
     List<Future> futures = [];
@@ -151,17 +164,29 @@ class CustomerOrderScreenController{
 
   void loadProfile() async {
  
-    
-
     updateState();
-
-    
 
   }
 
-  void onAddToBasketTap(){
+  void onAddToBasketTap() async {
 
-    
+    final isValidOrder = model.validateOrder();
+
+    if(!isValidOrder){
+      showToastWidget(ToastNotification(message: model.errorMessage, isError: true));
+      return;
+    }
+
+    final successfullyAddedToBasket = await model.addOrderToBasket();
+
+    if(!successfullyAddedToBasket){
+      showToastWidget(ToastNotification(message: "Error adding order to basket", isError: true));
+      return;
+    }
+
+    updateState();
+
+    showToastWidget(ToastNotification(message: "Added order to basket", isError: false));
 
   }
 

@@ -15,9 +15,9 @@ class ToastNotification extends StatelessWidget {
     return Container(
       width: screenWidth * 0.8,
       decoration: BoxDecoration(
-        color: isError ? Theme.of(context).colorScheme.errorContainer : Colors.green[300],
+        color: isError ? Colors.red[200] : Colors.green[300],
         border: BoxBorder.all(
-          color: isError ? Theme.of(context).colorScheme.error : Colors.green[700]!,
+          color: isError ?  Colors.red[700]! : Colors.green[700]!,
           width: 1.0, 
         ),
         borderRadius: BorderRadius.all(Radius.circular(3))
