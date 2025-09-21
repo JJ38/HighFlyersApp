@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:high_flyers_app/components/order_card.dart';
 import 'package:high_flyers_app/components/order_form.dart';
-import 'package:high_flyers_app/components/squared_input.dart';
 import 'package:high_flyers_app/controllers/customer_order_screen_controller.dart';
 
 class CustomerOrderScreen extends StatefulWidget {
@@ -24,7 +22,7 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
   } 
 
   void updateState(){
-    print("customer order screen set state");
+
     if(mounted){
       setState(() {
         

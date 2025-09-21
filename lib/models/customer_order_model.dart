@@ -227,23 +227,23 @@ class CustomerOrderModel {
       "message": message
     }; 
 
-
-    //load basket
-    final successfullyLoadedBasket = await loadBasket();
-    
-    if(!successfullyLoadedBasket){
-      return false;
-    }
-
     //add order to list
-    basket.add(order);
+
+    List<Map<String, dynamic>> basketCopy = List<Map<String, dynamic>>.from(
+      json.decode(json.encode(basket))
+    );
+
+    basketCopy.add(order);
+
     //save json as basket
-    final successfullySavedBasket = await saveBasket();
+    final successfullySavedBasket = await saveBasket(basketCopy);
 
     if(!successfullySavedBasket){
       return false;
     }
 
+    //update client if successfully updated local storage
+    basket.add(order);
 
     return true;
 
@@ -282,11 +282,11 @@ class CustomerOrderModel {
 
   }
 
-  Future<bool> saveBasket() async {
+  Future<bool> saveBasket(List<Map<String, dynamic>> basketCopy) async {
 
     try{
 
-      String basketJSON = json.encode(basket);
+      String basketJSON = json.encode(basketCopy);
 
       basketJSON = '{"basket": $basketJSON}';
 

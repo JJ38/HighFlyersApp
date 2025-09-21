@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:high_flyers_app/components/input_pill.dart';
 import 'package:high_flyers_app/components/squared_input.dart';
 import 'package:high_flyers_app/components/stateful_button.dart';
 import 'package:high_flyers_app/controllers/customer_profile_screen_controller.dart';
@@ -20,11 +19,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("init state customer profile screen");
     
     customerProfileScreenController = CustomerProfileScreenController(updateState: updateState, validator: Validator());
     customerProfileScreenController.loadProfile();
-    print("customerProfileScreenController.loadProfile();");
 
   }
 

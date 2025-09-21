@@ -22,6 +22,7 @@ class _OrderFormState extends State<OrderForm> {
     super.initState();
 
     customerOrderScreenController = widget.customerOrderScreenController;
+    customerOrderScreenController.loadBasket();
 
   }
 

@@ -190,4 +190,17 @@ class CustomerOrderScreenController{
 
   }
 
+  void loadBasket() async {
+
+    final successfullyLoadedBasket = await model.loadBasket();
+
+    if(!successfullyLoadedBasket){
+      showToastWidget(ToastNotification(message: "Error adding order to basket", isError: true));
+      return;
+    }
+
+    updateState();
+
+  }
+
 }
