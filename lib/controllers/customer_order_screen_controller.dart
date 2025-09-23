@@ -13,7 +13,6 @@ class CustomerOrderScreenController{
   void animalTypeOnChange(String? input){
 
     model.animalType = input;
-    print(model.animalType);
 
   }
 
@@ -187,6 +186,27 @@ class CustomerOrderScreenController{
     updateState();
 
     showToastWidget(ToastNotification(message: "Added order to basket", isError: false));
+
+  }
+
+  void onRemoveFromBasketTap(String? uuid) async { 
+
+    if(uuid == null){
+      showToastWidget(ToastNotification(message: "Error removing order from basket", isError: true));
+      return;
+    }
+
+    //find order in list based on uuid
+    final bool successfullyRemovedOrder = await model.removeOrderFromBasket(uuid);
+
+    if(!successfullyRemovedOrder){
+      showToastWidget(ToastNotification(message: "Error removing order from basket", isError: true));
+      return;
+    }
+
+    showToastWidget(ToastNotification(message: "Successfully removed order from basket", isError: false));
+
+    updateState();
 
   }
 

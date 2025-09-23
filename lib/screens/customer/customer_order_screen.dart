@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:high_flyers_app/components/basket_item.dart';
 import 'package:high_flyers_app/components/order_form.dart';
 import 'package:high_flyers_app/controllers/customer_order_screen_controller.dart';
 
@@ -40,98 +41,132 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-
             Padding(
               padding: EdgeInsets.all(screenWidth * 0.05),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 10,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Order", style: Theme.of(context).textTheme.titleLarge),
                       GestureDetector(
-                        onTap: (){customerOrderScreenController.onBasketTap();},
+                        onTap: () { customerOrderScreenController.onBasketTap(); },
                         child: Stack(
                           clipBehavior: Clip.none,
                           alignment: Alignment.topRight,
                           children: [
-                            Icon(Icons.shopping_cart_outlined, size: 35,),
-                              customerOrderScreenController.model.basket.isNotEmpty ? 
-                                  Transform.translate(
-                                  offset: Offset(2, -12),
-                                  child: Container(
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.red
-                                    ),
-                                    child: Text(customerOrderScreenController.model.basket.length.toString(), style: TextStyle(color: Colors.white),),
+                            const Icon(Icons.shopping_cart_outlined, size: 35),
+                            if (customerOrderScreenController.model.basket.isNotEmpty)
+                              Transform.translate(
+                                offset: const Offset(2, -12),
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red,
                                   ),
-                                )
-                              
-                              :
-                                  SizedBox(height: 0, width: 0,)
-                            ],
-                        )
-                      )
+                                  child: Text(
+                                    customerOrderScreenController.model.basket.length.toString(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                    customerOrderScreenController.model.isLoaded ? 
-                      customerOrderScreenController.model.isSuccessfullyLoaded ? 
-                        Expanded(
+                  const SizedBox(height: 10),
+                 
+                  customerOrderScreenController.model.isLoaded ?
+                    customerOrderScreenController.model.isSuccessfullyLoaded ?
+                      Expanded(
                         child: ListView(
                           children: [
-                            Expanded(child: OrderForm(customerOrderScreenController: customerOrderScreenController))
-                          ]
+                            OrderForm(customerOrderScreenController: customerOrderScreenController)
+                          ],
                         ),
-                      )
-                    
-                    :
-                        Center(
-                        child: Text("Error loading profile")
-                      )
-                    :
-                      Center(
-                      child: CircularProgressIndicator()
-                    )
-                  
+                      ) :
+                      const Center(
+                        child: Text("Error loading profile"),
+                      ) :
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                 ],
               ),
             ),
 
-            customerOrderScreenController.model.showBasket ? 
-
+            if (customerOrderScreenController.model.showBasket)
               Container(
-                decoration: BoxDecoration(
-                  color: Colors.white
+                decoration: const BoxDecoration(
+                  color: Colors.white,
                 ),
                 height: screenHeight,
                 width: screenWidth,
                 child: Padding(
-                  padding: EdgeInsets.all(screenWidth * 0.05),
+                  padding: EdgeInsets.all(screenWidth * 0.0),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: customerOrderScreenController.onCloseBasketTap,
-                            child: Icon(Icons.close, size: 35,),
+                      Padding(
+                        padding: EdgeInsets.all(screenWidth * 0.05),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: customerOrderScreenController.onCloseBasketTap,
+                              child: const Icon(Icons.close, size: 35),
+                            ),
+                            const SizedBox(width: 10),
+                            Text("Basket", style: Theme.of(context).textTheme.titleLarge),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 246, 246, 246)
                           ),
-                          SizedBox(width: 10,),
-                          Text("Basket", style: Theme.of(context).textTheme.titleLarge,)
-                        ],
-                      )
+                          child: ListView(
+                            children:[
+                              ...customerOrderScreenController.model.basket.map((order) {                          
+                                return BasketItem(order: order, onRemoveFromBasketTap: customerOrderScreenController.onRemoveFromBasketTap);
+                              }),
+
+                              customerOrderScreenController.model.basket.isNotEmpty ?
+                            
+                                Center(
+                                  child: SizedBox(
+                                    width: screenWidth * 0.9,
+                                    child: Material(              
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      shadowColor: Color(0x00000000),                                
+                                      borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                                      child: MaterialButton(
+                                        onPressed: customerOrderScreenController.onAddToBasketTap,
+                                        child: Text("Submit Orders", style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white)),                           
+                                      ),
+                                    ),
+                                  ),
+                                )
+
+                              :
+
+                                Padding(
+                                  padding: EdgeInsets.all(20),
+                                  child: Center(
+                                    child: Text("Your basket is empty")
+                                  )
+                                )
+                            ]
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              )
-
-            :
-
-              SizedBox(height: 0),
-          ]
+              ),
+          ],
         ),
       ),
     );

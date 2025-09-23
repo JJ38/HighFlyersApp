@@ -1,13 +1,8 @@
-import 'package:action_slider/action_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/assigned_stops.dart';
 import 'package:high_flyers_app/components/current_stop.dart';
-import 'package:high_flyers_app/components/icon_label.dart';
-import 'package:high_flyers_app/components/stop_form.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
-import 'package:high_flyers_app/controllers/current_stop_controller.dart';
 import 'package:high_flyers_app/controllers/stop_screen_controller.dart';
 
 class StopScreen extends StatefulWidget {
@@ -38,8 +33,6 @@ class _StopScreenState extends State<StopScreen> {
   void initState() {
 
     super.initState();
-
-    print("init state stop screen");
     
     stopScreenController = StopScreenController(updateState: updateState, updateMapRunMarkers: widget.updateRunMapMarkers);
 
@@ -51,9 +44,6 @@ class _StopScreenState extends State<StopScreen> {
     error = false;
 
     stopScreenController.model.currentStop = widget.stop;
-    
-    print("stopScreenController.model.currentStop['stopNumber']");
-    print(stopScreenController.model.currentStop['stopNumber']);
 
     stopView = [
       CurrentStop(

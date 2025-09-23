@@ -5,10 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:high_flyers_app/models/validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class CustomerOrderModel {
 
   final Validator validator = Validator();
+  final Uuid uuid = Uuid();
   late Map<String, dynamic> birdSpeciesData;
   late Map<String, dynamic> postcodes;
   Map<String, dynamic> customerProfileData = {};
@@ -132,7 +134,6 @@ class CustomerOrderModel {
 
     if(!validator.isValidValueInList(animalType, birdSpeciesSet.toList())){
       errorMessage = "${validator.validationErrorMessage} - Animal Type";
-      print("INVLAID ANIMAL TYPE");
       return false;
     }
 
@@ -205,28 +206,36 @@ class CustomerOrderModel {
 
   Future<bool> addOrderToBasket() async {
 
-   
-    final Map<String, dynamic> order = {
-      "animalType": animalType,
-      "quantity": quantity,
-      "code": code,
-      "boxes": boxes,
-      "email": email,
-      "collectionName": collectionName,
-      "collectionAddressLine1": collectionAddressLine1,
-      "collectionAddressLine2": collectionAddressLine2,
-      "collectionAddressLine3": collectionAddressLine3,
-      "collectionPostcode": collectionPostcode,
-      "collectionPhoneNumber": collectionPhoneNumber,
-      "deliveryName": deliveryName,
-      "deliveryAddressLine1": deliveryAddressLine1,
-      "deliveryAddressLine2": deliveryAddressLine2,
-      "deliveryAddressLine3": deliveryAddressLine3,
-      "deliveryPostcode": deliveryPostcode,
-      "deliveryPhoneNumber": deliveryPhoneNumber,
-      "payment": payment,
-      "message": message
-    }; 
+    Map<String, dynamic> order;
+
+    try{
+
+      order = {
+        "clientSideUUID": uuid.v4(),
+        "animalType": animalType,
+        "quantity": quantity,
+        "code": code,
+        "boxes": boxes,
+        "email": email,
+        "collectionName": collectionName,
+        "collectionAddressLine1": collectionAddressLine1,
+        "collectionAddressLine2": collectionAddressLine2,
+        "collectionAddressLine3": collectionAddressLine3,
+        "collectionPostcode": collectionPostcode!.toUpperCase(),
+        "collectionPhoneNumber": collectionPhoneNumber,
+        "deliveryName": deliveryName,
+        "deliveryAddressLine1": deliveryAddressLine1,
+        "deliveryAddressLine2": deliveryAddressLine2,
+        "deliveryAddressLine3": deliveryAddressLine3,
+        "deliveryPostcode": deliveryPostcode!.toUpperCase(),
+        "deliveryPhoneNumber": deliveryPhoneNumber,
+        "payment": payment,
+        "message": message
+      }; 
+    
+    }catch(e){
+      return false;
+    }
 
     //add order to list
 
@@ -250,6 +259,45 @@ class CustomerOrderModel {
 
   }
 
+  Future<bool> removeOrderFromBasket(String uuid) async {
+
+    bool removed = false;
+    int? indexOfOrderToRemove;
+
+    //remove from localstorage
+
+    List<Map<String, dynamic>> basketCopy = List<Map<String, dynamic>>.from(
+      json.decode(json.encode(basket))
+    );
+
+    for(var i = 0; i < basket.length; i++){
+
+      if(basketCopy[i]['clientSideUUID'] == uuid){
+        basketCopy.removeAt(i);
+        indexOfOrderToRemove = i;
+        removed = true;
+        break;
+      }
+
+    }
+
+    if(!removed){
+      return false;
+    } 
+
+    //save json as basket
+    final successfullySavedBasket = await saveBasket(basketCopy);
+
+    if(!successfullySavedBasket){
+      return false;
+    }
+
+    //remove on client
+    basket.removeAt(indexOfOrderToRemove!);
+
+    return true;
+
+  }
 
   Future<bool> loadBasket() async {
 
