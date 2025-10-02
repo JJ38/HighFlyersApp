@@ -92,15 +92,15 @@ class _BasketItemState extends State<BasketItem> {
                                   Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
                                   Row(
                                     children: [
-                                      Text(widget.order['deliveryAddressLine1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),  
+                                      Text(widget.order['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),  
                                     ],
                                   ),
                                     Row(
                                     children: [
-                                      if(widget.order['deliveryAddressLine2'] != null)
-                                        Text("${widget.order['deliveryAddressLine2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
-                                      if(widget.order['deliveryAddressLine3'] != null)
-                                        Text(widget.order['deliveryAddressLine3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                                      if(widget.order['deliveryAddress2'] != null)
+                                        Text("${widget.order['deliveryAddress2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                                      if(widget.order['deliveryAddress3'] != null)
+                                        Text(widget.order['deliveryAddress3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
                                     ]
                                   ),
                                   Text(widget.order['deliveryPostcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),

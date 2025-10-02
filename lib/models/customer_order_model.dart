@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:high_flyers_app/models/validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 class CustomerOrderModel {
 
@@ -18,28 +18,30 @@ class CustomerOrderModel {
   List<dynamic> basket = [];
   String? animalType;
   String? quantity;
-  String? code;
+  String? code = "";
   String? boxes;
   String? email;
   String? collectionName;
   String? collectionAddressLine1;
-  String? collectionAddressLine2;
-  String? collectionAddressLine3;
+  String? collectionAddressLine2 = "";
+  String? collectionAddressLine3 = "";
   String? collectionPostcode;
   String? collectionPhoneNumber;
   String? deliveryName;
   String? deliveryAddressLine1;
-  String? deliveryAddressLine2;
-  String? deliveryAddressLine3;
+  String? deliveryAddressLine2 = "";
+  String? deliveryAddressLine3 = "";
   String? deliveryPostcode;
   String? deliveryPhoneNumber;
   String? payment;
-  String? message;
+  String? message = "";
   String errorMessage = "";
   bool isLoaded = false;
   bool isSuccessfullyLoaded = false;
   bool showCollectionDetails = false;
   bool showBasket = false;
+  bool isSubmitting = false;
+
 
   Future<bool> fetchProfile() async {
 
@@ -218,17 +220,18 @@ class CustomerOrderModel {
         "boxes": boxes,
         "email": email,
         "collectionName": collectionName,
-        "collectionAddressLine1": collectionAddressLine1,
-        "collectionAddressLine2": collectionAddressLine2,
-        "collectionAddressLine3": collectionAddressLine3,
+        "collectionAddress1": collectionAddressLine1,
+        "collectionAddress2": collectionAddressLine2,
+        "collectionAddress3": collectionAddressLine3,
         "collectionPostcode": collectionPostcode!.toUpperCase(),
         "collectionPhoneNumber": collectionPhoneNumber,
         "deliveryName": deliveryName,
-        "deliveryAddressLine1": deliveryAddressLine1,
-        "deliveryAddressLine2": deliveryAddressLine2,
-        "deliveryAddressLine3": deliveryAddressLine3,
+        "deliveryAddress1": deliveryAddressLine1,
+        "deliveryAddress2": deliveryAddressLine2,
+        "deliveryAddress3": deliveryAddressLine3,
         "deliveryPostcode": deliveryPostcode!.toUpperCase(),
         "deliveryPhoneNumber": deliveryPhoneNumber,
+        "addedBy": "",
         "payment": payment,
         "message": message
       }; 
@@ -314,12 +317,6 @@ class CustomerOrderModel {
       //if basket is null
       basketJSON ??= '{"basket": []}';
 
-      // print("--------------------------------------------------------------");
-      // print("loadBasket");
-      // print(basketJSON);
-      // print("--------------------------------------------------------------");
-
-
       basket = json.decode(basketJSON)['basket'];
 
     }catch(e){
@@ -339,12 +336,6 @@ class CustomerOrderModel {
 
       basketJSON = '{"basket": $basketJSON}';
 
-      // print("--------------------------------------------------------------");
-      // print("saveBasket");
-      // print(basketJSON);
-      // print("--------------------------------------------------------------");
-
-
       final SharedPreferences prefs = await SharedPreferences.getInstance();
 
       // Set the values with a key and a value
@@ -353,6 +344,53 @@ class CustomerOrderModel {
     }catch(e){
       print(e);
       return false;
+    }
+
+    return true;
+
+  }
+
+  Future<bool> submitOrders() async {
+
+    //create order json
+
+    // print(jsonEncode(basket));
+
+    // return false;
+
+
+    try{
+
+      final user = FirebaseAuth.instance.currentUser;
+      String? token = await user?.getIdToken();  
+
+      final url = Uri.parse('https://api-qjydin7gka-uc.a.run.app/storeorder');
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(basket),
+      );
+
+      if (response.statusCode == 200) {
+
+        print('Response: ${response.body}');
+
+      } else {
+
+        print('Error: ${response.statusCode} - ${response.body}');
+        return false;
+
+      }
+
+    }catch(e){
+
+      print(e);
+      return false;
+
     }
 
     return true;

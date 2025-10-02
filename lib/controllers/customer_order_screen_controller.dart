@@ -237,4 +237,41 @@ class CustomerOrderScreenController{
 
   }
 
+  void submitOrders() async {
+
+    model.isSubmitting = true;
+    updateState();
+
+    final submittedOrdersSuccessfully = await model.submitOrders();
+    final clearedBasketSuccessfully = await model.saveBasket([]);
+
+    model.isSubmitting = false;
+
+    if(!submittedOrdersSuccessfully){
+
+      showToastWidget(ToastNotification(message: "Error submitting orders", isError: true));
+      updateState();
+
+      return;
+
+    }
+
+    if(!clearedBasketSuccessfully){
+
+      showToastWidget(ToastNotification(message: "Error clearing basket", isError: true));
+      updateState();
+
+      return;
+
+    }
+
+    showToastWidget(ToastNotification(message: "Successfully submitted order(s) - you should revieve an email shortly", isError: false));
+
+    //clear basket
+
+    model.basket = [];
+    updateState();
+
+  }
+
 }

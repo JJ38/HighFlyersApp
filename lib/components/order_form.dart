@@ -209,7 +209,7 @@ class _OrderFormState extends State<OrderForm> {
                     ),
                   ),
                   keyboardType: TextInputType.text,
-                  onChanged: (input){},
+                  onChanged: (input){customerOrderScreenController.messageOnChange(input);},
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                 ),
                 SizedBox(height: 20,),
