@@ -11,12 +11,12 @@ class DriverHomeScreenController {
 
   DriverHomeScreenController({required this.initialiseDriver, required this.updateState});
 
-  void onRunTileTap(DocumentSnapshot<Object?> runDocument, bool runStatus, context) async {
+  void onRunTileTap(DocumentSnapshot<Object?> runDocument, bool runStatus, String shipmentName, context) async {
 
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => RunScreen(runDocument: runDocument, runStatus: runStatus),
+            builder: (context) => RunScreen(runDocument: runDocument, runStatus: runStatus, shipmentName: shipmentName),
             settings: RouteSettings(name: '/Run Screen')));
 
     // reinitialisePage

@@ -17,8 +17,9 @@ class RunScreen extends StatefulWidget {
 
   final DocumentSnapshot<Object?> runDocument;
   final bool runStatus;
+  final String shipmentName;
 
-  const RunScreen({super.key, required this.runDocument, required this.runStatus});
+  const RunScreen({super.key, required this.runDocument, required this.runStatus, required this.shipmentName});
 
   @override
   State<RunScreen> createState() => _RunScreenState();
@@ -29,6 +30,7 @@ class _RunScreenState extends State<RunScreen> {
   late RunScreenController runScreenController;
   late Map<String, dynamic> run;
   late String runID;
+  late String shipmentName;
   late DocumentSnapshot<Object?> runDocument;
   late List<Widget> runInfoView;
   late CameraPosition _initialCameraPositon;
@@ -44,6 +46,10 @@ class _RunScreenState extends State<RunScreen> {
     run = widget.runDocument.data()! as Map<String, dynamic>;
     runID = widget.runDocument.id;
     runDocument = widget.runDocument;
+    shipmentName = widget.shipmentName;
+    runScreenController.model.shipmentName = widget.shipmentName;
+
+
     print(run);
 
     if (run.isEmpty) {

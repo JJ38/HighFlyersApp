@@ -13,6 +13,7 @@ class RunModel {
   Map<String, dynamic>? run; 
   String? runID;
   String? progressedRunID;
+  String? shipmentName;
   dynamic orders;
   Key scaffoldKey = UniqueKey();
   Set<Marker> markers = {};
@@ -322,15 +323,32 @@ class RunModel {
       for(var i = 0; i < newAssignedRuns.length; i++){
 
         if(newAssignedRuns[i]['runID'] == runID){
-          
-          newAssignedRuns[i]['progressedRunID'] = progressedRunDocRef.id;
-          newAssignedRuns[i]['progressedRun'] = true;
-
+          newAssignedRuns.removeAt(i);
+          break;
         }
 
       }
 
-      print(newAssignedRuns);
+      //print(newAssignedRuns);
+
+      List<dynamic> newProgressedRuns = [];
+
+      //if progressed runs is empty or undefined
+      List<dynamic>? currentProgressedRuns = driverData['progressedRuns'] ;
+
+      currentProgressedRuns ??= [];
+
+      //get current progressed runs
+      newProgressedRuns + currentProgressedRuns;
+
+      newProgressedRuns.add({
+        "progressedRunID": progressedRunDocRef.id,
+        "runName": run!['runName'],
+        "shipmentName": shipmentName
+      });
+
+
+      print(newProgressedRuns);
 
       await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").runTransaction((transaction) async {
 
@@ -344,6 +362,7 @@ class RunModel {
 
         transaction.update(driverDocRef, {
           'assignedRuns': newAssignedRuns,
+          'progressedRuns': newProgressedRuns,
           'driverStatus': "Online",
           'updated_at': FieldValue.serverTimestamp(), // Optional: use a server timestamp
         });

@@ -40,31 +40,34 @@ class DriverModel {
     print("fetching dirver runs");
 
     final assignedRuns = driverDoc['assignedRuns'];
+    final progressedRuns = driverDoc['progressedRuns'];
+
 
     List<DocumentReference<Map<String, dynamic>>> documentReferences = [];
     runStatuses = [];
 
     for (var i = 0; i < assignedRuns.length; i++) {
-      
-      if(driverDoc['assignedRuns'][i]['progressedRun'] == true){
 
-        DocumentReference<Map<String, dynamic>> progressedRunDoc = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns').doc(assignedRuns[i]['progressedRunID']);
-        documentReferences.add(progressedRunDoc);
-        runStatuses.add(true);
-
-      }else{
-
-        DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Runs').doc(assignedRuns[i]['runID']);
-        documentReferences.add(driverDocRef);
-        runStatuses.add(false);
-
-      }
+      DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Runs').doc(assignedRuns[i]['runID']);
+      documentReferences.add(driverDocRef);
+      runStatuses.add(false);
 
     }
+
+    for (var i = 0; i < progressedRuns.length; i++) {
+
+      DocumentReference<Map<String, dynamic>> progressedRunDoc = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns').doc(progressedRuns[i]['progressedRunID']);
+      documentReferences.add(progressedRunDoc);
+      runStatuses.add(true);
+
+    }
+
+    print(documentReferences);
 
     try{
 
       driverRunDocs = await FirebaseModel.fetchMultipleDocuments(documentReferences);
+      print(driverRunDocs);
 
     }catch(e){
 

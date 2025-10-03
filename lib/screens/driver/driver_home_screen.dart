@@ -80,8 +80,19 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                       ListView.builder(
                         shrinkWrap: true,
                         padding: const EdgeInsets.all(8),
-                        itemCount: driverHomeScreenController.model.driverDoc['assignedRuns'].length,
+                        itemCount: driverHomeScreenController.model.driverRunDocs.length,
                         itemBuilder: (BuildContext context, int i) {
+                  
+                          final numberOfAssignedRuns = driverHomeScreenController.model.driverDoc['assignedRuns'].length; //1
+
+                          dynamic runIndex = i;
+
+                          if(i > (numberOfAssignedRuns - 1)){
+                            runIndex = i - numberOfAssignedRuns;
+                          }
+
+                          final runType = i > numberOfAssignedRuns - 1 ? "progressedRuns" : "assignedRuns";
+
                           return GestureDetector(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
@@ -89,12 +100,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                 Column(                        
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(driverHomeScreenController.model.driverDoc['assignedRuns'][i]['shipmentName'], style: Theme.of(context).textTheme.titleMedium,),
+                                    Text(driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'], style: Theme.of(context).textTheme.titleMedium,),
                                     Text(driverHomeScreenController.model.driverRunDocs[i]['runName'], style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
+                                    Text(driverHomeScreenController.model.runStatuses[i] ? "Progressed" : "Pending", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
+
                                   ]
                                 ),
                             ),                      
-                            onTap: () { driverHomeScreenController.onRunTileTap(driverHomeScreenController.model.driverRunDocs[i], driverHomeScreenController.model.runStatuses[i], context);},
+                            onTap: () { driverHomeScreenController.onRunTileTap(driverHomeScreenController.model.driverRunDocs[i], driverHomeScreenController.model.runStatuses[i], driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'], context);},
                           );
                         },
                       )
