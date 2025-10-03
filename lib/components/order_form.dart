@@ -29,6 +29,11 @@ class _OrderFormState extends State<OrderForm> {
   @override
   Widget build(BuildContext context) { 
 
+    final GlobalKey<FormFieldState<String?>> animalFieldKey = GlobalKey<FormFieldState<String?>>();
+    final GlobalKey<FormFieldState<String?>> paymentFieldKey = GlobalKey<FormFieldState<String?>>();
+
+
+
     double screenWidth = MediaQuery.of(context).size.width;
 
     return  Column(
@@ -37,8 +42,8 @@ class _OrderFormState extends State<OrderForm> {
                 
                 Text("Order Details", style: Theme.of(context).textTheme.titleMedium),
                 SizedBox(height: 10, width: 0,),
-                DropdownButtonFormField(
-                  key: const ValueKey('animalType'),
+                DropdownButtonFormField<String?>(
+                  key: animalFieldKey,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                   decoration: InputDecoration(
                     icon: Icon(Icons.pets),
@@ -56,15 +61,15 @@ class _OrderFormState extends State<OrderForm> {
                       ),
                     ),
                   ),
-                  value: customerOrderScreenController.model.animalType,                          
+                  value: customerOrderScreenController.model.getAnimalType(),  
+                  hint: const Text("Select Animal"),                    
                   onChanged: (value){customerOrderScreenController.animalTypeOnChange(value);},
-                  items:  customerOrderScreenController.model.birdSpeciesSet.toList().map((bird) {
-                              return DropdownMenuItem(
-                                value: bird,
-                                child: Text(bird),
-                              );
-                            },
-                          ).toList()
+                  items:  customerOrderScreenController.model.birdSpeciesSet.map((bird) =>
+                            DropdownMenuItem<String?>(
+                              value: bird,
+                              child: Text(bird),
+                            ),
+                          ).toList(),
                 ),
                 SizedBox(height: 20,),
                 SquaredInput(label: "Quantity", value: customerOrderScreenController.model.quantity, icon: Icons.numbers_outlined, onChange: customerOrderScreenController.quantityOnChange, keyboardType: TextInputType.number,),
@@ -155,7 +160,8 @@ class _OrderFormState extends State<OrderForm> {
                 SizedBox(height: 10,),
                 Text("Payment Details", style: Theme.of(context).textTheme.titleMedium),
                 SizedBox(height: 10,),
-                  DropdownButtonFormField(
+                DropdownButtonFormField<String?>(
+                  key: paymentFieldKey,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                   decoration: InputDecoration(
                     icon: Icon(Icons.payment_outlined),
@@ -173,6 +179,8 @@ class _OrderFormState extends State<OrderForm> {
                       ),
                     ),
                   ),
+                  hint: const Text("Select payment"),
+                  value: customerOrderScreenController.model.getPayment(),
                   onChanged: (value){customerOrderScreenController.paymentOnChange(value);},
                   items: [
                     DropdownMenuItem(

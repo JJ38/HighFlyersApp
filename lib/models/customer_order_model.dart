@@ -21,6 +21,7 @@ class CustomerOrderModel {
   String? code = "";
   String? boxes;
   String? email;
+  String? profileEmail;
   String? collectionName;
   String? collectionAddressLine1;
   String? collectionAddressLine2 = "";
@@ -42,6 +43,13 @@ class CustomerOrderModel {
   bool showBasket = false;
   bool isSubmitting = false;
 
+  dynamic getAnimalType(){
+    return animalType;
+  }
+
+  dynamic getPayment(){
+    return payment;
+  }
 
   Future<bool> fetchProfile() async {
 
@@ -69,6 +77,7 @@ class CustomerOrderModel {
 
       collectionName = customerProfileData['collectionName'];
       email = customerProfileData['email'];
+      profileEmail = customerProfileData['email'];
       collectionAddressLine1 = customerProfileData['collectionAddress1'];
       collectionAddressLine2 = customerProfileData['collectionAddress2'];
       collectionAddressLine3 = customerProfileData['collectionAddress3'];
@@ -350,15 +359,26 @@ class CustomerOrderModel {
 
   }
 
+  void clearForm(){
+
+    animalType = null;
+    quantity = null;
+    code = null;
+    boxes = null;
+    deliveryAddressLine1 = null;
+    deliveryAddressLine2 = null;
+    deliveryAddressLine3 = null;
+    deliveryName = null;
+    deliveryPostcode = null;
+    deliveryPhoneNumber = null;
+    payment = null;
+    message = null;
+
+  }
+
   Future<bool> submitOrders() async {
 
-    //create order json
-
-    // print(jsonEncode(basket));
-
-    // return false;
-
-
+ 
     try{
 
       final user = FirebaseAuth.instance.currentUser;
@@ -372,7 +392,10 @@ class CustomerOrderModel {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
         },
-        body: jsonEncode(basket),
+        body: jsonEncode({
+          "profileEmail": email,
+          "orderDetails": basket
+        }),
       );
 
       if (response.statusCode == 200) {

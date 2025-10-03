@@ -183,11 +183,16 @@ class CustomerOrderScreenController{
       return;
     }
 
+    //clear non profile form fields
+    model.clearForm();
+
+
     updateState();
 
     showToastWidget(ToastNotification(message: "Added order to basket", isError: false));
 
   }
+
 
   void onRemoveFromBasketTap(String? uuid) async { 
 
