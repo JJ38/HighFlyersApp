@@ -199,6 +199,7 @@ class _OrderFormState extends State<OrderForm> {
                 ),
                 SizedBox(height: 20),
                 TextField(
+                  controller: TextEditingController(text: customerOrderScreenController.model.message),
                   maxLines: null,
                   decoration: InputDecoration(
                     icon: Icon(Icons.message_outlined),
