@@ -38,7 +38,6 @@ void main() async {
 
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-
     return true;
   };
 

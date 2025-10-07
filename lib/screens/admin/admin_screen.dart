@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:high_flyers_app/controllers/admin_screen_controller.dart';
 import 'package:high_flyers_app/screens/admin/admin_manage_orders_screen.dart';
+import 'package:high_flyers_app/screens/admin/admin_manage_users_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   static String id = "Admin Screen";
@@ -13,16 +13,13 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
 
-  late AdminScreenController adminScreenController;
-
   var currentPageIndex = 0;
 
-  List<Widget> screens = [AdminManageOrdersScreen(), AdminManageOrdersScreen()];
+  List<Widget> screens = [AdminManageOrdersScreen(), AdminManageUsersScreen()];
 
   @override
   void initState(){
     super.initState();
-    adminScreenController = AdminScreenController();
 
   }
 
