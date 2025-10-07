@@ -6,8 +6,10 @@ class AdminManageOrdersScreenModel{
   Stream<QuerySnapshot>? orderListener;
   List<dynamic> orders = [];
   int? latestOrderID;
+  int? oldestOrderID;
   bool showFilterSettings = false;
-  bool isLoadingOrders = false;
+  bool isLoadingInitialOrders = false;
+  bool isLoadingAdditionalOrders = false;
 
 
   Future<bool> getInitialOrders() async {
@@ -20,10 +22,11 @@ class AdminManageOrdersScreenModel{
       )
       .collection('Orders')
       .orderBy('ID', descending: true)
-      .limit(2)
+      .limit(10)
       .get();
 
       latestOrderID = initialOrders.docs.first.get('ID');
+      oldestOrderID = initialOrders.docs.last.get('ID');
 
       orders.insertAll(0, initialOrders.docs);
 
@@ -77,6 +80,35 @@ class AdminManageOrdersScreenModel{
     .where('ID', isGreaterThan: latestOrderID)
     .orderBy('ID', descending: false) // ascending to get oldest-newest
     .snapshots();
+
+  }
+
+  //called when the user has scrolled down - pagination
+  Future<bool> getAdditionalOrders() async {
+
+    try{
+
+      final initialOrders = await FirebaseFirestore.instanceFor(
+        app: Firebase.app(),
+        databaseId: "development",
+      )
+      .collection('Orders')
+      .where('ID', isLessThan: oldestOrderID)
+      .orderBy('ID', descending: true)
+      .limit(10)
+      .get();
+
+      oldestOrderID = initialOrders.docs.last.get('ID');
+      print(oldestOrderID);
+
+      orders.addAll(initialOrders.docs);
+
+    }catch(e){
+      print(e);
+      return false;
+    }
+
+    return true;
 
   }
 

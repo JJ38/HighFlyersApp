@@ -27,9 +27,9 @@ class AdminManageOrdersScreenController {
 
   void getInitialOrders() async{
 
-    model.isLoadingOrders = true;
+    model.isLoadingInitialOrders = true;
     final successfullyFetchedOrders = await model.getInitialOrders();
-    model.isLoadingOrders = false;
+    model.isLoadingInitialOrders = false;
 
 
     if(!successfullyFetchedOrders){
@@ -38,7 +38,6 @@ class AdminManageOrdersScreenController {
     }
 
     model.initialiseNewOrderListener(updateState);
-
 
     updateState();
 
@@ -49,14 +48,22 @@ class AdminManageOrdersScreenController {
 
     listViewScrollController.addListener(() async {
 
-      if(model.isLoadingOrders){
+      if(model.isLoadingAdditionalOrders){
         return;
       }
 
-      if (listViewScrollController.position.pixels >= listViewScrollController.position.maxScrollExtent - 50) {
-        print("load more orders");
-        model.isLoadingOrders = true;
-        // final fetchPaginatedOrdersResult = await model.fetchPaginatedOrders();
+      if (listViewScrollController.position.pixels >= listViewScrollController.position.maxScrollExtent - 200) {
+
+        model.isLoadingAdditionalOrders = true;
+        updateState();
+        final successfullyFetchedOrders = await model.getAdditionalOrders();
+
+        if(!successfullyFetchedOrders){
+          showToastWidget(ToastNotification(message: "Error fetching additional orders", isError: true));
+        }
+
+        model.isLoadingAdditionalOrders = false;
+        updateState();
       }
 
     });

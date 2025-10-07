@@ -84,7 +84,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
                   ),
                 ),
 
-                adminManageOrdersScreenController.model.isLoadingOrders ? 
+                adminManageOrdersScreenController.model.isLoadingInitialOrders ? 
 
                     Center(
                       child: CircularProgressIndicator()
@@ -95,10 +95,22 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
                     ListView.builder(
                       controller: adminManageOrdersScreenController.listViewScrollController,
                       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                      itemCount: adminManageOrdersScreenController.model.orders.length,
+                      itemCount: adminManageOrdersScreenController.model.isLoadingAdditionalOrders ? adminManageOrdersScreenController.model.orders.length + 1 : adminManageOrdersScreenController.model.orders.length,
                       itemBuilder: (context, index) {
+
+                        if(index == adminManageOrdersScreenController.model.orders.length){
+                          return Padding(
+                            padding: EdgeInsetsGeometry.all(20),
+                            child: Center(child: CircularProgressIndicator())
+                          );
+                        }
+
                         final data = adminManageOrdersScreenController.model.orders[index].data() as Map<String, dynamic>;
-                        return AdminOrderCard(order: data);
+                
+                        return Padding(
+                          padding: EdgeInsetsGeometry.only(top: 10),
+                          child: AdminOrderCard(order: data)
+                        );
                       },
                     )              
               ],          
