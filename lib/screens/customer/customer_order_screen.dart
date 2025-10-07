@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/basket_item.dart';
-import 'package:high_flyers_app/components/order_form.dart';
+import 'package:high_flyers_app/components/customer_order_form.dart';
 import 'package:high_flyers_app/controllers/customer_order_screen_controller.dart';
 
 class CustomerOrderScreen extends StatefulWidget {
@@ -84,7 +84,7 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                       Expanded(
                         child: ListView(
                           children: [
-                            OrderForm(customerOrderScreenController: customerOrderScreenController)
+                            CustomerOrderForm(customerOrderScreenController: customerOrderScreenController)
                           ],
                         ),
                       ) :

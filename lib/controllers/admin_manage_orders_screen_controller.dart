@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/admin_manage_orders_screen_model.dart';
+import 'package:high_flyers_app/screens/admin/admin_add_order_screen.dart';
 
 class AdminManageOrdersScreenController {
 
@@ -19,9 +20,14 @@ class AdminManageOrdersScreenController {
 
   }
 
-  void onAddOrderTap(){
+  void onAddOrderTap(context) async{
 
     
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AdminAddOrderScreen(),
+            settings: RouteSettings(name: '/Add Order Screen')));
 
   }
 
@@ -45,7 +51,6 @@ class AdminManageOrdersScreenController {
 
   void initialiseListViewScrollController(){
 
-
     listViewScrollController.addListener(() async {
 
       if(model.isLoadingAdditionalOrders){
@@ -67,8 +72,7 @@ class AdminManageOrdersScreenController {
       }
 
     });
-    
-    
+  
   }
 
   void getOrderListener(){

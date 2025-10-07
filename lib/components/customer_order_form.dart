@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/squared_input.dart';
 import 'package:high_flyers_app/controllers/customer_order_screen_controller.dart';
 
-class OrderForm extends StatefulWidget {
+class CustomerOrderForm extends StatefulWidget {
 
   final CustomerOrderScreenController customerOrderScreenController;
   
-  const OrderForm({super.key, required this.customerOrderScreenController});
+  const CustomerOrderForm({super.key, required this.customerOrderScreenController});
 
   @override
-  State<OrderForm> createState() => _OrderFormState();
+  State<CustomerOrderForm> createState() => _CustomerOrderFormState();
 }
 
-class _OrderFormState extends State<OrderForm> {
+class _CustomerOrderFormState extends State<CustomerOrderForm> {
 
   late CustomerOrderScreenController customerOrderScreenController;
 
@@ -38,8 +38,7 @@ class _OrderFormState extends State<OrderForm> {
 
     return  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                
+              children: [  
                 Text("Order Details", style: Theme.of(context).textTheme.titleMedium),
                 SizedBox(height: 10, width: 0,),
                 DropdownButtonFormField<String?>(

@@ -63,7 +63,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  onPressed: adminManageOrdersScreenController.onAddOrderTap,
+                  onPressed: (){adminManageOrdersScreenController.onAddOrderTap(context);},
                   child: Row(
                     children: [
                       Icon(Icons.add, color: Colors.white),
