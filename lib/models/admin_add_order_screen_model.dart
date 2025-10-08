@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:high_flyers_app/models/validator.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 class AdminAddOrderScreenModel {
 
@@ -13,12 +15,13 @@ class AdminAddOrderScreenModel {
   late Map<String, dynamic> postcodes;
   Map<String, dynamic> customerProfileData = {};
   Set<String> birdSpeciesSet = {};
-  List<dynamic> basket = [];
   String? animalType;
   String? quantity;
   String? code = "";
   String? boxes;
   String? email;
+  String? account;
+  String? deliveryWeek;
   String? profileEmail;
   String? collectionName;
   String? collectionAddressLine1;
@@ -33,6 +36,7 @@ class AdminAddOrderScreenModel {
   String? deliveryPostcode;
   String? deliveryPhoneNumber;
   String? payment;
+  String? price;
   String? message = "";
   String errorMessage = "";
   bool isLoaded = false;
@@ -169,7 +173,16 @@ class AdminAddOrderScreenModel {
       final user = FirebaseAuth.instance.currentUser;
       String? token = await user?.getIdToken();  
 
-      final url = Uri.parse('https://api-qjydin7gka-uc.a.run.app/storeorder');
+      // final storeOrderEndpoint = dotenv.env['STORE_ORDER_ENDPOINT'];
+      final storeOrderEndpoint = "https://api-qjydin7gka-uc.a.run.app/storeorder";
+
+      print(storeOrderEndpoint);
+
+      if(storeOrderEndpoint == null){
+        return false;
+      }
+
+      final url = Uri.parse(storeOrderEndpoint);
 
       final response = await http.post(
         url,
@@ -179,7 +192,7 @@ class AdminAddOrderScreenModel {
         },
         body: jsonEncode({
           "profileEmail": email,
-          "orderDetails": basket
+          "orderDetails": [getOrderJSON()]
         }),
       );
 
@@ -205,5 +218,48 @@ class AdminAddOrderScreenModel {
     
   }
 
+  Map<String, dynamic> getOrderJSON(){
+
+    account ??= "";
+    print(account);
+
+    Map<String, dynamic> order = {
+
+      "animalType": animalType,
+      "quantity": quantity,
+      "code": code,
+      "boxes": boxes,
+      "email": email,
+      "account": account,
+      "collectionName": collectionName,
+      "collectionAddress1": collectionAddressLine1,
+      "collectionAddress2": collectionAddressLine2,
+      "collectionAddress3": collectionAddressLine3,
+      "collectionPostcode": collectionPostcode!.toUpperCase(),
+      "collectionPhoneNumber": collectionPhoneNumber,
+      "deliveryName": deliveryName,
+      "deliveryAddress1": deliveryAddressLine1,
+      "deliveryAddress2": deliveryAddressLine2,
+      "deliveryAddress3": deliveryAddressLine3,
+      "deliveryPostcode": deliveryPostcode!.toUpperCase(),
+      "deliveryPhoneNumber": deliveryPhoneNumber,
+      "addedBy": "",
+      "payment": payment,
+      "message": message
+    }; 
+
+    if(deliveryWeek != null){
+      order['deliveryWeek'] = deliveryWeek;
+    }
+
+    if(price != null){
+      order['price'] = price;
+    }
+
+    print(order);
+
+    return order;
+
+  }
 
 }

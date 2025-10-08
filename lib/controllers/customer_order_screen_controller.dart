@@ -273,7 +273,6 @@ class CustomerOrderScreenController{
     showToastWidget(ToastNotification(message: "Successfully submitted order(s) - you should revieve an email shortly", isError: false));
 
     //clear basket
-
     model.basket = [];
     updateState();
 

@@ -73,6 +73,10 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
               SizedBox(height: 20,),
               SquaredInput(label: "Email", value: adminAddOrderScreenController.model.email, icon: Icons.alternate_email_outlined, onChange: adminAddOrderScreenController.emailOnChange, keyboardType: TextInputType.emailAddress,),
               SizedBox(height: 20,),
+              SquaredInput(label: "Account", value: adminAddOrderScreenController.model.account, icon: Icons.my_library_books_outlined, onChange: adminAddOrderScreenController.accountOnChange),
+              SizedBox(height: 20,),
+              SquaredInput(label: "Delivery Week", value: adminAddOrderScreenController.model.deliveryWeek, icon: Icons.calendar_month, onChange: adminAddOrderScreenController.deliveryWeekOnChange, keyboardType: TextInputType.number,),
+              SizedBox(height: 20,),
                   
               SizedBox(height: 10, width: 0,),
               Divider(height: 1,),
@@ -156,6 +160,8 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                 ],
               ),
               SizedBox(height: 20),
+              SquaredInput(label: "Price", value: adminAddOrderScreenController.model.price, icon: Icons.currency_pound_outlined, onChange: adminAddOrderScreenController.priceOnChange, keyboardType: TextInputType.number,),
+              SizedBox(height: 20,),
               TextField(
                 controller: TextEditingController(text: adminAddOrderScreenController.model.message),
                 maxLines: null,

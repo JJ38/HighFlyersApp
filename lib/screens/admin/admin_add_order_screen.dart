@@ -24,9 +24,11 @@ class _AdminAddOrderScreenState extends State<AdminAddOrderScreen> {
 
   void updateState(){
 
-    setState(() {
-      
-    });
+    if(mounted){
+      setState(() {
+        
+      });
+    }
 
   }
 

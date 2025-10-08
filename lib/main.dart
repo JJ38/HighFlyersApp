@@ -7,6 +7,11 @@ import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+
 import 'screens/login_screen.dart';
 import 'screens/driver/driver_screen.dart';
 import 'screens/customer/customer_screen.dart';
@@ -26,6 +31,7 @@ void main() async {
   }
 
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -34,12 +40,20 @@ void main() async {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
 
-  // FlutterError.onError = (onError) { FirebaseCrashlytics.instance.recordFlutterFatalError; };
 
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+
+  String envFile = ".env.development";
+
+  if (kReleaseMode) {
+    envFile = ".env.production";
+  }
+
+  await dotenv.load(fileName: envFile);
 
   runApp(const MyApp());
   

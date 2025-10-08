@@ -27,9 +27,11 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
   }
 
   void updateState(){
-    setState(() {
-      
-    });
+    if(mounted){
+      setState(() {
+        
+      });
+    }
   }
 
   @override

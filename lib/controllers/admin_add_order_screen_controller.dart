@@ -5,7 +5,7 @@ import 'package:high_flyers_app/models/admin_add_order_screen_model.dart';
 
 class AdminAddOrderScreenController {
 
-  AdminAddOrderScreenModel model = AdminAddOrderScreenModel();
+  final AdminAddOrderScreenModel model = AdminAddOrderScreenModel();
   void Function() updateState;
 
   AdminAddOrderScreenController({required this.updateState});
@@ -37,6 +37,18 @@ class AdminAddOrderScreenController {
   void boxesOnChange(String input){
 
     model.boxes = input;
+
+  }
+
+  void accountOnChange(String input){
+
+    model.account = input;
+
+  }
+
+  void deliveryWeekOnChange(String input){
+
+    model.deliveryWeek = input;
 
   }
   
@@ -128,6 +140,12 @@ class AdminAddOrderScreenController {
   void paymentOnChange(String? input){
 
     model.payment = input;
+
+  }
+
+  void priceOnChange(String input){
+
+    model.price = input;
 
   }
 
