@@ -96,7 +96,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
               
                     ListView.builder(
                       controller: adminManageOrdersScreenController.listViewScrollController,
-                      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
                       itemCount: adminManageOrdersScreenController.model.isLoadingAdditionalOrders ? adminManageOrdersScreenController.model.orders.length + 1 : adminManageOrdersScreenController.model.orders.length,
                       itemBuilder: (context, index) {
 
