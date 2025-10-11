@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/squared_input.dart';
-import 'package:high_flyers_app/controllers/admin_add_order_screen_controller.dart';
+import 'package:high_flyers_app/controllers/order_controller_abstract.dart';
 
 class AdminOrderForm extends StatefulWidget {
 
-  final AdminAddOrderScreenController adminAddOrderScreenController;
+  final OrderController orderController;
+  final String buttonText;
 
-  const AdminOrderForm({super.key, required this.adminAddOrderScreenController});
+  const AdminOrderForm({super.key, required this.orderController, required this.buttonText});
 
   @override
   State<AdminOrderForm> createState() => _AdminOrderFormState();
@@ -14,14 +15,14 @@ class AdminOrderForm extends StatefulWidget {
 
 class _AdminOrderFormState extends State<AdminOrderForm> {
 
-  late AdminAddOrderScreenController adminAddOrderScreenController;
+  late OrderController orderController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    adminAddOrderScreenController = widget.adminAddOrderScreenController;
-    adminAddOrderScreenController.loadForm();
+    orderController = widget.orderController;
+    orderController.loadForm();
 
   }
 
@@ -54,10 +55,10 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                     ),
                   ),
                 ),
-                // value: adminAddOrderScreenController.model.getAnimalType(),  
+                // value: orderController.model.getAnimalType(),  
                 hint: const Text("Select Animal"),                    
-                onChanged: (value){adminAddOrderScreenController.animalTypeOnChange(value);},
-                items:  adminAddOrderScreenController.model.birdSpeciesSet.map((bird) =>
+                onChanged: (value){orderController.animalTypeOnChange(value);},
+                items:  orderController.model.birdSpeciesSet.map((bird) =>
                           DropdownMenuItem<String?>(
                             value: bird,
                             child: Text(bird),
@@ -65,17 +66,17 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                         ).toList(),
               ),
               SizedBox(height: 20,),
-              SquaredInput(label: "Quantity", value: adminAddOrderScreenController.model.quantity, icon: Icons.numbers_outlined, onChange: adminAddOrderScreenController.quantityOnChange, keyboardType: TextInputType.number,),
+              SquaredInput(label: "Quantity", value: orderController.model.quantity, icon: Icons.numbers_outlined, onChange: orderController.quantityOnChange, keyboardType: TextInputType.number,),
               SizedBox(height: 20,),
-              SquaredInput(label: "Code", value: adminAddOrderScreenController.model.code, icon: Icons.redeem_outlined, onChange: adminAddOrderScreenController.codeOnChange),
+              SquaredInput(label: "Code", value: orderController.model.code, icon: Icons.redeem_outlined, onChange: orderController.codeOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Boxes", value: adminAddOrderScreenController.model.boxes, icon: Icons.card_travel_outlined, onChange: adminAddOrderScreenController.boxesOnChange, keyboardType: TextInputType.number,),
+              SquaredInput(label: "Boxes", value: orderController.model.boxes, icon: Icons.card_travel_outlined, onChange: orderController.boxesOnChange, keyboardType: TextInputType.number,),
               SizedBox(height: 20,),
-              SquaredInput(label: "Email", value: adminAddOrderScreenController.model.email, icon: Icons.alternate_email_outlined, onChange: adminAddOrderScreenController.emailOnChange, keyboardType: TextInputType.emailAddress,),
+              SquaredInput(label: "Email", value: orderController.model.email, icon: Icons.alternate_email_outlined, onChange: orderController.emailOnChange, keyboardType: TextInputType.emailAddress,),
               SizedBox(height: 20,),
-              SquaredInput(label: "Account", value: adminAddOrderScreenController.model.account, icon: Icons.my_library_books_outlined, onChange: adminAddOrderScreenController.accountOnChange),
+              SquaredInput(label: "Account", value: orderController.model.account, icon: Icons.my_library_books_outlined, onChange: orderController.accountOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Delivery Week", value: adminAddOrderScreenController.model.deliveryWeek, icon: Icons.calendar_month, onChange: adminAddOrderScreenController.deliveryWeekOnChange, keyboardType: TextInputType.number,),
+              SquaredInput(label: "Delivery Week", value: orderController.model.deliveryWeek, icon: Icons.calendar_month, onChange: orderController.deliveryWeekOnChange, keyboardType: TextInputType.number,),
               SizedBox(height: 20,),
                   
               SizedBox(height: 10, width: 0,),
@@ -86,17 +87,17 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
               
               SizedBox(height: 20, width: 0,),
 
-              SquaredInput(label: "Collection Name", value: adminAddOrderScreenController.model.collectionName, icon: Icons.person_outline_outlined, onChange: adminAddOrderScreenController.collectionNameOnChange),
+              SquaredInput(label: "Collection Name", value: orderController.model.collectionName, icon: Icons.person_outline_outlined, onChange: orderController.collectionNameOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Collection Address line 1", value: adminAddOrderScreenController.model.collectionAddressLine1, icon: Icons.local_post_office_outlined, onChange: adminAddOrderScreenController.collectionAddressOneOnChange),
+              SquaredInput(label: "Collection Address line 1", value: orderController.model.collectionAddressLine1, icon: Icons.local_post_office_outlined, onChange: orderController.collectionAddressOneOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Collection Address line 2", value: adminAddOrderScreenController.model.collectionAddressLine2, icon: Icons.local_post_office_outlined, onChange: adminAddOrderScreenController.collectionAddressTwoOnChange),
+              SquaredInput(label: "Collection Address line 2", value: orderController.model.collectionAddressLine2, icon: Icons.local_post_office_outlined, onChange: orderController.collectionAddressTwoOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Collection Address line 3", value: adminAddOrderScreenController.model.collectionAddressLine3, icon: Icons.local_post_office_outlined, onChange: adminAddOrderScreenController.collectionAddressThreeOnChange),
+              SquaredInput(label: "Collection Address line 3", value: orderController.model.collectionAddressLine3, icon: Icons.local_post_office_outlined, onChange: orderController.collectionAddressThreeOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Collection Postcode", value: adminAddOrderScreenController.model.collectionPostcode, icon: Icons.local_post_office_outlined, onChange: adminAddOrderScreenController.collectionPostcodeOnChange),
+              SquaredInput(label: "Collection Postcode", value: orderController.model.collectionPostcode, icon: Icons.local_post_office_outlined, onChange: orderController.collectionPostcodeOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Collection Phone number", value: adminAddOrderScreenController.model.collectionPhoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: adminAddOrderScreenController.collectionPhoneNumberOnChange),
+              SquaredInput(label: "Collection Phone number", value: orderController.model.collectionPhoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: orderController.collectionPhoneNumberOnChange),
               SizedBox(height: 20,),
                               
               Divider(height: 1,),
@@ -104,17 +105,17 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
               Text("Delivery Details", style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 20, width: 0,),
               
-              SquaredInput(label: "Delivery Name", value: adminAddOrderScreenController.model.deliveryName, icon: Icons.person_outline_outlined, onChange: adminAddOrderScreenController.deliveryNameOnChange),
+              SquaredInput(label: "Delivery Name", value: orderController.model.deliveryName, icon: Icons.person_outline_outlined, onChange: orderController.deliveryNameOnChange),
               SizedBox(height: 20,),                          
-              SquaredInput(label: "Delivery Address line 1", value: adminAddOrderScreenController.model.deliveryAddressLine1, icon: Icons.local_post_office_outlined, onChange: adminAddOrderScreenController.deliveryAddressOneOnChange),
+              SquaredInput(label: "Delivery Address line 1", value: orderController.model.deliveryAddressLine1, icon: Icons.local_post_office_outlined, onChange: orderController.deliveryAddressOneOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Delivery Address line 2", value: adminAddOrderScreenController.model.deliveryAddressLine2, icon: Icons.local_post_office_outlined, onChange: adminAddOrderScreenController.deliveryAddressTwoOnChange),
+              SquaredInput(label: "Delivery Address line 2", value: orderController.model.deliveryAddressLine2, icon: Icons.local_post_office_outlined, onChange: orderController.deliveryAddressTwoOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Delivery Address line 3", value: adminAddOrderScreenController.model.deliveryAddressLine3, icon: Icons.local_post_office_outlined, onChange: adminAddOrderScreenController.deliveryAddressThreeOnChange),
+              SquaredInput(label: "Delivery Address line 3", value: orderController.model.deliveryAddressLine3, icon: Icons.local_post_office_outlined, onChange: orderController.deliveryAddressThreeOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Delivery Postcode", value: adminAddOrderScreenController.model.deliveryPostcode, icon: Icons.local_post_office_outlined, onChange: adminAddOrderScreenController.deliveryPostcodeOnChange),
+              SquaredInput(label: "Delivery Postcode", value: orderController.model.deliveryPostcode, icon: Icons.local_post_office_outlined, onChange: orderController.deliveryPostcodeOnChange),
               SizedBox(height: 20,),
-              SquaredInput(label: "Delivery Phone number", value: adminAddOrderScreenController.model.deliveryPhoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: adminAddOrderScreenController.deliveryPhoneNumberOnChange),
+              SquaredInput(label: "Delivery Phone number", value: orderController.model.deliveryPhoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: orderController.deliveryPhoneNumberOnChange),
               SizedBox(height: 20,),
             
               
@@ -142,8 +143,8 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                   ),
                 ),
                 hint: const Text("Select payment"),
-                // value: adminAddOrderScreenController.model.getPayment(),
-                onChanged: (value){adminAddOrderScreenController.paymentOnChange(value);},
+                // value: orderController.model.getPayment(),
+                onChanged: (value){orderController.paymentOnChange(value);},
                 items: [
                   DropdownMenuItem(
                     value: 'Collection',
@@ -160,10 +161,10 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                 ],
               ),
               SizedBox(height: 20),
-              SquaredInput(label: "Price", value: adminAddOrderScreenController.model.price, icon: Icons.currency_pound_outlined, onChange: adminAddOrderScreenController.priceOnChange, keyboardType: TextInputType.number,),
+              SquaredInput(label: "Price", value: orderController.model.price, icon: Icons.currency_pound_outlined, onChange: orderController.priceOnChange, keyboardType: TextInputType.number,),
               SizedBox(height: 20,),
               TextField(
-                controller: TextEditingController(text: adminAddOrderScreenController.model.message),
+                controller: TextEditingController(text: orderController.model.message),
                 maxLines: null,
                 decoration: InputDecoration(
                   icon: Icon(Icons.message_outlined),
@@ -182,12 +183,12 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                   ),
                 ),
                 keyboardType: TextInputType.text,
-                onChanged: (input){adminAddOrderScreenController.messageOnChange(input);},
+                onChanged: (input){orderController.messageOnChange(input);},
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
               ),
               SizedBox(height: 20,), 
 
-              adminAddOrderScreenController.model.isSubmitting ? 
+              orderController.model.isSubmitting ? 
 
                   Center(
                     child: CircularProgressIndicator(),
@@ -203,8 +204,8 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                         shadowColor: Color(0x00000000),                                
                         borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                         child: MaterialButton(
-                          onPressed: adminAddOrderScreenController.submitOrder,
-                          child: Text("Add Order", style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white)),                           
+                          onPressed: orderController.submitOrder,
+                          child: Text(widget.buttonText, style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white)),                           
                         ),
                       ),
                     ),

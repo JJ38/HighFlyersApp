@@ -1,33 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/admin_order_form.dart';
-import 'package:high_flyers_app/components/customer_order_form.dart';
-import 'package:high_flyers_app/controllers/admin_add_order_screen_controller.dart';
-import 'package:high_flyers_app/controllers/admin_manage_orders_screen_controller.dart';
+import 'package:high_flyers_app/controllers/admin_edit_order_screen_controller.dart';
 
-class AdminAddOrderScreen extends StatefulWidget {
-  const AdminAddOrderScreen({super.key});
+class AdminEditOrderScreen extends StatefulWidget {
+
+  final Map<String, dynamic> order;
+
+  const AdminEditOrderScreen({super.key, required this.order});
 
   @override
-  State<AdminAddOrderScreen> createState() => _AdminAddOrderScreenState();
+  State<AdminEditOrderScreen> createState() => _AdminEditOrderScreenState();
 }
 
-class _AdminAddOrderScreenState extends State<AdminAddOrderScreen> {
+class _AdminEditOrderScreenState extends State<AdminEditOrderScreen> {
 
-  late AdminAddOrderScreenController adminAddOrderScreenController;
+  late AdminEditOrderScreenController adminEditOrderScreenController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    adminAddOrderScreenController = AdminAddOrderScreenController(updateState: updateState);
+    adminEditOrderScreenController = AdminEditOrderScreenController(updateState: updateState);
+    // adminEditOrderScreenController.model.order = widget.order;
+
   }
 
   void updateState(){
 
     if(mounted){
+
       setState(() {
         
       });
+      
     }
 
   }
@@ -44,7 +49,7 @@ class _AdminAddOrderScreenState extends State<AdminAddOrderScreen> {
           child: ListView(
             children: [
               GestureDetector(
-                onTap: (){adminAddOrderScreenController.onBackArrowTap(context);},
+                onTap: (){adminEditOrderScreenController.onBackArrowTap(context);},
                 child: Padding(
                   padding: EdgeInsetsGeometry.symmetric(vertical:  10),
                   child: Row(
@@ -56,12 +61,12 @@ class _AdminAddOrderScreenState extends State<AdminAddOrderScreen> {
                           Text("Back", style: Theme.of(context).textTheme.titleSmall),
                         ],
                       ),
-                      Text("Add", style: Theme.of(context).textTheme.titleSmall),
+                      Text("Edit", style: Theme.of(context).textTheme.titleSmall),
                     ]
                   ),
                 ),
               ),
-              AdminOrderForm(orderController: adminAddOrderScreenController, buttonText: "Add Order",)
+              AdminOrderForm(orderController: adminEditOrderScreenController, buttonText: "Update Order")
             ],
           )
         )

@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/controllers/order_controller_abstract.dart';
-import 'package:high_flyers_app/models/admin_add_order_screen_model.dart';
+import 'package:high_flyers_app/models/admin_edit_order_screen_model.dart';
 import 'package:high_flyers_app/models/order_model_abstract.dart';
 
-class AdminAddOrderScreenController extends OrderController {
+class AdminEditOrderScreenController extends OrderController {
 
-  AdminAddOrderScreenController({required super.updateState});
+  AdminEditOrderScreenController({required super.updateState});
 
   @override
   OrderModel createModel(){
-    return AdminAddOrderScreenModel();
+    return AdminEditOrderScreenModel();
   }
 
   void onBackArrowTap(context){
@@ -19,6 +19,7 @@ class AdminAddOrderScreenController extends OrderController {
     Navigator.pop(context);
 
   }
+
   
   @override
   void submitOrder() async {
@@ -39,14 +40,14 @@ class AdminAddOrderScreenController extends OrderController {
 
     if(!submittedOrdersSuccessfully){
 
-      showToastWidget(ToastNotification(message: "Error adding order", isError: true));
+      showToastWidget(ToastNotification(message: "Error editing order", isError: true));
       updateState();
 
       return;
 
     }
 
-    showToastWidget(ToastNotification(message: "Successfully added order", isError: false));
+    showToastWidget(ToastNotification(message: "Successfully updated order", isError: false));
 
     updateState();
 

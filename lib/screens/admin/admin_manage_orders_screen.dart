@@ -111,7 +111,10 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
                 
                         return Padding(
                           padding: EdgeInsetsGeometry.only(top: 10),
-                          child: AdminOrderCard(order: data)
+                          child: GestureDetector(
+                            onTap: (){ adminManageOrdersScreenController.onAdminOrderTap(context, data); },
+                            child: AdminOrderCard(order: data)
+                          )
                         );
                       },
                     )              
