@@ -76,14 +76,14 @@ class AdminEditOrderScreenController extends OrderController<AdminEditOrderScree
 
       showToastWidget(ToastNotification(message: "Error deleting order", isError: true));
       controller.reset();
+      model.isDeleting = false;
+      updateState();
 
       return;
 
     }
 
     controller.success();
-
-    // await Future.delayed(Duration(seconds: 1));
 
     showToastWidget(ToastNotification(message: "Successfully deleted order", isError: false));
 

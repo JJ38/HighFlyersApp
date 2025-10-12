@@ -23,19 +23,24 @@ class AdminManageOrdersScreenController {
 
   void onAddOrderTap(context) async{
 
+    model.cancelOrderSubscription();
+
     await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => AdminAddOrderScreen(),
             settings: RouteSettings(name: '/Add Order Screen')));
 
+    model.cancelOrderSubscription();
     model.orders = [];
-
+    updateState();
     getInitialOrders();
 
   }
 
   void onAdminOrderTap(context, data, uuid) async{
+
+    model.cancelOrderSubscription();
 
     await Navigator.push(
         context,
@@ -44,13 +49,17 @@ class AdminManageOrdersScreenController {
             settings: RouteSettings(name: '/Edit Order Screen')));
 
     //refetch orders
-    model.orders = [];
 
+    print("popped add order");
+
+    model.cancelOrderSubscription();
+    model.orders = [];
     getInitialOrders();
 
   }
 
   void getInitialOrders() async{
+    print("getInitialOrders");
 
     model.isLoadingInitialOrders = true;
     updateState();

@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class AdminManageOrdersScreenModel{
 
   Stream<QuerySnapshot>? orderListener;
+  StreamSubscription<QuerySnapshot<Object?>>? orderSubscription;
   List<dynamic> orders = [];
   int? latestOrderID;
   int? oldestOrderID;
@@ -28,6 +31,10 @@ class AdminManageOrdersScreenModel{
       latestOrderID = initialOrders.docs.first.get('ID');
       oldestOrderID = initialOrders.docs.last.get('ID');
 
+      print("latestOrderID: " + latestOrderID.toString());
+      print("oldestOrderID: " + oldestOrderID.toString());
+
+
       orders.insertAll(0, initialOrders.docs);
 
     }catch(e){
@@ -41,9 +48,10 @@ class AdminManageOrdersScreenModel{
 
   void initialiseNewOrderListener(updateState){
 
+    cancelOrderSubscription();
     updateOrderListener();
     
-    orderListener!.listen((snapshot) {
+    orderSubscription = orderListener!.listen((snapshot) {
 
       print("New order");
 
@@ -51,6 +59,8 @@ class AdminManageOrdersScreenModel{
 
         if (docChange.type == DocumentChangeType.added) {
           final newDoc = docChange.doc;
+          print(newDoc);
+
           orders.insert(0, newDoc);
         }
 
@@ -66,6 +76,18 @@ class AdminManageOrdersScreenModel{
 
     }, onError: (error) {print("Listener error: $error");});
 
+
+  }
+
+  void cancelOrderSubscription(){
+
+    print("Attempting to Cancel Subscription");
+
+    if(orderSubscription != null){
+      orderSubscription!.cancel();
+      orderSubscription = null;
+      print("Subscription Cancelled");
+    }
 
   }
 

@@ -21,7 +21,15 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
     adminManageOrdersScreenController = AdminManageOrdersScreenController(updateState: updateState);
     adminManageOrdersScreenController.getInitialOrders();
     adminManageOrdersScreenController.initialiseListViewScrollController();
+
+    print("init state manage orders screen");
  
+  }
+
+  @override
+  void dispose() {
+    adminManageOrdersScreenController.model.orderSubscription?.cancel();
+    super.dispose();
   }
 
   void updateState(){
