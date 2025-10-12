@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:high_flyers_app/models/validator.dart';
 import 'package:http/http.dart' as http;
 
@@ -165,16 +165,18 @@ abstract class OrderModel {
 
   }
 
-  Future<bool> submitOrder() async {
+  Future<bool> submitOrder(JSONRequest request) async {
 
     final user = FirebaseAuth.instance.currentUser;
-    String? token = await user?.getIdToken();  
+    String? token = await user?.getIdToken();
 
     if(token == null){
       return false;
     }
 
-    final successfullySentRequest = await submitRequest(token);
+    request.setBearerHeader(token);  
+
+    final successfullySentRequest = await submitRequest(request);
 
     if(!successfullySentRequest || response == null){
       return false;
@@ -195,9 +197,29 @@ abstract class OrderModel {
     
   }
 
-  Future<bool> submitRequest(String token);
+  Future<bool> submitRequest(JSONRequest request) async{
 
-  Map<String, dynamic> getOrderJSON(){
+    try{
+
+      final url = Uri.parse(request.endpoint);
+
+      response = await http.post(
+        url,
+        headers: request.headers,
+        body: request.body,
+      );
+    
+      return true;
+
+    }catch(e){
+      print(e);
+      return false;
+    }
+
+  }
+
+
+  Map<String, dynamic> getOrder(){
 
     account ??= "";
     print(account);

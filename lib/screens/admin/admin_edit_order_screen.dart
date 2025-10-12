@@ -1,3 +1,4 @@
+import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/admin_order_form.dart';
 import 'package:high_flyers_app/controllers/admin_edit_order_screen_controller.dart';
@@ -66,7 +67,21 @@ class _AdminEditOrderScreenState extends State<AdminEditOrderScreen> {
                   ),
                 ),
               ),
-              AdminOrderForm(orderController: adminEditOrderScreenController, buttonText: "Update Order")
+              AdminOrderForm(orderController: adminEditOrderScreenController, buttonText: "Update Order"),
+              Padding(
+                padding: EdgeInsetsGeometry.fromLTRB(1,0,1,20),
+                child: Center(
+                  child: ActionSlider.standard(
+                    icon: Icon(Icons.delete_forever_rounded, color: Colors.white,),
+                    toggleColor: Colors.red,
+                    backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+                    boxShadow: [BoxShadow(color: Colors.red, blurRadius: 0, spreadRadius: 1)],
+                    borderWidth: 4,
+                    child: Text("Slide to delete order", style: TextStyle(color: Colors.black),),
+                    // action: (controller) async { await adminEditOrderScreenController.deleteOrder(controller);}
+                  )
+                )
+              )
             ],
           )
         )

@@ -30,6 +30,8 @@ class StopFormController {
 
     }catch(e){
 
+      print(e);
+
     }
 
   }

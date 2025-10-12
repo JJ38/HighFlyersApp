@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/admin_order_card.dart';
 import 'package:high_flyers_app/controllers/admin_manage_orders_screen_controller.dart';

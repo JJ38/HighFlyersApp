@@ -1,10 +1,11 @@
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
+import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:high_flyers_app/models/order_model_abstract.dart';
 
-abstract class OrderController {
+abstract class OrderController<T extends OrderModel> {
 
-  late final OrderModel model;
+  late final T model;
   final void Function() updateState;
 
   OrderController({required this.updateState}){
@@ -13,7 +14,7 @@ abstract class OrderController {
 
   }
 
-  OrderModel createModel();
+  T createModel();
   
   void animalTypeOnChange(String? input){
 

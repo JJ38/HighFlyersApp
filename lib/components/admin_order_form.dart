@@ -29,9 +29,6 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
   @override
   Widget build(BuildContext context) {
 
-    final GlobalKey<FormFieldState<String?>> animalFieldKey = GlobalKey<FormFieldState<String?>>();
-    final GlobalKey<FormFieldState<String?>> paymentFieldKey = GlobalKey<FormFieldState<String?>>();
-
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
@@ -40,7 +37,6 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
               Text("Order Details", style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 10, width: 0,),
               DropdownButtonFormField<String?>(
-                // key: animalFieldKey,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                 decoration: InputDecoration(
                   icon: Icon(Icons.pets),
@@ -127,7 +123,6 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
               Text("Payment Details", style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 10,),
               DropdownButtonFormField<String?>(
-                key: paymentFieldKey,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                 decoration: InputDecoration(
                   icon: Icon(Icons.payment_outlined),
@@ -207,7 +202,7 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                         shadowColor: Color(0x00000000),                                
                         borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                         child: MaterialButton(
-                          onPressed: (){ orderController.submitOrder(context); },
+                          onPressed: (){orderController.submitOrder(context);},
                           child: Text(widget.buttonText, style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white)),                           
                         ),
                       ),
