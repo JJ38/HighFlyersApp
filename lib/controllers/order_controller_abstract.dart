@@ -94,13 +94,6 @@ abstract class OrderController<T extends OrderModel> {
 
   }
 
-  void onCollectionDetailsTap(){
-
-    model.showCollectionDetails = !model.showCollectionDetails;
-    updateState();
-
-  }
-
   void deliveryNameOnChange(String input){
 
     model.deliveryName = input;

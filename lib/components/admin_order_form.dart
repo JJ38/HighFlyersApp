@@ -6,8 +6,9 @@ class AdminOrderForm extends StatefulWidget {
 
   final OrderController orderController;
   final String buttonText;
+  final bool Function()? isDeletingHook;
 
-  const AdminOrderForm({super.key, required this.orderController, required this.buttonText});
+  const AdminOrderForm({super.key, required this.orderController, required this.buttonText, this.isDeletingHook});
 
   @override
   State<AdminOrderForm> createState() => _AdminOrderFormState();
@@ -194,21 +195,27 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
 
                 :
 
-                  Center(
-                    child: SizedBox(
-                      width: screenWidth * 0.9,
-                      child: Material(              
-                        color: Theme.of(context).colorScheme.secondary,
-                        shadowColor: Color(0x00000000),                                
-                        borderRadius: BorderRadius.all(Radius.circular(8)),                                     
-                        child: MaterialButton(
-                          onPressed: (){orderController.submitOrder(context);},
-                          child: Text(widget.buttonText, style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white)),                           
+                  widget.isDeletingHook != null && widget.isDeletingHook!() ? 
+
+                      SizedBox(height: 0,)
+
+                    :
+
+                      Center(
+                        child: SizedBox(
+                          width: screenWidth * 0.9,
+                          child: Material(              
+                            color: Theme.of(context).colorScheme.secondary,
+                            shadowColor: Color(0x00000000),                                
+                            borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                            child: MaterialButton(
+                              onPressed: (){ orderController.submitOrder(context); },
+                              child: Text(widget.buttonText, style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white)),                           
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 20,)
+                      SizedBox(height: 20,)
             ]
           );
   }

@@ -39,8 +39,6 @@ abstract class OrderModel {
   String errorMessage = "";
   bool isLoaded = false;
   bool isSuccessfullyLoaded = false;
-  bool showCollectionDetails = false;
-  bool showBasket = false;
   bool isSubmitting = false;
 
   
@@ -177,6 +175,8 @@ abstract class OrderModel {
     request.setBearerHeader(token);  
 
     final successfullySentRequest = await submitRequest(request);
+
+    print(successfullySentRequest);
 
     if(!successfullySentRequest || response == null){
       return false;

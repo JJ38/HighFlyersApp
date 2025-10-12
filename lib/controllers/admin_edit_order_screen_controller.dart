@@ -25,25 +25,7 @@ class AdminEditOrderScreenController extends OrderController<AdminEditOrderScree
 
   }
 
-  // Future<void> deleteOrder(controller, context){
 
-  //   controller.loading();
-
-  //   final deletedSuccessfully = model.deleteOrder();
-
-  //   if(!deletedSuccessfully){
-  //     showToastWidget(ToastNotification(message: "Form is not valid", isError: true));
-  //     controller.reset();
-  //     return;
-  //   }
-    
-  //   Navigator.pop(context);
-
-  //   return;
-
-  // }
-
-  
   @override
   void submitOrder(context) async {
 
@@ -57,9 +39,7 @@ class AdminEditOrderScreenController extends OrderController<AdminEditOrderScree
     model.isSubmitting = true;
     updateState(); 
 
-  
     final JSONRequest request = model.getEditOrderRequest();
-
     final submittedOrdersSuccessfully = await model.submitOrder(request);
 
     model.isSubmitting = false;
@@ -68,7 +48,6 @@ class AdminEditOrderScreenController extends OrderController<AdminEditOrderScree
 
       showToastWidget(ToastNotification(message: "Error editing order", isError: true));
       updateState();
-
       return;
 
     }
@@ -79,10 +58,36 @@ class AdminEditOrderScreenController extends OrderController<AdminEditOrderScree
 
   }
 
-  void editOrder(){
 
+  Future<void> deleteOrder(context, controller) async {
 
+    //hide edit button
+    model.isDeleting = true;
+    updateState();
 
+    print("delete order");
+
+    controller.loading();
+
+    final request = model.getDeleteOrderRequest();
+    final deletedSuccessfully = await model.submitOrder(request);
+
+    if(!deletedSuccessfully){
+
+      showToastWidget(ToastNotification(message: "Error deleting order", isError: true));
+      controller.reset();
+
+      return;
+
+    }
+
+    controller.success();
+
+    // await Future.delayed(Duration(seconds: 1));
+
+    showToastWidget(ToastNotification(message: "Successfully deleted order", isError: false));
+
+    Navigator.pop(context);
   }
 
 }

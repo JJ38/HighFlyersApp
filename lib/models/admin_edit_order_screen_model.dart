@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:high_flyers_app/models/Requests/delete_order_request.dart';
 import 'package:high_flyers_app/models/Requests/edit_order_request.dart';
 import 'package:high_flyers_app/models/order_model_abstract.dart';
-import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -10,10 +10,18 @@ class AdminEditOrderScreenModel extends OrderModel {
 
   Map<String, dynamic> order;
   String uuid;
-
+  bool isDeleting = false;
 
   EditOrderRequest getEditOrderRequest(){
     return EditOrderRequest(order: getOrder(), uuid: uuid);
+  }
+
+  DeleteOrderRequest getDeleteOrderRequest(){
+    return DeleteOrderRequest(uuid: uuid);
+  }
+
+  bool getIsDeleting(){
+    return isDeleting;
   }
 
   AdminEditOrderScreenModel({required this.order, required this.uuid}){
