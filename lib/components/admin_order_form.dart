@@ -29,6 +29,9 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
   @override
   Widget build(BuildContext context) {
 
+    final GlobalKey<FormFieldState<String?>> animalFieldKey = GlobalKey<FormFieldState<String?>>();
+    final GlobalKey<FormFieldState<String?>> paymentFieldKey = GlobalKey<FormFieldState<String?>>();
+
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
@@ -55,7 +58,7 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                     ),
                   ),
                 ),
-                // value: orderController.model.getAnimalType(),  
+                value: orderController.model.animalType,  
                 hint: const Text("Select Animal"),                    
                 onChanged: (value){orderController.animalTypeOnChange(value);},
                 items:  orderController.model.birdSpeciesSet.map((bird) =>
@@ -124,7 +127,7 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
               Text("Payment Details", style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 10,),
               DropdownButtonFormField<String?>(
-                // key: paymentFieldKey,
+                key: paymentFieldKey,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                 decoration: InputDecoration(
                   icon: Icon(Icons.payment_outlined),
@@ -143,7 +146,7 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                   ),
                 ),
                 hint: const Text("Select payment"),
-                // value: orderController.model.getPayment(),
+                value: orderController.model.payment,
                 onChanged: (value){orderController.paymentOnChange(value);},
                 items: [
                   DropdownMenuItem(
@@ -204,7 +207,7 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
                         shadowColor: Color(0x00000000),                                
                         borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                         child: MaterialButton(
-                          onPressed: orderController.submitOrder,
+                          onPressed: (){ orderController.submitOrder(context); },
                           child: Text(widget.buttonText, style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white)),                           
                         ),
                       ),

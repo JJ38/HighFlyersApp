@@ -21,7 +21,7 @@ class AdminAddOrderScreenController extends OrderController {
   }
   
   @override
-  void submitOrder() async {
+  void submitOrder(context) async {
 
     final isValidOrder = model.validateOrder();
 
@@ -48,7 +48,7 @@ class AdminAddOrderScreenController extends OrderController {
 
     showToastWidget(ToastNotification(message: "Successfully added order", isError: false));
 
-    updateState();
+    Navigator.pop(context);
 
   }
 

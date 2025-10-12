@@ -29,21 +29,32 @@ class AdminManageOrdersScreenController {
             builder: (context) => AdminAddOrderScreen(),
             settings: RouteSettings(name: '/Add Order Screen')));
 
+    model.orders = [];
+
+    getInitialOrders();
+
   }
 
-  void onAdminOrderTap(context, data) async{
+  void onAdminOrderTap(context, data, uuid) async{
 
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AdminEditOrderScreen(order: data),
+            builder: (context) => AdminEditOrderScreen(order: data, uuid: uuid),
             settings: RouteSettings(name: '/Edit Order Screen')));
+
+    //refetch orders
+    model.orders = [];
+
+    getInitialOrders();
 
   }
 
   void getInitialOrders() async{
 
     model.isLoadingInitialOrders = true;
+    updateState();
+
     final successfullyFetchedOrders = await model.getInitialOrders();
     model.isLoadingInitialOrders = false;
 

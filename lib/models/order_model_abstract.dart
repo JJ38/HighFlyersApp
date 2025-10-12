@@ -42,6 +42,7 @@ abstract class OrderModel {
   bool showCollectionDetails = false;
   bool showBasket = false;
   bool isSubmitting = false;
+
   
   Future<bool> fetchBirdSpecies() async {
 

@@ -23,7 +23,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
     adminManageOrdersScreenController = AdminManageOrdersScreenController(updateState: updateState);
     adminManageOrdersScreenController.getInitialOrders();
     adminManageOrdersScreenController.initialiseListViewScrollController();
-    updateState();
+ 
   }
 
   void updateState(){
@@ -107,12 +107,15 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
                           );
                         }
 
-                        final data = adminManageOrdersScreenController.model.orders[index].data() as Map<String, dynamic>;
+                        final doc = adminManageOrdersScreenController.model.orders[index];
+
+                        final uuid = doc.id;
+                        final data = doc.data() as Map<String, dynamic>;
                 
                         return Padding(
                           padding: EdgeInsetsGeometry.only(top: 10),
                           child: GestureDetector(
-                            onTap: (){ adminManageOrdersScreenController.onAdminOrderTap(context, data); },
+                            onTap: (){ adminManageOrdersScreenController.onAdminOrderTap(context, data, uuid); },
                             child: AdminOrderCard(order: data)
                           )
                         );

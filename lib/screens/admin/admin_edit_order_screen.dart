@@ -5,8 +5,9 @@ import 'package:high_flyers_app/controllers/admin_edit_order_screen_controller.d
 class AdminEditOrderScreen extends StatefulWidget {
 
   final Map<String, dynamic> order;
+  final String uuid;
 
-  const AdminEditOrderScreen({super.key, required this.order});
+  const AdminEditOrderScreen({super.key, required this.order, required this.uuid});
 
   @override
   State<AdminEditOrderScreen> createState() => _AdminEditOrderScreenState();
@@ -18,10 +19,9 @@ class _AdminEditOrderScreenState extends State<AdminEditOrderScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
-    adminEditOrderScreenController = AdminEditOrderScreenController(updateState: updateState);
-    // adminEditOrderScreenController.model.order = widget.order;
+    adminEditOrderScreenController = AdminEditOrderScreenController(updateState: updateState, order: widget.order, uuid: widget.uuid);
 
   }
 

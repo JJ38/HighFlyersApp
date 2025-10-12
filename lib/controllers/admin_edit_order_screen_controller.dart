@@ -7,11 +7,14 @@ import 'package:high_flyers_app/models/order_model_abstract.dart';
 
 class AdminEditOrderScreenController extends OrderController {
 
-  AdminEditOrderScreenController({required super.updateState});
+  Map<String, dynamic> order;
+  String uuid;
+
+  AdminEditOrderScreenController({required super.updateState, required this.order, required this.uuid});
 
   @override
   OrderModel createModel(){
-    return AdminEditOrderScreenModel();
+    return AdminEditOrderScreenModel(order: order, uuid: uuid);
   }
 
   void onBackArrowTap(context){
@@ -22,7 +25,7 @@ class AdminEditOrderScreenController extends OrderController {
 
   
   @override
-  void submitOrder() async {
+  void submitOrder(context) async {
 
     final isValidOrder = model.validateOrder();
 
@@ -49,7 +52,7 @@ class AdminEditOrderScreenController extends OrderController {
 
     showToastWidget(ToastNotification(message: "Successfully updated order", isError: false));
 
-    updateState();
+    Navigator.pop(context);
 
   }
 
