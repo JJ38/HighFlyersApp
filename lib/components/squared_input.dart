@@ -16,7 +16,7 @@ class SquaredInput extends StatelessWidget {
       controller: TextEditingController(text: value),
       style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
       decoration: InputDecoration(
-        icon: Icon(icon),
+        icon: icon != null ? Icon(icon) : null,
         label: label != null ? Text(label!) : Text(""),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         fillColor: Colors.grey,

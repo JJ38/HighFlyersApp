@@ -17,9 +17,67 @@ class AdminManageOrdersScreenController {
 
   void onFilterTap(){
 
-    
+    model.showFilters = !model.showFilters;
+    updateState();
 
   }
+
+  void onClearFilterTap() async {
+
+    model.showFilters = !model.showFilters;
+    model.selectedFilterField = null;
+    model.searchValue = null;
+
+    model.orders = [];
+
+    updateState();
+
+    getInitialOrders();
+  }
+
+  void onFilterFieldChange(String? field){
+    model.selectedFilterField = field;
+  }
+
+  void onSearchValueChange(String? field){
+    model.searchValue = field;
+  }
+
+  void onSearchOrderTap() async {
+  
+    print(model.selectedFilterField);
+    print(model.searchValue);
+
+    if(model.selectedFilterField == null){
+      showToastWidget(ToastNotification(message: "Error selected a field to filter", isError: true));
+      return;
+    }
+
+    if(model.searchValue == null){
+      showToastWidget(ToastNotification(message: "Error enter a search value", isError: true));
+      return;
+    } 
+
+    model.cancelOrderSubscription();
+    model.orders = [];
+    model.isLoadingOrders = true;
+    updateState();
+
+    final success = await model.getFilteredOrders();
+
+    if(!success){
+      showToastWidget(ToastNotification(message: "Error fetching filtered orders", isError: true));
+      getInitialOrders();
+      return;
+    }
+
+    model.isShowingFilteredOrders = true;
+    model.isLoadingOrders = false;
+    updateState();
+
+    showToastWidget(ToastNotification(message: "Successfully fetched filtered orders", isError: false));  
+
+  } 
 
   void onAddOrderTap(context) async{
 
@@ -61,11 +119,11 @@ class AdminManageOrdersScreenController {
   void getInitialOrders() async{
     print("getInitialOrders");
 
-    model.isLoadingInitialOrders = true;
+    model.isLoadingOrders = true;
     updateState();
 
     final successfullyFetchedOrders = await model.getInitialOrders();
-    model.isLoadingInitialOrders = false;
+    model.isLoadingOrders = false;
 
 
     if(!successfullyFetchedOrders){
@@ -73,6 +131,7 @@ class AdminManageOrdersScreenController {
       return;
     }
 
+    model.isShowingFilteredOrders = false;
     model.initialiseNewOrderListener(updateState);
 
     updateState();
@@ -87,13 +146,13 @@ class AdminManageOrdersScreenController {
         return;
       }
 
-      if (listViewScrollController.position.pixels >= listViewScrollController.position.maxScrollExtent - 200) {
+      if ((listViewScrollController.position.pixels >= listViewScrollController.position.maxScrollExtent - 200) && !model.hasLoadedAllOrders) {
 
         model.isLoadingAdditionalOrders = true;
         updateState();
         final successfullyFetchedOrders = await model.getAdditionalOrders();
 
-        if(!successfullyFetchedOrders){
+        if(!successfullyFetchedOrders && !model.hasLoadedAllOrders){       
           showToastWidget(ToastNotification(message: "Error fetching additional orders", isError: true));
         }
 
