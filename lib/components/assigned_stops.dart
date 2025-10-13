@@ -26,19 +26,16 @@ class _AssignedStopsState extends State<AssignedStops> {
   @override
   Widget build(BuildContext context) {
     
-  
     final screenWidth = MediaQuery.of(context).size.width;
+    final stops = widget.run['stops'] as List<dynamic>? ?? [];
 
-    return Expanded(
-            flex: 1,
-            child: Column(
-              children: widget.run['stops'].map<Widget>((stop){
-                return StopCard(
-                  stop: stop,
-                  width: screenWidth,
-                );
-              }).toList()
-            )                       
+    return Column(
+            children: stops.map<Widget>((stop){
+              return StopCard(
+                stop: stop,
+                width: screenWidth,
+              );
+            }).toList()                               
           );       
   }
 
