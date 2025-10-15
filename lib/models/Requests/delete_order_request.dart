@@ -1,4 +1,5 @@
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 
 class DeleteOrderRequest extends JSONRequest{
@@ -10,6 +11,21 @@ class DeleteOrderRequest extends JSONRequest{
   }
 
   @override
-  String get endpoint => "https://api-qjydin7gka-uc.a.run.app/deleteorder";
+  String getEndpoint(){
+
+    String? endpoint = "";
+
+    try{
+
+      endpoint = dotenv.env['DELETE_ORDER_ENDPOINT'];
+      print("using dotenv");
+
+    }catch(e){
+      print(e);
+    }
+
+    return endpoint ?? "";
+
+  }
 
 }

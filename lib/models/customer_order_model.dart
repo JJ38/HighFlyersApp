@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -66,7 +67,13 @@ class CustomerOrderModel {
 
       final userID = currentUser.uid;
 
-      DocumentReference<Map<String, dynamic>> customerProfileDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Customers').doc(userID);
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      DocumentReference<Map<String, dynamic>> customerProfileDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Customers').doc(userID);
       DocumentSnapshot<Map<String, dynamic>> response = await customerProfileDocRef.get();
 
       if (response.data() == null) {
@@ -100,7 +107,13 @@ class CustomerOrderModel {
 
     try{
 
-      DocumentReference<Map<String, dynamic>> birdSpeciesDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Settings').doc('birdSpecies');
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      DocumentReference<Map<String, dynamic>> birdSpeciesDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Settings').doc('birdSpecies');
       DocumentSnapshot<Map<String, dynamic>> response = await birdSpeciesDocRef.get();
 
       if (response.data() == null) {
@@ -378,13 +391,18 @@ class CustomerOrderModel {
 
   Future<bool> submitOrders() async {
 
- 
     try{
 
       final user = FirebaseAuth.instance.currentUser;
       String? token = await user?.getIdToken();  
 
-      final url = Uri.parse('https://api-qjydin7gka-uc.a.run.app/storeorder');
+      final storeOrderEndpoint = dotenv.env['STORE_ORDER_ENDPOINT'];
+
+      if(storeOrderEndpoint == null){
+        return false;
+      }
+
+      final url = Uri.parse(storeOrderEndpoint);
 
       final response = await http.post(
         url,

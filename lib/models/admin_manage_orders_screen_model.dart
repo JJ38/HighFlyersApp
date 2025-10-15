@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AdminManageOrdersScreenModel{
 
@@ -54,13 +55,22 @@ class AdminManageOrdersScreenModel{
     hasLoadedAllOrders = false;
     isShowingFilteredOrders = false;
 
-    baseQuery = FirebaseFirestore.instanceFor(
-      app: Firebase.app(),
-      databaseId: "development",
-    )
-    .collection('Orders')
-    .orderBy('ID', descending: true)
-    .limit(10);
+    try{
+
+      final databaseName = dotenv.env['DATABASE_NAME'];
+    
+      baseQuery = FirebaseFirestore.instanceFor(
+        app: Firebase.app(),
+        databaseId: databaseName,
+      )
+      .collection('Orders')
+      .orderBy('ID', descending: true)
+      .limit(10);
+
+    }catch(e){
+      print(e);
+      return false;
+    }
 
     try{
 
@@ -85,16 +95,23 @@ class AdminManageOrdersScreenModel{
     hasLoadedAllOrders = false;
     isShowingFilteredOrders = true;
 
-    ;
+    try{
+
+      final databaseName = dotenv.env['DATABASE_NAME'];
     
-    baseQuery = FirebaseFirestore.instanceFor(
-      app: Firebase.app(),
-      databaseId: "development",
-    )
-    .collection('Orders')
-    .orderBy('ID', descending: true)
-    .where(selectedFilterField!, isEqualTo: getTypeCorrectSearchValue())
-    .limit(10);
+      baseQuery = FirebaseFirestore.instanceFor(
+        app: Firebase.app(),
+        databaseId: databaseName,
+      )
+      .collection('Orders')
+      .orderBy('ID', descending: true)
+      .where(selectedFilterField!, isEqualTo: getTypeCorrectSearchValue())
+      .limit(10);
+
+    }catch(e){
+      print(e);
+      return false;
+    }
 
     try{
 
@@ -171,13 +188,21 @@ class AdminManageOrdersScreenModel{
 
     print(latestOrderID);
 
-    orderListener = FirebaseFirestore.instanceFor(
-      app: Firebase.app(),
-      databaseId: "development",
-    ).collection('Orders')
-    .where('ID', isGreaterThan: latestOrderID)
-    .orderBy('ID', descending: false) // ascending to get oldest-newest
-    .snapshots();
+    try{
+
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      orderListener = FirebaseFirestore.instanceFor(
+        app: Firebase.app(),
+        databaseId: "development",
+      ).collection('Orders')
+      .where('ID', isGreaterThan: latestOrderID)
+      .orderBy('ID', descending: false) // ascending to get oldest-newest
+      .snapshots();
+    
+    }catch(e){
+      print(e);
+    }
 
   }
 
@@ -191,7 +216,6 @@ class AdminManageOrdersScreenModel{
     print("getAdditionalOrders");
     print(baseQuery);
     print("oldestOrderID: " + oldestOrderID.toString());
-
 
     final queryToAttempt = baseQuery!.where('ID', isLessThan: oldestOrderID);
 

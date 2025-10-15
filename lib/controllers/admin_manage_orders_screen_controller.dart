@@ -146,7 +146,7 @@ class AdminManageOrdersScreenController {
         return;
       }
 
-      if ((listViewScrollController.position.pixels >= listViewScrollController.position.maxScrollExtent - 200) && !model.hasLoadedAllOrders) {
+      if ((listViewScrollController.position.pixels >= listViewScrollController.position.maxScrollExtent - 1500) && !model.hasLoadedAllOrders) {
 
         model.isLoadingAdditionalOrders = true;
         updateState();

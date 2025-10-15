@@ -201,7 +201,7 @@ abstract class OrderModel {
 
     try{
 
-      final url = Uri.parse(request.endpoint);
+      final url = Uri.parse(request.getEndpoint());
 
       response = await http.post(
         url,

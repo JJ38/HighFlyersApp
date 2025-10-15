@@ -58,7 +58,9 @@ class AdminOrderCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Email: ", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 13, fontWeight: FontWeight.w500)),
-                      Text(order['email'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),  
+                      Expanded(
+                        child: Text(order['email'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15), textAlign: TextAlign.end,),  
+                      )
                     ]
                   ),
                   SizedBox(height: 5,),
@@ -88,15 +90,12 @@ class AdminOrderCard extends StatelessWidget {
                       
                       Text(order['collectionName'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),  
                       Text(order['collectionAddress1'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),  
+
+                      if(order['collectionAddress2'] != "" && order['collectionAddress2'] != null)
+                        Text("${order['collectionAddress2']}", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                      if(order['collectionAddress3'] != "" && order['collectionAddress3'] != null)
+                        Text(order['collectionAddress3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                         
-                      Row(
-                        children: [
-                          if(order['collectionAddress2'] != "" && order['collectionAddress2'] != null)
-                            Text("${order['collectionAddress2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                          if(order['collectionAddress3'] != "" && order['collectionAddress3'] != null)
-                            Text(order['collectionAddress3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        ]
-                      ),
                       Text(order['collectionPostcode'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                       Text(order['collectionPhoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
 
@@ -112,16 +111,12 @@ class AdminOrderCard extends StatelessWidget {
                       
                       Text(order['deliveryName'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),  
                       Text(order['deliveryAddress1'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),  
-                        
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if(order['deliveryAddress2'] != "" && order['deliveryAddress2'] != null)
-                            Text("${order['deliveryAddress2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                          if(order['deliveryAddress3'] != "" && order['deliveryAddress3'] != null )
-                            Text(order['deliveryAddress3'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        ]
-                      ),
+                                           
+                      if(order['deliveryAddress2'] != "" && order['deliveryAddress2'] != null)
+                        Text("${order['deliveryAddress2']}", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                      if(order['deliveryAddress3'] != "" && order['deliveryAddress3'] != null )
+                        Text(order['deliveryAddress3'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                    
                       Text(order['deliveryPostcode'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                       Text(order['deliveryPhoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                     ]              
@@ -137,7 +132,7 @@ class AdminOrderCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Message:", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 13, fontWeight: FontWeight.w500)),
-                  Text(order['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),  
+                  Text(order['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true,),  
                   SizedBox(height: 20,),
                 ]
               ),

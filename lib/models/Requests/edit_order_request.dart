@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 
 class EditOrderRequest extends JSONRequest{
@@ -9,7 +10,22 @@ class EditOrderRequest extends JSONRequest{
     setBody({"orderDetails": order, "uuid": uuid});
   }
 
+
   @override
-  String get endpoint => "https://api-qjydin7gka-uc.a.run.app/editorder";
+  String getEndpoint(){
+
+    String? endpoint = "";
+
+    try{
+
+      endpoint = dotenv.env['EDIT_ORDER_ENDPOINT'];
+
+    }catch(e){
+      print(e);
+    }
+
+    return endpoint ?? "";
+
+  }
 
 }

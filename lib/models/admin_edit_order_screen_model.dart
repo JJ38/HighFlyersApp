@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/Requests/delete_order_request.dart';
 import 'package:high_flyers_app/models/Requests/edit_order_request.dart';
 import 'package:high_flyers_app/models/order_model_abstract.dart';
@@ -50,82 +52,5 @@ class AdminEditOrderScreenModel extends OrderModel {
     message = order['message'];
 
   }
-
-  Future<bool> deleteOrder(String uuid, String token) async {
-
-    try{
-
-      // final editOrderEndpoint = dotenv.env['DELETE_ORDER_ENDPOINT'];
-      final editOrderEndpoint = "https://api-qjydin7gka-uc.a.run.app/deleteorder";
-
-      if(editOrderEndpoint == null){
-        return false;
-      }
-
-      final url = Uri.parse(editOrderEndpoint);
-
-      super.response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode({
-          "orderDetails": getOrder(),
-          "uuid": uuid
-        }),
-      );
-
-
-    }catch(e){
-      print(e);
-      return false;
-    }
-
-    return true;
-
-  }
-
-  // @override
-  // Future<bool> submitRequest(JSONRequest request) async {
-    
-  //   try{
-
-  //     // final editOrderEndpoint = dotenv.env['EDIT_ORDER_ENDPOINT'];
-  //     final editOrderEndpoint = "https://api-qjydin7gka-uc.a.run.app/editorder";
-
-  //     if(editOrderEndpoint == null){
-  //       return false;
-  //     }
-
-  //     final url = Uri.parse(editOrderEndpoint);
-
-  //     // super.response = await http.post(
-  //     //   url,
-  //     //   headers: {
-  //     //     'Content-Type': 'application/json',
-  //     //     'Authorization': 'Bearer $token',
-  //     //   },
-  //     //   body: jsonEncode({
-  //     //     "orderDetails": getOrderJSON(),
-  //     //     "uuid": uuid
-  //     //   }),
-  //     // );
-
-  //     super.response = await http.post(
-  //       request.url,
-  //       request.headers,
-  //       request.body
-  //     );
-    
-  //   }catch(e){
-
-  //     return false;
-
-  //   }
-
-  //   return true;
-
-  // }
 
 }

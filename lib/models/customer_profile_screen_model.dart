@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/validator.dart';
 
 class CustomerProfileScreenModel {
@@ -44,7 +45,13 @@ class CustomerProfileScreenModel {
 
       final userID = currentUser.uid;
 
-      DocumentReference<Map<String, dynamic>> customerProfileDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Customers').doc(userID);
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      DocumentReference<Map<String, dynamic>> customerProfileDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Customers').doc(userID);
       DocumentSnapshot<Map<String, dynamic>> response = await customerProfileDocRef.get();
 
       if (response.data() == null) {
@@ -87,7 +94,13 @@ class CustomerProfileScreenModel {
 
       final userID = currentUser.uid;
 
-      DocumentReference<Map<String, dynamic>> customerDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Customers').doc(userID);
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      DocumentReference<Map<String, dynamic>> customerDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Customers').doc(userID);
 
       Map<String, dynamic> fieldsToUpdate = 
       {
