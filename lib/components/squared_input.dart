@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SquaredInput extends StatelessWidget {
+
+class SquaredInput extends StatefulWidget {
 
   final void Function(String) onChange;
   final String? label;
@@ -11,13 +12,30 @@ class SquaredInput extends StatelessWidget {
   const SquaredInput({super.key, required this.onChange, this.label, this.keyboardType, this.icon, this.value});
 
   @override
+  State<SquaredInput> createState() => _SquaredInputState();
+}
+
+class _SquaredInputState extends State<SquaredInput> {
+
+  late TextEditingController textEditingController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    textEditingController = TextEditingController(text: widget.value);
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: TextEditingController(text: value),
+      controller: textEditingController,
       style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
       decoration: InputDecoration(
-        icon: icon != null ? Icon(icon) : null,
-        label: label != null ? Text(label!) : Text(""),
+        icon: widget.icon != null ? Icon(widget.icon) : null,
+        label: widget.label != null ? Text(widget.label!) : Text(""),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         fillColor: Colors.grey,
         border: OutlineInputBorder(
@@ -31,9 +49,8 @@ class SquaredInput extends StatelessWidget {
           ),
         ),
       ),
-      keyboardType: keyboardType ?? TextInputType.text,
-      onChanged: (input) {onChange(input);},
-      
+      keyboardType: widget.keyboardType ?? TextInputType.text,
+      onChanged: (input) {widget.onChange(input);},
     );
   }
 }

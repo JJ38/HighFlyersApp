@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 class CurrentStopModel {
@@ -36,8 +37,14 @@ class CurrentStopModel {
 
     try{
 
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
       //update ProgressedRun doc stops[i] with stop status to skipped
-      DocumentReference<Map<String, dynamic>> runDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns').doc(progressedRunID);
+      DocumentReference<Map<String, dynamic>> runDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('ProgressedRuns').doc(progressedRunID);
       
       final stops = runData['stops'];
 

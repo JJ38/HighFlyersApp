@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:high_flyers_app/models/firebase_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 enum Status { offline, online, skipped, completed, enroute }
 
@@ -37,10 +38,14 @@ class DriverModel {
 
   Future<bool> fetchDriverRuns() async {
 
-    print("fetching dirver runs");
-
     final assignedRuns = driverDoc['assignedRuns'];
     final progressedRuns = driverDoc['progressedRuns'];
+
+    final databaseName = dotenv.env['DATABASE_NAME'];
+
+    if(databaseName == null){
+      return false;
+    }
 
 
     List<DocumentReference<Map<String, dynamic>>> documentReferences = [];
@@ -48,17 +53,21 @@ class DriverModel {
 
     for (var i = 0; i < assignedRuns.length; i++) {
 
-      DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Runs').doc(assignedRuns[i]['runID']);
+      DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Runs').doc(assignedRuns[i]['runID']);
       documentReferences.add(driverDocRef);
       runStatuses.add(false);
 
     }
 
-    for (var i = 0; i < progressedRuns.length; i++) {
+    if(progressedRuns != null){
 
-      DocumentReference<Map<String, dynamic>> progressedRunDoc = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns').doc(progressedRuns[i]['progressedRunID']);
-      documentReferences.add(progressedRunDoc);
-      runStatuses.add(true);
+      for (var i = 0; i < progressedRuns.length; i++) {
+
+        DocumentReference<Map<String, dynamic>> progressedRunDoc = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('ProgressedRuns').doc(progressedRuns[i]['progressedRunID']);
+        documentReferences.add(progressedRunDoc);
+        runStatuses.add(true);
+
+      }
 
     }
 
@@ -68,6 +77,8 @@ class DriverModel {
 
       driverRunDocs = await FirebaseModel.fetchMultipleDocuments(documentReferences);
       print(driverRunDocs);
+
+      print("fetched driver run documents");
 
     }catch(e){
 
@@ -81,8 +92,14 @@ class DriverModel {
 
   Future<bool> fetchDriverDoc() async {
 
+    final databaseName = dotenv.env['DATABASE_NAME'];
+
+    if(databaseName == null){
+      return false;
+    }
+
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Drivers').doc(uid);
+    DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Drivers').doc(uid);
 
     try {
 
@@ -103,15 +120,4 @@ class DriverModel {
     return true;
   }
 
-  // Stream<QuerySnapshot> getDriverRunsQuerySnapshot() {
-
-  //   final Stream<QuerySnapshot> stream = FirebaseFirestore.instanceFor(
-  //           app: Firebase.app(), databaseId: "development")
-  //       .collection('Runs')
-  //       .where("assignedDriver",
-  //           isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-  //       .snapshots();
-
-  //   return stream;
-  // }
 }

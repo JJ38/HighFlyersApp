@@ -51,8 +51,11 @@ class _RunScreenState extends State<RunScreen> {
 
 
     print(run);
+    print(" -------- run");
+
 
     if (run.isEmpty) {
+      print("run.isEmpty");
       return;
     }
 

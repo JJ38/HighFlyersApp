@@ -153,7 +153,6 @@ class CustomerProfileScreenModel {
       return false;
     }
 
-
     return true;
 
   }

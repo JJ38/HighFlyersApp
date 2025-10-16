@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' show CollectionReference, 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:high_flyers_app/components/marker_label.dart';
 import 'package:high_flyers_app/models/firebase_model.dart';
@@ -154,11 +155,20 @@ class RunModel {
 
 
   Future<DocumentSnapshot<Map<String, dynamic>>> fetchOrder(id) async {
-
-    final db = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development");
-    final orderDocRef = db.collection('Orders').doc(id);
-
+    
     try{
+
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        print("databaseName == null");
+        throw Error();
+      }
+
+      final db = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName);
+      final orderDocRef = db.collection('Orders').doc(id);
+
+    
       final orderDoc = await orderDocRef.get();
 
       if(orderDoc.data() == null){
@@ -260,7 +270,13 @@ class RunModel {
         return false;
       }
 
-      DocumentReference driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development")
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      DocumentReference driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName)
           .collection('Drivers')
           .doc(currentUser.uid);
 
@@ -287,7 +303,7 @@ class RunModel {
 
       for(var i = 0; i < newStopsCopy.length; i++){
 
-        DocumentReference<Map<String, dynamic>> orderDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Orders').doc(newStopsCopy[i]['orderID']);
+        DocumentReference<Map<String, dynamic>> orderDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Orders').doc(newStopsCopy[i]['orderID']);
         documentReferences.add(orderDocRef);
 
       }
@@ -314,7 +330,7 @@ class RunModel {
 
       //add document to progress documents collection and add progressed doc ref to assigned runs in driver doc
 
-      CollectionReference progressedRunCollectionRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('ProgressedRuns');
+      CollectionReference progressedRunCollectionRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('ProgressedRuns');
       
       DocumentReference progressedRunDocRef = progressedRunCollectionRef.doc();
 
@@ -350,7 +366,7 @@ class RunModel {
 
       print(newProgressedRuns);
 
-      await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").runTransaction((transaction) async {
+      await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).runTransaction((transaction) async {
 
         final driverDoc = await transaction.get(driverDocRef);
 
