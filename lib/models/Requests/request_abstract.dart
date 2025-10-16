@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 abstract class JSONRequest{
 
@@ -14,6 +15,18 @@ abstract class JSONRequest{
   }
 
   void setBody(Map<String, dynamic> requestBody){
+
+    String environment = "";
+
+    try{
+
+      environment = dotenv.env['ENVIRONMENT'] ?? "";
+      
+    }catch(e){
+      print(e);
+    }
+
+    requestBody.addAll({'environment': environment});
     body = jsonEncode(requestBody);
   }
 
