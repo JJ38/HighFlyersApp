@@ -1,79 +1,17 @@
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
+import 'package:high_flyers_app/controllers/order_controller_abstract.dart';
+
 import 'package:high_flyers_app/models/customer_order_model.dart';
 
-class CustomerOrderScreenController{
+class CustomerOrderScreenController extends OrderController<CustomerOrderModel>{
 
 
-  final CustomerOrderModel model = CustomerOrderModel();
-  final void Function() updateState;
+  CustomerOrderScreenController({required super.updateState});
 
-  CustomerOrderScreenController({required this.updateState});
-
-  void animalTypeOnChange(String? input){
-
-    model.animalType = input;
-
-  }
-
-  void quantityOnChange(String input){
-
-    model.quantity = input;
-
-  }
-
-  void codeOnChange(String input){
-
-    model.code = input;
-
-  }
-
-  void boxesOnChange(String input){
-
-    model.boxes = input;
-
-  }
-  
-  void collectionNameOnChange(String input){
-
-    model.collectionName = input;
-
-  }
-
-  void emailOnChange(String input){
-
-    model.email = input;
-
-  }
-
-  void collectionAddressOneOnChange(String input){
-
-    model.collectionAddressLine1 = input;
-
-  }
-
-  void collectionAddressTwoOnChange(String input){
-
-    model.collectionAddressLine2 = input;
-
-  }
-
-  void collectionAddressThreeOnChange(String input){
-
-    model.collectionAddressLine3 = input;
-
-  }
-
-  void collectionPostcodeOnChange(String input){
-
-    model.collectionPostcode = input;
-
-  }
-
-  void collectionPhoneNumberOnChange(String input){
-
-    model.collectionPhoneNumber = input;
-
+  @override
+  CustomerOrderModel createModel(){
+    return CustomerOrderModel();
   }
 
   void onCollectionDetailsTap(){
@@ -83,54 +21,7 @@ class CustomerOrderScreenController{
 
   }
 
-  void deliveryNameOnChange(String input){
-
-    model.deliveryName = input;
-
-  }
-
-  void deliveryAddressOneOnChange(String input){
-
-    model.deliveryAddressLine1 = input;
-
-  }
-
-  void deliveryAddressTwoOnChange(String input){
-
-    model.deliveryAddressLine2 = input;
-
-  }
-
-  void deliveryAddressThreeOnChange(String input){
-
-    model.deliveryAddressLine3 = input;
-
-  }
-
-  void deliveryPostcodeOnChange(String input){
-
-    model.deliveryPostcode = input;
-
-  }
-
-  void deliveryPhoneNumberOnChange(String input){
-
-    model.deliveryPhoneNumber = input;
-
-  }
-
-  void paymentOnChange(String? input){
-
-    model.payment = input;
-
-  }
-
-  void messageOnChange(String input){
-
-    model.message = input;
-
-  }
-
+  @override
   void loadForm() async {
 
     List<Future> futures = [];
@@ -242,12 +133,18 @@ class CustomerOrderScreenController{
 
   }
 
-  void submitOrders() async {
+  @override
+  void submitOrder(context) async {
 
     model.isSubmitting = true;
     updateState();
 
-    final submittedOrdersSuccessfully = await model.submitOrders();
+    final request = model.getCustomerOrderRequest();
+  
+
+    print(model.deliveryAddressLine1);
+
+    final submittedOrdersSuccessfully = await model.submitOrder(request);
     final clearedBasketSuccessfully = await model.saveBasket([]);
 
     model.isSubmitting = false;

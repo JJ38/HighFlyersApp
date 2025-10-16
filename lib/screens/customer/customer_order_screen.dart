@@ -151,7 +151,7 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                                           shadowColor: Color(0x00000000),                                
                                           borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                                           child: MaterialButton(
-                                            onPressed: customerOrderScreenController.submitOrders,
+                                            onPressed: () {customerOrderScreenController.submitOrder(context);},
                                             child: Text("Submit Orders", style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white)),                           
                                           ),
                                         ),
