@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/controllers/order_controller_abstract.dart';
-import 'package:high_flyers_app/models/Requests/add_order_request.dart';
 import 'package:high_flyers_app/models/admin_add_order_screen_model.dart';
-import 'package:high_flyers_app/models/order_model_abstract.dart';
 
 class AdminAddOrderScreenController extends OrderController<AdminAddOrderScreenModel> {
 
@@ -35,7 +33,7 @@ class AdminAddOrderScreenController extends OrderController<AdminAddOrderScreenM
     updateState();
 
     final request = model.getAddOrderRequest();
-    final submittedOrdersSuccessfully = await model.submitOrder(request);
+    final submittedOrdersSuccessfully = await model.submitAuthenticatedRequest(request);
 
     model.isSubmitting = false;
 

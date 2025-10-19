@@ -3,15 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
+import 'package:high_flyers_app/models/request_model.dart';
 import 'package:high_flyers_app/models/validator.dart';
 import 'package:http/http.dart' as http;
 
-abstract class OrderModel {
+abstract class OrderModel extends RequestModel{
   
   final Validator validator = Validator();
   late Map<String, dynamic> birdSpeciesData;
   late Map<String, dynamic> postcodes;
-  http.Response? response;
   Map<String, dynamic> customerProfileData = {};
   Set<String> birdSpeciesSet = {};
   String? animalType;
@@ -167,61 +167,6 @@ abstract class OrderModel {
     }
     
     return true;
-
-  }
-
-  Future<bool> submitOrder(JSONRequest request) async {
-
-    final user = FirebaseAuth.instance.currentUser;
-    String? token = await user?.getIdToken();
-
-    if(token == null){
-      return false;
-    }
-
-    request.setBearerHeader(token);  
-
-    final successfullySentRequest = await submitRequest(request);
-
-    print(successfullySentRequest);
-
-    if(!successfullySentRequest || response == null){
-      return false;
-    }
-
-    if (response!.statusCode == 200) {
-
-      print('Response: ${response!.body}');
-
-    } else {
-
-      print('Error: ${response!.statusCode} - ${response!.body}');
-      return false;
-
-    }
-
-    return true;
-    
-  }
-
-  Future<bool> submitRequest(JSONRequest request) async{
-
-    try{
-
-      final url = Uri.parse(request.getEndpoint());
-
-      response = await http.post(
-        url,
-        headers: request.headers,
-        body: request.body,
-      );
-    
-      return true;
-
-    }catch(e){
-      print(e);
-      return false;
-    }
 
   }
 

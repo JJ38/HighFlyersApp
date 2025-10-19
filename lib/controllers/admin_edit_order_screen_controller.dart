@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/controllers/order_controller_abstract.dart';
-import 'package:high_flyers_app/models/Requests/edit_order_request.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:high_flyers_app/models/admin_edit_order_screen_model.dart';
-import 'package:high_flyers_app/models/order_model_abstract.dart';
 
 class AdminEditOrderScreenController extends OrderController<AdminEditOrderScreenModel> {
 
@@ -40,7 +38,7 @@ class AdminEditOrderScreenController extends OrderController<AdminEditOrderScree
     updateState(); 
 
     final JSONRequest request = model.getEditOrderRequest();
-    final submittedOrdersSuccessfully = await model.submitOrder(request);
+    final submittedOrdersSuccessfully = await model.submitAuthenticatedRequest(request);
 
     model.isSubmitting = false;
 
@@ -70,7 +68,7 @@ class AdminEditOrderScreenController extends OrderController<AdminEditOrderScree
     controller.loading();
 
     final request = model.getDeleteOrderRequest();
-    final deletedSuccessfully = await model.submitOrder(request);
+    final deletedSuccessfully = await model.submitAuthenticatedRequest(request);
 
     if(!deletedSuccessfully){
 

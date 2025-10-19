@@ -191,10 +191,13 @@ class AdminManageOrdersScreenModel{
     try{
 
       final databaseName = dotenv.env['DATABASE_NAME'];
+      if(databaseName == null){
+        return;
+      }
 
       orderListener = FirebaseFirestore.instanceFor(
         app: Firebase.app(),
-        databaseId: "development",
+        databaseId: databaseName,
       ).collection('Orders')
       .where('ID', isGreaterThan: latestOrderID)
       .orderBy('ID', descending: false) // ascending to get oldest-newest
@@ -212,10 +215,6 @@ class AdminManageOrdersScreenModel{
     if(baseQuery == null){
       return false;
     }
-
-    print("getAdditionalOrders");
-    print(baseQuery);
-    print("oldestOrderID: " + oldestOrderID.toString());
 
     final queryToAttempt = baseQuery!.where('ID', isLessThan: oldestOrderID);
 

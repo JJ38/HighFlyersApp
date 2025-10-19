@@ -144,7 +144,7 @@ class CustomerOrderScreenController extends OrderController<CustomerOrderModel>{
 
     print(model.deliveryAddressLine1);
 
-    final submittedOrdersSuccessfully = await model.submitOrder(request);
+    final submittedOrdersSuccessfully = await model.submitAuthenticatedRequest(request);
     final clearedBasketSuccessfully = await model.saveBasket([]);
 
     model.isSubmitting = false;
