@@ -1,6 +1,7 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:high_flyers_app/components/add_user_dialog_box.dart';
 import 'package:high_flyers_app/components/change_user_password_dialog_box.dart';
 import 'package:high_flyers_app/components/delete_user_dialog_box.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
@@ -12,10 +13,6 @@ class AdminManageUsersScreenController {
   final void Function() updateState;
 
   AdminManageUsersScreenController({required this.updateState});
-
-  void onAddUserTap(){
-
-  }
 
   void loadUsers() async{
 
@@ -57,6 +54,17 @@ class AdminManageUsersScreenController {
         return ChangeUserPasswordDialogBox(uid: userDoc.id);
       }
     );
+  }
+
+  void onAddUserTap(BuildContext context){
+
+    showDialog(
+      context: context, 
+      builder: (context){
+        return AddUserDialogBox(loadUsers: loadUsers);
+      }
+    );
+
   }
 
 

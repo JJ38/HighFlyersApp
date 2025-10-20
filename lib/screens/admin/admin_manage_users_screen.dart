@@ -59,7 +59,7 @@ class _AdminManageUsersScreenState extends State<AdminManageUsersScreen> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-                      onPressed: adminManageUsersScreenController.onAddUserTap,
+                      onPressed: (){ adminManageUsersScreenController.onAddUserTap(context);},
                       child: Row(
                         children: [
                           Icon(Icons.add, color: Colors.white),
