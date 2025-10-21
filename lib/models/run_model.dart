@@ -348,15 +348,8 @@ class RunModel {
 
       //print(newAssignedRuns);
 
-      List<dynamic> newProgressedRuns = [];
-
       //if progressed runs is empty or undefined
-      List<dynamic>? currentProgressedRuns = driverData['progressedRuns'];
-
-      currentProgressedRuns ??= [];
-
-      //get current progressed runs
-      newProgressedRuns + currentProgressedRuns;
+      List<dynamic> newProgressedRuns = [...driverData['progressedRuns']];
 
       newProgressedRuns.add({
         "progressedRunID": progressedRunDocRef.id,
@@ -366,6 +359,7 @@ class RunModel {
 
 
       print(newProgressedRuns);
+
 
       await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).runTransaction((transaction) async {
 
