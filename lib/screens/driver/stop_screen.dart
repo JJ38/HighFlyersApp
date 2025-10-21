@@ -59,7 +59,9 @@ class _StopScreenState extends State<StopScreen> {
   }
 
   void updateState(){
-    setState(() {});
+    if(mounted){
+      setState(() {});
+    }
   }
 
   @override

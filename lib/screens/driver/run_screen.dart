@@ -3,12 +3,7 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:high_flyers_app/components/assigned_stops.dart';
-import 'package:high_flyers_app/components/button_pill.dart';
-import 'package:high_flyers_app/components/completed_stops.dart';
-import 'package:high_flyers_app/components/pending_stops.dart';
 import 'package:high_flyers_app/components/stop.dart';
-import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/controllers/run_screen_controller.dart';
 import 'package:high_flyers_app/screens/driver/stop_screen.dart';
 
@@ -148,9 +143,11 @@ class _RunScreenState extends State<RunScreen> {
   }
 
   void updateState(){
-    setState(() {
-      
-    });
+    if(mounted){
+      setState(() {
+        
+      });
+    }
   }
 
   @override

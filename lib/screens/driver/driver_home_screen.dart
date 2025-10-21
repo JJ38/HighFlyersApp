@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/controllers/driver_home_screen_controller.dart';
 
@@ -25,9 +24,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   }
 
   void updateState(){
-    setState(() {
-      
-    });
+    if(mounted){
+      setState(() {
+        
+      });
+    }
   }
 
   void initialiseDriver() async {
@@ -47,10 +48,12 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
     driverHomeScreenController.model.isLoading = false;
 
-    setState(() {
-      driverHomeScreenController.model.driverLoadedSuccessfully;
-      driverHomeScreenController.model.isLoading;
-    });
+    if(mounted){
+      setState(() {
+        driverHomeScreenController.model.driverLoadedSuccessfully;
+        driverHomeScreenController.model.isLoading;
+      });
+    }
 
   }
 

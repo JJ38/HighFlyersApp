@@ -30,9 +30,12 @@ class _DriverSettingsScreenState extends State<DriverSettingsScreen> {
     await driverSettingsScreenController.getNavigationPreferences();
     await driverSettingsScreenController.model.getAvailableNavigationApps();
     print("update state");
-    setState(() {
-      
-    });
+    
+    if(mounted){
+      setState(() {
+        
+      });
+    }
   }
 
   @override

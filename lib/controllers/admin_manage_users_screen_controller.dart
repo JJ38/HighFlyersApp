@@ -35,13 +35,9 @@ class AdminManageUsersScreenController {
     showDialog(
       context: context, 
       builder: (context){
-        return DeleteUserDialogBox(onDeleteUserSlide: onDeleteUserSlide,);
+        return DeleteUserDialogBox(userDoc: userDoc, loadUsers: loadUsers);
       }
     );
-  }
-
-  void onDeleteUserSlide(ActionSliderController controller) async{
-    print("delete user");
   }
 
   void onChangeUserPasswordTap(BuildContext context, dynamic userDoc){
