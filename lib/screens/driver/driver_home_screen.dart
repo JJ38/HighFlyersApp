@@ -15,7 +15,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   @override
   void initState() {
-    print("init state driver home screen");
+
     super.initState();
     driverHomeScreenController = DriverHomeScreenController(initialiseDriver: initialiseDriver, updateState: updateState);
 
@@ -34,7 +34,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   void initialiseDriver() async {
 
     final initialisedDriver = await driverHomeScreenController.model.initialiseDriver();
-    print("initialisedDriver: $initialisedDriver");
+ 
     if (initialisedDriver) {
 
       final driverRunsFetched = await driverHomeScreenController.model.fetchDriverRuns();
@@ -85,7 +85,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         padding: const EdgeInsets.all(8),
                         itemCount: driverHomeScreenController.model.driverRunDocs.length,
                         itemBuilder: (BuildContext context, int i) {
-                  
+                 
                           final numberOfAssignedRuns = driverHomeScreenController.model.driverDoc['assignedRuns'].length; //1
 
                           dynamic runIndex = i;
@@ -96,6 +96,10 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
                           final runType = i > numberOfAssignedRuns - 1 ? "progressedRuns" : "assignedRuns";
 
+                          print("runType: " + runType);
+                          print("shipment name: " + driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName']);
+
+
                           return GestureDetector(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
@@ -105,7 +109,21 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                   children: [
                                     Text(driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'], style: Theme.of(context).textTheme.titleMedium,),
                                     Text(driverHomeScreenController.model.driverRunDocs[i]['runName'], style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
-                                    Text(driverHomeScreenController.model.runStatuses[i] ? "Progressed" : "Pending", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
+
+                                    runType == "assignedRuns" ? 
+
+                                        Text("New", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.blue),)
+                                      
+                                      :
+
+                                        driverHomeScreenController.model.driverRunDocs[i]['runStatus']  == "Completed" ? 
+
+                                            Text("Completed", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.green),)
+
+                                          :
+
+                                            Text("In Progress", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.amber),)
+                                            
 
                                   ]
                                 ),

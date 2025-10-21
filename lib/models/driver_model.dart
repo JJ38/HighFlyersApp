@@ -71,8 +71,6 @@ class DriverModel {
 
     }
 
-    print(documentReferences);
-
     try{
 
       driverRunDocs = await FirebaseModel.fetchMultipleDocuments(documentReferences);

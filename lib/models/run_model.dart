@@ -18,6 +18,8 @@ class RunModel {
   dynamic orders;
   Key scaffoldKey = UniqueKey();
   Set<Marker> markers = {};
+  bool isStartingRun = false;
+  bool runStarted = false;
 
 
   RunModel();
@@ -137,8 +139,6 @@ class RunModel {
     for(var i = 0; i < stops.length; i++){
       orderFutures.add(fetchOrder(stops[i]['orderID']));
     }
-
-    // orderFutures.add(fetchOrder('bad id'));
 
     try{
       
@@ -323,6 +323,7 @@ class RunModel {
         'driverID': driverDocRef.id,
         'runName': run!['runName'],
         'runTime': run!['runTime'],
+        'runStatus': 'In Progress',
         'optimisedRun': run!['optimisedRoute'],
         'currentStopNumber': 1,
         'stops': newStopsCopy,
@@ -350,7 +351,7 @@ class RunModel {
       List<dynamic> newProgressedRuns = [];
 
       //if progressed runs is empty or undefined
-      List<dynamic>? currentProgressedRuns = driverData['progressedRuns'] ;
+      List<dynamic>? currentProgressedRuns = driverData['progressedRuns'];
 
       currentProgressedRuns ??= [];
 

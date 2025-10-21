@@ -8,6 +8,7 @@ import 'package:high_flyers_app/controllers/run_screen_controller.dart';
 import 'package:high_flyers_app/screens/driver/stop_screen.dart';
 
 class RunScreen extends StatefulWidget {
+
   static String id = "Run Screen";
 
   final DocumentSnapshot<Object?> runDocument;
@@ -31,7 +32,7 @@ class _RunScreenState extends State<RunScreen> {
   late CameraPosition _initialCameraPositon;
   bool error = false;
   bool loaded = false;
-  bool runStarted = false;
+ 
 
   @override
   void initState() {
@@ -44,28 +45,23 @@ class _RunScreenState extends State<RunScreen> {
     shipmentName = widget.shipmentName;
     runScreenController.model.shipmentName = widget.shipmentName;
 
-
-    print(run);
-    print(" -------- run");
-
-
     if (run.isEmpty) {
       print("run.isEmpty");
       return;
     }
 
-    runStarted = widget.runStatus;
+    runScreenController.model.runStarted = widget.runStatus;
 
     // runInfoView = [AssignedStops(run: run), PendingStops(), CompletedStops()];
     runScreenController.model.setRun(run);
 
-    if(runStarted){
+    if(runScreenController.model.runStarted){
       runScreenController.model.progressedRunID = runID;
     }else{
       runScreenController.model.setRunID(runID);
     }
 
-    if(!runStarted){
+    if(!runScreenController.model.runStarted){
       _initialiseStartRunPage();
       return;
     }
@@ -214,18 +210,21 @@ class _RunScreenState extends State<RunScreen> {
                                               width: 100,
                                             ),
                                           ),
-                                          !runStarted ? 
-                                          Text(run["runName"],
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge)
-                                          :
-                                            SizedBox()
+                                          !runScreenController.model.runStarted ? 
+
+                                            Text(run["runName"],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge)
+
+                                            :
+
+                                              SizedBox()
                                         ],
                                       ),
                                     ),
                                   ),
-                                ...runStarted ? 
+                                ...runScreenController.model.runStarted ? 
                                   [
                                     StopScreen(
                                       stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']), 
@@ -268,23 +267,27 @@ class _RunScreenState extends State<RunScreen> {
                                         ), 
                                       ]
                                     ),
-                                    Material(
-                                      color: Theme.of(context).colorScheme.secondary,
-                                      shadowColor: Color(0x00000000),                                
-                                      borderRadius: BorderRadius.all(Radius.circular(8)),                                     
-                                      child: MaterialButton(
-                                        onPressed: () async { 
-                                          if(await runScreenController.startRun(context)){ 
-                                            setState(() {
-                                              runStarted = true;
-                                            });
-                                          } 
-                                        },
-                                        minWidth: screenWidth * 0.8,
-                                        height: screenWidth * 0.1,
-                                        child: Text("Start Run", style: TextStyle(color: Colors.white)),
-                                      ),
-                                    ),                      
+
+                                    runScreenController.model.isStartingRun ? 
+
+                                        Center(
+                                          child: CircularProgressIndicator()
+                                        )
+
+                                      :
+
+                                        Material(
+                                          color: Theme.of(context).colorScheme.secondary,
+                                          shadowColor: Color(0x00000000),                                
+                                          borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                                          child: MaterialButton(
+                                            onPressed: () {runScreenController.startRun(context);},                                     
+                                            minWidth: screenWidth * 0.8,
+                                            height: screenWidth * 0.1,
+                                            child: Text("Start Run", style: TextStyle(color: Colors.white)),
+                                          ),
+                                        ),
+
                                     Expanded(
                                       flex: 1,
                                       child: ListView.builder(

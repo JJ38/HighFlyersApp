@@ -12,6 +12,7 @@ class CurrentStopModel {
   List<AvailableMap>? availableMaps;
   bool isDefaultMapAvailable = false;
   late void Function(Map<String, dynamic>) updateCurrentStop;
+  bool isRunCompleted = false;
 
 
   Future<bool> skipStop() async{
@@ -56,7 +57,6 @@ class CurrentStopModel {
       bool foundStop = false; 
 
       int newStopNumber = runData['currentStopNumber'];
-      bool isLastStop = true;
 
 
       for(int i = 0; i < newStops.length; i++){
@@ -69,7 +69,6 @@ class CurrentStopModel {
           newStops[i]['formDetails'] = formDetails;
 
           newStopNumber += 1;
-          isLastStop = false;
           foundStop = true;
           break;
         }
@@ -82,9 +81,13 @@ class CurrentStopModel {
 
       String runStatus = "Enroute";
 
+      //is there a stop to show next? - is the run completed?
       if(newStopNumber > stops.length){
+
+        isRunCompleted = true;
         runStatus = "Completed";
         newStopNumber = newStopNumber - 1;
+
       }
 
       Map<String, dynamic> fieldsToUpdate = 
@@ -97,14 +100,11 @@ class CurrentStopModel {
 
       await runDocRef.update(fieldsToUpdate);
       
-      if(isLastStop){
-        print("is last stop. TODO:");
-        return false;
-      }
-
+      //updates client that holds info for run
       runData['currentStopNumber'] = newStopNumber;
       runData['runStatus'] = runStatus;
       runData['stops'] = newStops;
+      
 
       for(int i = 0; i < newStops.length; i++){
 
@@ -117,7 +117,6 @@ class CurrentStopModel {
 
       }
 
-      //completed run
 
       return false;
 

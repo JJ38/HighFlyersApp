@@ -30,31 +30,32 @@ class RunScreenController {
     
   }
 
-  Future<bool> startRun(context) async{
+  void startRun(context) async {
 
     //write to document to say run has started
 
+    model.isStartingRun = true;
+    updateState();
+
     final bool runStarted = await model.startRun();
 
+    model.isStartingRun = false;
+
+
     if(!runStarted){
-  
-      showToastWidget(
-        ToastNotification(message: 'Error starting run', isError: true),
-        context: context
-      );
-
-      return false;
-
+      showToastWidget(ToastNotification(message: 'Error starting run', isError: true), context: context);
+      updateState();
+      return;
     }
 
-    //update stop screen to show details of first stop. This can show another button saying start stop 
+    model.runStarted = true;
+    updateState();
 
-    return true;
 
   }
 
   void updateMapMarker(Map<String, dynamic> stopData) async {
-    print("updateMapMarker");
+
     final successfullyUpdatedMarker = await model.getMarkerForStop(stopData);
 
     if(!successfullyUpdatedMarker){
@@ -67,7 +68,6 @@ class RunScreenController {
 
   void updateRunMapMarkers() async {
     
-    print("updateMapRunMarker");
     final successfullyUpdatedRunMarkers = await model.getMarkersForRun();
 
     if(!successfullyUpdatedRunMarkers){
@@ -76,6 +76,7 @@ class RunScreenController {
     }
 
     updateState();
+
   }
 
 }

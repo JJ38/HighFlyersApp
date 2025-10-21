@@ -54,7 +54,7 @@ class _AddUserDialogBoxState extends State<AddUserDialogBox> {
                 mainAxisSize: MainAxisSize.min,
                 spacing: 10,
                 children: [
-                    Text("Create user", style: Theme.of(context).textTheme.titleSmall, maxLines: 2,),
+                  Text("Create user", style: Theme.of(context).textTheme.titleSmall, maxLines: 2,),
                   SquaredInput(label: "Username", value: "", onChange: (value){addUserDialogBoxController.onUsernameChange(value);}, keyboardType: TextInputType.text,),
                   SquaredInput(label: "Password", value: "", onChange: (value){addUserDialogBoxController.onPasswordChange(value);}, keyboardType: TextInputType.text,),
                   SquaredInput(label: "Confirm Password", value: "", onChange: (value){addUserDialogBoxController.onConfirmPasswordChange(value);}, keyboardType: TextInputType.text,),
