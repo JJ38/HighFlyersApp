@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show CollectionReference, DocumentReference, DocumentSnapshot, FirebaseFirestore, FieldValue;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -267,6 +268,7 @@ class RunModel {
       final User? currentUser = auth.currentUser;
       
       if (currentUser == null) {
+        FirebaseCrashlytics.instance.log('Current user is null');
         return false;
       }
 
@@ -283,10 +285,12 @@ class RunModel {
       final driverDoc = await driverDocRef.get();
 
       if(!driverDoc.exists){
+        FirebaseCrashlytics.instance.log('Driver doc doesnt exist');
         return false;
       }
 
       if(driverDoc.data() == null){
+        FirebaseCrashlytics.instance.log('Driver doc data is null');
         return false;
       } 
 
@@ -314,6 +318,7 @@ class RunModel {
       for(var i = 0; i < orderDocuments.length; i++){
         
         if(!mergeStopAndOrder(newStopsCopy, orderDocuments[i])){
+          FirebaseCrashlytics.instance.log('Failed to stop and order');
           return false;
         }
 
@@ -349,7 +354,7 @@ class RunModel {
       //print(newAssignedRuns);
 
       //if progressed runs is empty or undefined
-      List<dynamic> newProgressedRuns = [...driverData['progressedRuns']];
+      List<dynamic>? newProgressedRuns = [...driverData['progressedRuns'] ?? []];
 
       newProgressedRuns.add({
         "progressedRunID": progressedRunDocRef.id,
@@ -358,14 +363,13 @@ class RunModel {
       });
 
 
-      print(newProgressedRuns);
-
 
       await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).runTransaction((transaction) async {
 
         final driverDoc = await transaction.get(driverDocRef);
 
         if (!driverDoc.exists) {
+          FirebaseCrashlytics.instance.log('Driver doc doesnt exist - transaction');
           return false;
         }
 
@@ -383,9 +387,12 @@ class RunModel {
       progressedRunID = progressedRunDocRef.id;
       run!['currentStopNumber'] = 1;
 
-    } catch (e) {
+    } catch (e, stack) {
 
-      print("Error updating document: $e");
+      await FirebaseCrashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.log('Failed to start run: $e');
+
+      debugPrint("Error updating document: $e");
       return false;
 
     }
@@ -413,8 +420,6 @@ class RunModel {
   }
 
   dynamic getStopByStopNumber(int stopNumber){
-
-    print(stopNumber);
 
     for(int i = 0; i < run!['stops'].length; i++){
 
