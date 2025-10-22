@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AdminManageOrdersScreenModel{
 
@@ -67,8 +68,20 @@ class AdminManageOrdersScreenModel{
       .orderBy('ID', descending: true)
       .limit(10);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_initial_orders_query_builder_error', {
+            'module': 'admin_manage_orders',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
       return false;
     }
 
@@ -81,8 +94,21 @@ class AdminManageOrdersScreenModel{
 
       orders.insertAll(0, initialOrders.docs);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_initial_orders_error', {
+            'module': 'admin_manage_orders',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
+
       return false;
     }
 
@@ -108,8 +134,21 @@ class AdminManageOrdersScreenModel{
       .where(selectedFilterField!, isEqualTo: getTypeCorrectSearchValue())
       .limit(10);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_filtered_orders_query_builder_error', {
+            'module': 'admin_manage_orders',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
+
       return false;
     }
 
@@ -123,9 +162,20 @@ class AdminManageOrdersScreenModel{
 
       return true;
 
-    }catch(e){
+    }catch(error, stack){
 
-      print(e);
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_filtered_orders_error', {
+            'module': 'admin_manage_orders',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
       return false; 
 
     }
@@ -145,10 +195,10 @@ class AdminManageOrdersScreenModel{
 
   }
 
-  void initialiseNewOrderListener(updateState){
+  Future<void> initialiseNewOrderListener(updateState) async {
 
     cancelOrderSubscription();
-    updateOrderListener();
+    await updateOrderListener();
     
     orderSubscription = orderListener!.listen((snapshot) {
 
@@ -169,8 +219,22 @@ class AdminManageOrdersScreenModel{
 
       updateState();
 
-    }, onError: (error) {print("Listener error: $error");});
+    }, onError: (error, stack) {
 
+      Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('initialise_new_order_listener_error', {
+            'module': 'admin_manage_orders',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
+
+    });
 
   }
 
@@ -179,14 +243,11 @@ class AdminManageOrdersScreenModel{
     if(orderSubscription != null){
       orderSubscription!.cancel();
       orderSubscription = null;
-      print("Subscription Cancelled");
     }
 
   }
 
-  void updateOrderListener() {
-
-    print(latestOrderID);
+  Future<void> updateOrderListener() async {
 
     try{
 
@@ -203,8 +264,21 @@ class AdminManageOrdersScreenModel{
       .orderBy('ID', descending: false) // ascending to get oldest-newest
       .snapshots();
     
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_filtered_orders_query_builder_error', {
+            'module': 'admin_manage_orders',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
+
     }
 
   }
@@ -223,7 +297,6 @@ class AdminManageOrdersScreenModel{
       final additionalOrders = await queryToAttempt.get();
 
       if(additionalOrders.docs.isEmpty){
-        print("Loaded all orders for query");
         hasLoadedAllOrders = true;
         return false;
       }
@@ -232,8 +305,20 @@ class AdminManageOrdersScreenModel{
 
       orders.addAll(additionalOrders.docs);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+       await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_additional_orders_error', {
+            'module': 'admin_manage_orders',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
       return false;
     }
 

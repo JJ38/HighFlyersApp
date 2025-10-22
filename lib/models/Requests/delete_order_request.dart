@@ -1,6 +1,7 @@
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class DeleteOrderRequest extends JSONRequest{
 
@@ -18,10 +19,23 @@ class DeleteOrderRequest extends JSONRequest{
     try{
 
       endpoint = dotenv.env['DELETE_ORDER_ENDPOINT'];
-      print("using dotenv");
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('delete_order_request_error', {
+            'module': 'delete_order_request',
+            'details': error.toString(),
+            'endpoint': endpoint
+          });
+        },
+      );
+      
+      print(error);
+      
     }
 
     return endpoint ?? "";

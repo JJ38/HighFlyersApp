@@ -96,10 +96,6 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
                           final runType = i > numberOfAssignedRuns - 1 ? "progressedRuns" : "assignedRuns";
 
-                          print("runType: " + runType);
-                          print("shipment name: " + driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName']);
-
-
                           return GestureDetector(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),

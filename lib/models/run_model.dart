@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:high_flyers_app/components/marker_label.dart';
 import 'package:high_flyers_app/models/firebase_model.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:widget_to_marker/widget_to_marker.dart';
 
 
@@ -145,8 +146,21 @@ class RunModel {
       
       orders = await Future.wait(orderFutures, eagerError: true);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('fetch_run_orders_error', {
+            'module': 'driver_run',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
+      
       return false;
     }
 
@@ -178,11 +192,21 @@ class RunModel {
 
       return orderDoc;
 
-    }catch(e){
-      print(e.toString());
-      print("error fetching order");
+    }catch(error, stack){
 
-      return Future.error(e);
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('fetch_order_error', {
+            'module': 'driver_run',
+            'details': error.toString(),
+          });
+        },
+      );
+
+
+      return Future.error(error);
 
     } 
 
@@ -351,7 +375,6 @@ class RunModel {
 
       }
 
-      //print(newAssignedRuns);
 
       //if progressed runs is empty or undefined
       List<dynamic>? newProgressedRuns = [...driverData['progressedRuns'] ?? []];
@@ -361,7 +384,6 @@ class RunModel {
         "runName": run!['runName'],
         "shipmentName": shipmentName
       });
-
 
 
       await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).runTransaction((transaction) async {
@@ -387,12 +409,20 @@ class RunModel {
       progressedRunID = progressedRunDocRef.id;
       run!['currentStopNumber'] = 1;
 
-    } catch (e, stack) {
+    } catch (error, stack) {
 
-      await FirebaseCrashlytics.instance.recordError(e, stack);
-      FirebaseCrashlytics.instance.log('Failed to start run: $e');
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('start_run_error', {
+            'module': 'driver_run',
+            'details': error.toString(),
+          });
+        },
+      );
 
-      debugPrint("Error updating document: $e");
+      print("Error updating document: $error");
       return false;
 
     }

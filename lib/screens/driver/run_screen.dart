@@ -73,7 +73,6 @@ class _RunScreenState extends State<RunScreen> {
   void _initialiseCurrentStopPage() async{
 
     //find out what stop user is currently on
-
     int currentStopNumber = run['currentStopNumber'];
 
     //load stop (in model as current stop maybe)

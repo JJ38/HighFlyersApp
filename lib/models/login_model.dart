@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class LoginScreenModel {
 
@@ -42,9 +43,23 @@ class LoginScreenModel {
       getFirebaseErrorMessage(e.code);
       return false;
 
-    } catch (e) {
+    } catch (error, stack) {
 
       errorMessage = "Invalid Credentials";
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('login_error', {
+            'module': 'login',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
+
       return false;
 
     }

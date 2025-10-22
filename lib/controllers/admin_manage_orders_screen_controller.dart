@@ -132,7 +132,7 @@ class AdminManageOrdersScreenController {
     }
 
     model.isShowingFilteredOrders = false;
-    model.initialiseNewOrderListener(updateState);
+    await model.initialiseNewOrderListener(updateState);
 
     updateState();
 

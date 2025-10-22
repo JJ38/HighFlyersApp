@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 abstract class JSONRequest{
 
@@ -21,8 +22,22 @@ abstract class JSONRequest{
 
       environment = dotenv.env['ENVIRONMENT'] ?? "";
       
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('JSONRequest_error', {
+            'module': 'JSONRequest',
+            'details': error.toString(),
+            'environment': environment
+          });
+        },
+      );
+      
+      print(error);
+      
     }
 
     requestBody.addAll({'environment': environment});

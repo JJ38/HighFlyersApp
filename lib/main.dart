@@ -16,6 +16,8 @@ import 'screens/login_screen.dart';
 import 'screens/driver/driver_screen.dart';
 import 'screens/customer/customer_screen.dart';
 import 'screens/admin/admin_screen.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+
 
 void main() async {
   // await SystemChrome.setPreferredOrientations([
@@ -55,7 +57,13 @@ void main() async {
 
   await dotenv.load(fileName: envFile);
 
-  runApp(const MyApp());
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = 'https://de4a38caedfc88db522107309f646142@o4510232854593536.ingest.de.sentry.io/4510232863899728';
+    },
+    appRunner: () => runApp(SentryWidget(child: const MyApp())),
+  );
+
   
 }
 

@@ -1,4 +1,5 @@
 import 'package:map_launcher/map_launcher.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DriverSettingsScreenModel {
@@ -19,8 +20,20 @@ class DriverSettingsScreenModel {
       navigationPreference = prefs.getString('maptype_preference');
       print(navigationPreference);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_navigation_preference_error', {
+            'module': 'driver_settings',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
       return false;
     }
 
@@ -41,8 +54,21 @@ class DriverSettingsScreenModel {
       // Set the values with a key and a value
       await prefs.setString('maptype_preference', mapType);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('set_navigation_preference_error', {
+            'module': 'driver_settings',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
+
       return false;
     }
 
@@ -57,8 +83,20 @@ class DriverSettingsScreenModel {
       availableMaps = await MapLauncher.installedMaps;
       print(availableMaps);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_available_maps_error', {
+            'module': 'driver_settings',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
       
     }
   }

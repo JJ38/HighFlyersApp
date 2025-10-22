@@ -4,7 +4,6 @@ import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/current_stop_model.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class CurrentStopController {
@@ -32,7 +31,7 @@ class CurrentStopController {
 
     // get preferred map to launch into to
 
-    final MapType? mapPreference = await getMapPreference();
+    final MapType? mapPreference = await model.getMapPreference();
 
     if(mapPreference != null){
     
@@ -54,41 +53,6 @@ class CurrentStopController {
 
   }
 
-  Future<MapType?> getMapPreference() async {
-
-    try{
-
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? mapPreference = prefs.getString('maptype_preference');
-
-      if(mapPreference == null){
-        return null;
-      }
-
-      print(mapPreference);
-      
-
-      switch (mapPreference){
-
-        case "Apple Maps":
-          return MapType.apple;
-
-        case "Google Maps":
-          return MapType.google;
-
-        case "Waze":
-          return MapType.waze;
-
-      }
-
-      return null;
-
-    }catch(e){
-      print(e);
-      return null;
-    }
-
-  }
 
   static Future<void> launchMap(stop, mapType) async{
     
@@ -133,18 +97,6 @@ class CurrentStopController {
     );
   };
 
-  void confirmOrder(controller){
-
-    controller.loading();
-
-    if(false){
-      controller.success();
-    }
-
-    showToastWidget(ToastNotification(message: "Error confirming delivery", isError: true));
-    controller.reset();
-
-  }
 
   void showStopForm(){
 

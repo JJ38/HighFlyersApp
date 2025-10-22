@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:high_flyers_app/controllers/login_screen_controller.dart';
 import 'package:high_flyers_app/components/button_pill.dart';
 import 'package:high_flyers_app/components/input_pill.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+
 
 class LoginScreen extends StatefulWidget {
   static String id = 'Login Screen';
@@ -41,6 +43,20 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // ElevatedButton(
+            //   onPressed: () async {
+              
+            //     try {
+            //       throw StateError('Sentry Test Exception');
+            //     } catch (exception, stackTrace) {
+            //       await Sentry.captureException(
+            //         exception,
+            //         stackTrace: stackTrace,
+            //       );
+            //     }
+            //   },
+            //   child: const Text('Verify Sentry Setup'),
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

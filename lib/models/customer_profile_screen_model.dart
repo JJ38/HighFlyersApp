@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/validator.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CustomerProfileScreenModel {
 
@@ -73,8 +74,20 @@ class CustomerProfileScreenModel {
 
       print(customerProfileData);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('customer_profile_error', {
+            'module': 'customer_profile',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
       return false;
     }
 
@@ -116,8 +129,21 @@ class CustomerProfileScreenModel {
       await customerDocRef.update(fieldsToUpdate);
       
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('customer_update_profile_error', {
+            'module': 'customer_profile',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
       return false;
     }
     

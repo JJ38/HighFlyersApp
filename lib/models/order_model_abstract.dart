@@ -6,6 +6,7 @@ import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:high_flyers_app/models/request_model.dart';
 import 'package:high_flyers_app/models/validator.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 abstract class OrderModel extends RequestModel{
   
@@ -67,8 +68,20 @@ abstract class OrderModel extends RequestModel{
 
       isSuccessfullyLoaded = true;
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+      
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_bird_species_error', {
+            'module': 'order_form_error',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
       return false;
     }
 

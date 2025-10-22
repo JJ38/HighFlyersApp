@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/Requests/customer_order_request.dart';
 import 'package:high_flyers_app/models/order_model_abstract.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
@@ -69,8 +70,21 @@ class CustomerOrderModel extends OrderModel{
       collectionPostcode = customerProfileData['collectionPostcode'];
       collectionPhoneNumber = customerProfileData['collectionPhoneNumber'];
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('customer_profile_error', {
+            'module': 'customer_form',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
+
       return false;
     }
 
@@ -165,8 +179,20 @@ class CustomerOrderModel extends OrderModel{
 
       basket = json.decode(basketJSON)['basket'];
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('load_basket_error', {
+            'module': 'basket',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
       return false;
     }
 
@@ -187,8 +213,20 @@ class CustomerOrderModel extends OrderModel{
       // Set the values with a key and a value
       await prefs.setString('basket', basketJSON);
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+       await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('save_basket_error', {
+            'module': 'basket',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
       return false;
     }
 

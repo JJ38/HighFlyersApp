@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:high_flyers_app/models/firebase_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 enum Status { offline, online, skipped, completed, enroute }
 
@@ -78,9 +79,20 @@ class DriverModel {
 
       print("fetched driver run documents");
 
-    }catch(e){
+    }catch(error, stack){
 
-      print("Error fetching run documents");
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('fetch_driver_runs_error', {
+            'module': 'driver_home',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
       return false;
 
     }
@@ -109,7 +121,20 @@ class DriverModel {
 
       driverDoc = response.data()!;
 
-    } catch (e) {
+    } catch (error, stack) {
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('fetch_driver_doc_error', {
+            'module': 'driver_home',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      print(error);
 
       return false;
 

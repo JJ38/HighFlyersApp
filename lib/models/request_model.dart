@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RequestModel {
 
@@ -43,8 +44,6 @@ class RequestModel {
   
   Future<bool> submitRequest(JSONRequest request) async{
 
-    print("submitRequest");
-
     try{
 
       final url = Uri.parse(request.getEndpoint());
@@ -57,8 +56,22 @@ class RequestModel {
     
       return true;
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('request_error', {
+            'module': 'request',
+            'details': error.toString(),
+            'endpoint': request.getEndpoint()
+          });
+        },
+      );
+      
+      print(error);
+      
       return false;
     }
 

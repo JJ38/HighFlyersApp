@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/stop_card.dart';
-import 'package:high_flyers_app/controllers/assigned_stops_controller.dart';
 
 
 class AssignedStops extends StatefulWidget {
 
-  final AssignedStopsController assignedStopsController = AssignedStopsController();
   final Map<String, dynamic> run;
   
-  AssignedStops({super.key, required this.run});
+  const AssignedStops({super.key, required this.run});
 
   @override
   State<AssignedStops> createState() => _AssignedStopsState();

@@ -5,6 +5,7 @@ class FirebaseModel {
   FirebaseModel();
 
   static Future<List<dynamic>> fetchMultipleDocuments(runDocumentReferences) async{
+    
 
     List<Future<DocumentSnapshot<Map<String, dynamic>>>> futureDocuments = [];
 

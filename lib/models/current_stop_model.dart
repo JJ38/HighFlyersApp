@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:map_launcher/map_launcher.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentStopModel {
 
@@ -120,10 +122,66 @@ class CurrentStopModel {
 
       return false;
 
-    }catch(e){
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('current_stop_error', {
+            'module': 'current_stop',
+            'details': error.toString(),
+          });
+        },
+      );
       
-      print(e);
+      print(error);
       return false;
+    }
+
+  }
+
+  Future<MapType?> getMapPreference() async {
+
+    try{
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? mapPreference = prefs.getString('maptype_preference');
+
+      if(mapPreference == null){
+        return null;
+      }
+
+      switch (mapPreference){
+
+        case "Apple Maps":
+          return MapType.apple;
+
+        case "Google Maps":
+          return MapType.google;
+
+        case "Waze":
+          return MapType.waze;
+
+      }
+
+      return null;
+
+    }catch(error, stack){
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_map_preference_error', {
+            'module': 'current_stop',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
+      return null;
     }
 
   }

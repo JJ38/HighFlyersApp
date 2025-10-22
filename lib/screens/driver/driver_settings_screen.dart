@@ -27,9 +27,9 @@ class _DriverSettingsScreenState extends State<DriverSettingsScreen> {
   }
 
   void initialiseSettings() async{
+
     await driverSettingsScreenController.getNavigationPreferences();
     await driverSettingsScreenController.model.getAvailableNavigationApps();
-    print("update state");
     
     if(mounted){
       setState(() {
@@ -51,11 +51,6 @@ class _DriverSettingsScreenState extends State<DriverSettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Settings", style: Theme.of(context).textTheme.titleLarge),
-
-              // TextButton(
-              //     onPressed: () => {test!.length},
-              //     child: const Text("Throw Test Exception"),
-              // ),
 
               ...driverSettingsScreenController.model.loaded ?
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/request_model.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AdminManageUsersScreenModel extends RequestModel {
 
@@ -29,8 +30,20 @@ class AdminManageUsersScreenModel extends RequestModel {
       print(usersDocs.docs);
       users = usersDocs.docs;
 
-    }catch(e){
-      print(e);
+    }catch(error, stack){
+
+       await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('load_users_error', {
+            'module': 'admin_manage_users',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
       return false;
     }
 
