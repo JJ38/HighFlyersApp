@@ -128,6 +128,7 @@ class CustomerProfileScreenModel {
 
       await customerDocRef.update(fieldsToUpdate);
       
+      Sentry.logger.fmt.info("Updated user profile %s", [fieldsToUpdate]);
 
     }catch(error, stack){
 

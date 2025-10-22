@@ -36,11 +36,15 @@ class LoginScreenModel {
         return false;
       }
 
+      Sentry.logger.fmt.info("Logged in user %s", [username]);
+
       return true;
 
     } on FirebaseAuthException catch (e) {
 
       getFirebaseErrorMessage(e.code);
+      Sentry.logger.fmt.info("Failed log in attempt for %s %s", [username, e.toString()]);
+
       return false;
 
     } catch (error, stack) {

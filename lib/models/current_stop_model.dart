@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -15,6 +16,7 @@ class CurrentStopModel {
   bool isDefaultMapAvailable = false;
   late void Function(Map<String, dynamic>) updateCurrentStop;
   bool isRunCompleted = false;
+  String? currentDriverUsername;
 
 
   Future<bool> skipStop() async{
@@ -106,8 +108,17 @@ class CurrentStopModel {
       runData['currentStopNumber'] = newStopNumber;
       runData['runStatus'] = runStatus;
       runData['stops'] = newStops;
-      
 
+      final user = FirebaseAuth.instance.currentUser;
+      final String? username = user?.email?.replaceAll("@placeholder.com", "");
+
+      Sentry.logger.fmt.info("%s Successfully %s stop. Stop data: %s Form details: %s", [username, stopStatus, stop, formDetails]);
+
+      if(runStatus == "Completed"){
+        Sentry.logger.fmt.info("%s Successfully completed run %s", [username, runData['runName']]);
+      }
+
+      //find the new stop after the one just skipped/completed
       for(int i = 0; i < newStops.length; i++){
 
         if(newStopNumber == newStops[i]['stopNumber']){

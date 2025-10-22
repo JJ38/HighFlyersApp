@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:high_flyers_app/models/request_model.dart';
 import 'package:high_flyers_app/models/validator.dart';
 import 'package:http/http.dart' as http;

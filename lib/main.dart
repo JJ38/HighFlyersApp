@@ -60,10 +60,12 @@ void main() async {
   await SentryFlutter.init(
     (options) {
       options.dsn = 'https://de4a38caedfc88db522107309f646142@o4510232854593536.ingest.de.sentry.io/4510232863899728';
+      options.enableLogs = true;
     },
     appRunner: () => runApp(SentryWidget(child: const MyApp())),
   );
 
+  Sentry.logger.fmt.info("Test log from %s", ["Sentry"]);
   
 }
 

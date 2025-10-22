@@ -13,6 +13,7 @@ class RequestModel {
     String? token = await user?.getIdToken();
 
     if(token == null){
+      Sentry.logger.fmt.error("Attempted authenticated request - User token is null %s", [user.toString()]);
       return false;
     }
 
@@ -44,9 +45,13 @@ class RequestModel {
   
   Future<bool> submitRequest(JSONRequest request) async{
 
+    String endpoint = request.getEndpoint();
+
+    Sentry.logger.fmt.info("Attempting %s request %s %s", [endpoint, request.headers, request.body]);
+
     try{
 
-      final url = Uri.parse(request.getEndpoint());
+      final url = Uri.parse(endpoint);
 
       response = await http.post(
         url,
@@ -65,7 +70,8 @@ class RequestModel {
           scope.setContexts('request_error', {
             'module': 'request',
             'details': error.toString(),
-            'endpoint': request.getEndpoint()
+            'endpoint': request.getEndpoint(),
+            'request': request
           });
         },
       );

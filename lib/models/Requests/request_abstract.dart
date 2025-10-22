@@ -7,7 +7,6 @@ abstract class JSONRequest{
   Map<String, String> headers = {'Content-Type': 'application/json',};
   String? body;
 
-
   String getEndpoint();
   
   void setBearerHeader(String bearerToken){
@@ -43,6 +42,5 @@ abstract class JSONRequest{
     requestBody.addAll({'environment': environment});
     body = jsonEncode(requestBody);
   }
-
 
 }

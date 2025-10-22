@@ -286,13 +286,15 @@ class RunModel {
 
   Future<bool> startRun() async {
 
+    late final User? currentUser;
+
     try {
       
       final FirebaseAuth auth = FirebaseAuth.instance;
-      final User? currentUser = auth.currentUser;
+      currentUser = auth.currentUser;
       
       if (currentUser == null) {
-        FirebaseCrashlytics.instance.log('Current user is null');
+        Sentry.logger.info("Failed start run - user null");
         return false;
       }
 
@@ -309,12 +311,13 @@ class RunModel {
       final driverDoc = await driverDocRef.get();
 
       if(!driverDoc.exists){
+        Sentry.logger.info("Failed start run - Driver doc doesnt exist");
         FirebaseCrashlytics.instance.log('Driver doc doesnt exist');
         return false;
       }
 
       if(driverDoc.data() == null){
-        FirebaseCrashlytics.instance.log('Driver doc data is null');
+        Sentry.logger.info("Failed start run - Driver doc data is null");
         return false;
       } 
 
@@ -426,6 +429,8 @@ class RunModel {
       return false;
 
     }
+
+    Sentry.logger.fmt.info("%s Started run %s", [currentUser.email?.replaceAll("@placeholder.com", ""), run?['runName']]);
 
     return true;
 
