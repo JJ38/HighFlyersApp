@@ -38,17 +38,12 @@ class CurrentStopModel {
   }
 
 
-  Future<bool> nextStop(String stopStatus, [Map<String, dynamic>? formDetails]) async{  
-
-    //has a the customer not paid when they should have?
+  Future<bool> nextStop(String stopStatus, [Map<String, dynamic>? formDetails]) async{
     
-    if(formDetails != null){
+    final expectedPayment = stop['stopData']['payment'];  
+    
+    final Map<String, dynamic>? deferredPayment = shouldDeferPayment(stopStatus, stop, formDetails, expectedPayment);
 
-      if(stop['stopData']['payment'] == "yes" && formDetails['payment'] == "no"){
-
-      }
-      
-    }
 
     try{
 
@@ -159,6 +154,49 @@ class CurrentStopModel {
       print(error);
       return false;
     }
+
+  }
+
+  Map<String, dynamic>? shouldDeferPayment(stopStatus, currentStop, formDetails, expectedPayment){
+
+
+    //has the order been fufilled and were they meant to pay at this stop?
+    final didPay = formDetails?['collectedPayment'] ?? false; //set to false if stop was skipped
+
+    print("didPay: $didPay");
+    print("stop['stopType']: ${currentStop['stopType']}");
+    print("stopStatus: $stopStatus");
+
+
+
+    //If the stop was skipped or payment wasnt made when expected on ***delivery*** no adjustments should be made in any circumstance
+    //As if it was skipped on collection no payment is needed as nothing has been fufilled and if payment wasnt made on delivery
+    //When expected there are no stops left to adjust the payment status for
+    if(stopStatus == "Complete" && currentStop['stopType'] == "collection"){
+
+      if(expectedPayment != didPay){
+
+        print("Payment wasnt made when it should have been");
+
+        //create a deferred payment document
+        final Map<String, dynamic> deferredPayment = {
+          
+          "orderID": currentStop['orderID'],
+          "orderData": currentStop['orderData'],
+          "formDetails": formDetails,
+          "deferredPaymentType": didPay //If true it was an early payment if false its a late payment
+
+        };
+
+        print(deferredPayment);
+
+        return deferredPayment;
+
+      }
+
+    }
+
+    return null;
 
   }
 
