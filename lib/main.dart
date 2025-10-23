@@ -65,7 +65,6 @@ void main() async {
     appRunner: () => runApp(SentryWidget(child: const MyApp())),
   );
 
-  Sentry.logger.fmt.info("Test log from %s", ["Sentry"]);
   
 }
 

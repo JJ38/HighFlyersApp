@@ -38,14 +38,14 @@ class Stop extends StatelessWidget {
                     Text("#${stop['stopData']['ID']}", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14)),
                   ]  
                 ),        
-                Text(stop['stopData']['address1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 1),
+                Text(stop['stopData']['address1']?.trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 1),
                 Row(                
                   children: [
-                    Text(stop['stopData']['address2'].trim() + ", ", style: Theme.of(context).textTheme.labelSmall),
-                    Text(stop['stopData']['address3'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                    Text(stop['stopData']['address2'] != null ? stop['stopData']['address2']?.trim() + ", " : "", style: Theme.of(context).textTheme.labelSmall),
+                    Text(stop['stopData']['address3']?.trim(), style: Theme.of(context).textTheme.labelSmall),
                   ],
                 ),             
-                Text(stop['stopData']['postcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                Text(stop['stopData']['postcode']?.trim(), style: Theme.of(context).textTheme.labelSmall),
               ]
             ),
           )

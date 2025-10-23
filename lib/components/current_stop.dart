@@ -176,7 +176,7 @@ class _CurrentStopState extends State<CurrentStop> {
                           child: Text("Animal type:",  style: Theme.of(context).textTheme.labelSmall), 
                         ),
                         Expanded(
-                          child: Text(currentStopController.model.stop['stopData']['animalType'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          child: Text(currentStopController.model.stop['stopData']['animalType'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                         )
                       ],
                     ),
@@ -198,7 +198,7 @@ class _CurrentStopState extends State<CurrentStop> {
                           child: Text("Phone Number:",  style: Theme.of(context).textTheme.labelSmall), 
                         ),
                         Expanded(
-                          child: Text(currentStopController.model.stop['stopData']['phoneNumber'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          child: Text(currentStopController.model.stop['stopData']['phoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                         ),
                       ]
                     ),
@@ -219,7 +219,7 @@ class _CurrentStopState extends State<CurrentStop> {
                     Text("Message:",  style: Theme.of(context).textTheme.labelSmall), 
                         
                     
-                    Text(currentStopController.model.stop['orderData']['message'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
+                    Text(currentStopController.model.stop['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
                     
                         
                   ],

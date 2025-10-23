@@ -258,6 +258,8 @@ class RunModel {
     stopData['quantity'] = order['quantity'];
     stopData['ID'] = order['ID'];
 
+    final shouldCollectPayment = getStopPayment(order['payment'], stopType);
+
     if(stopType == "collection"){
 
       stopData['name'] = order['collectionName'];
@@ -266,7 +268,7 @@ class RunModel {
       stopData['address3'] = order['collectionAddress3'];
       stopData['postcode'] = order['collectionPostcode'];
       stopData['phoneNumber'] = order['collectionPhoneNumber'];
-      stopData['payment'] = order['payment'] == 'collection' ? true : false; 
+      stopData['payment'] = shouldCollectPayment;
 
     }else if(stopType == 'delivery'){
       
@@ -276,11 +278,42 @@ class RunModel {
       stopData['address3'] = order['deliveryAddress3'];
       stopData['postcode'] = order['deliveryPostcode'];
       stopData['phoneNumber'] = order['deliveryPhoneNumber'];
-      stopData['payment'] = order['payment'] == 'delivery' ? true : false; 
+      stopData['payment'] = shouldCollectPayment;
 
     }
 
     return stopData;
+
+  }
+
+  bool getStopPayment(orderPaymentType, stopType){
+
+    if(orderPaymentType == "Account"){
+      return false;
+    }
+
+    if(orderPaymentType == "Collection" || orderPaymentType == "Pickup"){
+
+      if(stopType == "collection"){
+        return true;
+      }
+
+      return false;
+
+    }
+
+    if(orderPaymentType == "Delivery"){
+
+      if(stopType == "delivery"){
+        return true;
+      }
+
+      return false;
+
+    }
+
+    //should never execute just for syntax
+    return false;
 
   }
 
@@ -328,7 +361,7 @@ class RunModel {
 
       newStopsCopy.sort((a, b) => a['stopNumber'].compareTo(b['stopNumber']));
 
-      //fetch all foreign key data to be stored in new document now run is about to be underway to stop issues with orders not being fetch and bad signal.
+      //fetch all foreign key data to be stored in new document now run is about to be underway to stop issues with orders not being fetched and bad signal.
       
       List<DocumentReference<Map<String, dynamic>>> documentReferences = [];
 

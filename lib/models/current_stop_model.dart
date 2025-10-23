@@ -40,6 +40,16 @@ class CurrentStopModel {
 
   Future<bool> nextStop(String stopStatus, [Map<String, dynamic>? formDetails]) async{  
 
+    //has a the customer not paid when they should have?
+    
+    if(formDetails != null){
+
+      if(stop['stopData']['payment'] == "yes" && formDetails['payment'] == "no"){
+
+      }
+      
+    }
+
     try{
 
       final databaseName = dotenv.env['DATABASE_NAME'];
