@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart' show showToastWidget;
+import 'package:high_flyers_app/components/call_admin_dialog_box.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/current_stop_model.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -112,7 +113,7 @@ class CurrentStopController {
 
   }
 
-  Future<void> skipStop(controller) async {
+  Future<void> skipStop(controller, context) async {
 
     controller.loading();
 
@@ -120,6 +121,22 @@ class CurrentStopController {
     final skippedStopSuccessfully = await model.skipStop();
 
     if(!skippedStopSuccessfully){
+
+      if(model.shouldCallAdmin){
+
+        showToastWidget(ToastNotification(message: "You must call kev before skipping this stop", isError: true));
+
+        showDialog(
+          context: context, 
+          builder: (context){
+            return CallAdminDialogBox(callAdmin: model.callAdmin);
+          }
+        );
+
+        controller.reset();
+        return;
+
+      }
 
       showToastWidget(ToastNotification(message: "Error skipping stop", isError: true));
       controller.reset();

@@ -276,8 +276,7 @@ class _CurrentStopState extends State<CurrentStop> {
               ...currentStopController.model.showStopForm ?
 
                 [
-                  StopForm(updateStopScreenState: updateState, updateMapMarker: currentStopController.updateMapMarkerNextStop, hideStopForm: currentStopController.hideStopFrom, completeStop: currentStopController.model.completeStop),
-
+                  StopForm(updateStopScreenState: updateState, updateMapMarker: currentStopController.updateMapMarkerNextStop, hideStopForm: currentStopController.hideStopFrom, completeStop: currentStopController.model.completeStop, getShouldCallAdmin: currentStopController.model.getShouldCallAdmin, callAdmin: currentStopController.model.callAdmin,),
                 ]
 
               :
@@ -306,7 +305,7 @@ class _CurrentStopState extends State<CurrentStop> {
                       boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
                       borderWidth: 4,
                       child: Text("Slide to skip stop", style: TextStyle(color: Colors.black),),
-                      action: (controller) async { await currentStopController.skipStop(controller);}
+                      action: (controller) async { await currentStopController.skipStop(controller, context);}
                     )
                   )
                 ]

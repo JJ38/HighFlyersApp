@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:high_flyers_app/components/call_admin_dialog_box.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/stop_form_model.dart';
 
@@ -8,9 +10,11 @@ class StopFormController {
   final void Function() updateStopScreenState;
   final void Function() hideStopForm;
   final void Function() updateMapMarker;
+  final bool Function() getShouldCallAdmin;
+  final void Function() callAdmin;
 
 
-  StopFormController({required this.updateStopScreenState, required this.updateMapMarker, required this.hideStopForm});
+  StopFormController({required this.updateStopScreenState, required this.updateMapMarker, required this.hideStopForm, required this.getShouldCallAdmin, required this.callAdmin});
 
   void onAnimalTypeSelect(String? animalType){
 
@@ -48,9 +52,7 @@ class StopFormController {
 
   }
 
-  Future<void> completeStop(controller) async {
-
-    print("complete stop stop_from_controller");
+  Future<void> completeStop(controller, context) async {
 
     controller.loading();
 
@@ -77,8 +79,27 @@ class StopFormController {
     final completedStopSuccessfully = await model.completeStop!(model.formDetails);
 
     if(!completedStopSuccessfully){
+
+      
+      if(getShouldCallAdmin()){
+
+        showToastWidget(ToastNotification(message: "You must call kev before compeleting this stop", isError: true));
+
+        showDialog(
+          context: context, 
+          builder: (context){
+            return CallAdminDialogBox(callAdmin: callAdmin);
+          }
+        );
+
+        controller.reset();
+        return;
+
+      }
+
       showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
       controller.reset();
+      return;
     }
 
     await Future.delayed(Duration(seconds: 1));

@@ -8,8 +8,11 @@ class StopForm extends StatefulWidget {
   final void Function() hideStopForm;
   final Future<bool> Function(Map<String, dynamic>?) completeStop;
   final void Function() updateMapMarker;
+  final bool Function() getShouldCallAdmin;
+  final void Function() callAdmin;
 
-  const StopForm({required this.updateStopScreenState, required this.updateMapMarker, required this.hideStopForm, required this.completeStop, super.key});
+
+  const StopForm({required this.updateStopScreenState, required this.updateMapMarker, required this.hideStopForm, required this.completeStop, required this.getShouldCallAdmin, required this.callAdmin, super.key});
 
   @override
   State<StopForm> createState() => _StopFormState();
@@ -23,7 +26,7 @@ class _StopFormState extends State<StopForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    stopFormController = StopFormController(updateStopScreenState: widget.updateStopScreenState, updateMapMarker: widget.updateMapMarker, hideStopForm: widget.hideStopForm);
+    stopFormController = StopFormController(updateStopScreenState: widget.updateStopScreenState, updateMapMarker: widget.updateMapMarker, hideStopForm: widget.hideStopForm, getShouldCallAdmin: widget.getShouldCallAdmin, callAdmin: widget.callAdmin);
     stopFormController.model.completeStop = widget.completeStop;
   }
 
@@ -193,7 +196,7 @@ class _StopFormState extends State<StopForm> {
             boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
             borderWidth: 4,
             child: Text("Slide to complete stop", style: TextStyle(color: Colors.black),),
-            action: (controller) async { await stopFormController.completeStop(controller);}
+            action: (controller) async { await stopFormController.completeStop(controller, context);}
           )
         )
       ]
