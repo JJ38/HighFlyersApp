@@ -1,5 +1,6 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:high_flyers_app/components/deferred_payment_hint.dart';
 import 'package:high_flyers_app/components/stop_form.dart';
 import 'package:high_flyers_app/controllers/current_stop_controller.dart';
 
@@ -209,7 +210,50 @@ class _CurrentStopState extends State<CurrentStop> {
                           child: Text("Collecting payment:",  style: Theme.of(context).textTheme.labelSmall), 
                         ),
                         Expanded(
-                          child: Text(currentStopController.model.stop['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          child: currentStopController.model.stop['deferredPayment'] == true ?
+
+                            //if deferred payment type of true it means it was paid on collection when it was stated to be paid on delivery
+                            currentStopController.model.stop['deferredPaymentDoc']['deferredPaymentType'] == true ? 
+
+                                GestureDetector(
+                                  onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Early");});},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.green
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                        Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
+                                      ]
+                                    )
+                                  )
+                                )
+
+                              :
+
+                                GestureDetector(
+                                  onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Late");});},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.red
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Yes", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                        Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
+                                      ]
+                                    )
+                                  )
+                                )
+                              
+                            :
+                          
+                              Text(currentStopController.model.stop['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                         ),
                       ],
                     ),

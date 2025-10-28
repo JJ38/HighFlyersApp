@@ -44,14 +44,11 @@ class CurrentStopModel {
     
     final Map<String, dynamic>? deferredPayment = shouldDeferPayment(stopStatus, stop, formDetails, expectedPayment);
 
-
     try{
-
+      
       final databaseName = dotenv.env['DATABASE_NAME'];
-
-      if(databaseName == null){
-        return false;
-      }
+      
+      DocumentReference<Map<String, dynamic>> deferredPaymentDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('DeferredPayments').doc();
 
       //update ProgressedRun doc stops[i] with stop status to skipped
       DocumentReference<Map<String, dynamic>> runDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('ProgressedRuns').doc(progressedRunID);
@@ -106,8 +103,31 @@ class CurrentStopModel {
         'stops': newStops
       };
 
+      bool runDocExists = true;
 
-      await runDocRef.update(fieldsToUpdate);
+      await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).runTransaction((transaction) async {
+
+        final runDoc = await transaction.get(runDocRef);
+
+        if (!runDoc.exists) {
+          Sentry.logger.fmt.info("Run doc was false on next stop attempt", []);
+          runDocExists = false;
+          return false;
+        }
+
+        if(deferredPayment != null){
+          Sentry.logger.fmt.info("Attempt to create deferred payment %s", [deferredPayment]);
+          transaction.set(deferredPaymentDocRef, deferredPayment);
+        }
+
+        transaction.update(runDocRef, fieldsToUpdate);
+
+      });
+
+      if(!runDocExists){
+        return false;
+      }
+
       
       //updates client that holds info for run
       runData['currentStopNumber'] = newStopNumber;
@@ -178,10 +198,14 @@ class CurrentStopModel {
 
         print("Payment wasnt made when it should have been");
 
+        
+        String deferredStopType = currentStop['stopType'] == "collection" ? "delivery" : "chase";
+
         //create a deferred payment document
         final Map<String, dynamic> deferredPayment = {
           
           "orderID": currentStop['orderID'],
+          "stopID": "${currentStop['orderID']}_$deferredStopType",//this refers to the stop that it updates
           "orderData": currentStop['orderData'],
           "formDetails": formDetails,
           "deferredPaymentType": didPay //If true it was an early payment if false its a late payment

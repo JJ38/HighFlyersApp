@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show CollectionReference, DocumentReference, DocumentSnapshot, FirebaseFirestore, FieldValue;
+import 'package:cloud_firestore/cloud_firestore.dart' show CollectionReference, DocumentReference, DocumentSnapshot, FieldValue, FirebaseFirestore, QuerySnapshot;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -345,7 +345,6 @@ class RunModel {
 
       if(!driverDoc.exists){
         Sentry.logger.info("Failed start run - Driver doc doesnt exist");
-        FirebaseCrashlytics.instance.log('Driver doc doesnt exist');
         return false;
       }
 
@@ -363,26 +362,34 @@ class RunModel {
 
       //fetch all foreign key data to be stored in new document now run is about to be underway to stop issues with orders not being fetched and bad signal.
       
-      List<DocumentReference<Map<String, dynamic>>> documentReferences = [];
+      List<DocumentReference<Map<String, dynamic>>> orderDocumentReferences = [];
 
       for(var i = 0; i < newStopsCopy.length; i++){
 
         DocumentReference<Map<String, dynamic>> orderDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Orders').doc(newStopsCopy[i]['orderID']);
-        documentReferences.add(orderDocRef);
+        orderDocumentReferences.add(orderDocRef);
 
       }
 
-      List<dynamic> orderDocuments =  await FirebaseModel.fetchMultipleDocuments(documentReferences);
+      List<dynamic> orderDocuments =  await FirebaseModel.fetchMultipleDocuments(orderDocumentReferences);
+
+
+      //check and fetch for all deferred payments associated with orders
+      Map<String, Map<String, dynamic>>? deferredPayments = await getDeferredPayments(newStopsCopy, databaseName);
+
+      print(deferredPayments);
 
       //merge stop and order data
       for(var i = 0; i < orderDocuments.length; i++){
         
-        if(!mergeStopAndOrder(newStopsCopy, orderDocuments[i])){
-          FirebaseCrashlytics.instance.log('Failed to stop and order');
+        if(!mergeStopAndOrder(newStopsCopy, orderDocuments[i], deferredPayments)){
+          Sentry.logger.fmt.error("Failed start run - Failed to merge stop and order %s %s %s", [newStopsCopy, orderDocuments[i], deferredPayments]);
           return false;
         }
 
       }
+
+      // return false;
 
       Map<String, dynamic> progressedRunDocument = {
         'driverID': driverDocRef.id,
@@ -463,13 +470,62 @@ class RunModel {
 
     }
 
-    Sentry.logger.fmt.info("%s Started run %s", [currentUser.email?.replaceAll("@placeholder.com", ""), run?['runName']]);
+    Sentry.logger.fmt.info("%s Started run %s", [currentUser?.email?.replaceAll("@placeholder.com", ""), run?['runName']]);
 
     return true;
 
   }
 
-  bool mergeStopAndOrder(stops, order){
+  Future<Map<String, Map<String, dynamic>>?>? getDeferredPayments(List<dynamic> newStopsCopy, String databaseName) async{
+
+    try{
+
+      List<Future<QuerySnapshot<Map<String, dynamic>>>> deferredPaymentDocs = [];
+
+      for(var i = 0; i < newStopsCopy.length; i++){
+
+        String stopPrimaryKey = "${newStopsCopy[i]['orderID']}_${newStopsCopy[i]['stopType']}";
+        print("fetching: $stopPrimaryKey");
+        deferredPaymentDocs.add(FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('DeferredPayments').where("stopID", isEqualTo: stopPrimaryKey).limit(1).get());
+
+      }
+
+      Future.wait(deferredPaymentDocs);
+
+      Map<String, Map<String, dynamic>> deferredPayments = {};
+
+
+      //check for docs that do exist as they have deferred payments
+      for(var i = 0; i < deferredPaymentDocs.length; i++){
+        
+        QuerySnapshot<Map<String, dynamic>> deferredPaymentDoc = await deferredPaymentDocs[i];
+
+        //if document exist
+        if(deferredPaymentDoc.docs.isNotEmpty){
+
+          String stopPrimaryKey = "${newStopsCopy[i]['orderID']}_${newStopsCopy[i]['stopType']}";
+          print("index at: $stopPrimaryKey");
+          deferredPayments.addAll({stopPrimaryKey: deferredPaymentDoc.docs[0].data()});
+
+        }
+
+      }
+
+      return deferredPayments;
+
+    }catch(error, stack){
+      
+      print("error: $error");
+      return null;
+    }
+
+  }
+
+  bool mergeStopAndOrder(dynamic stops, dynamic order, Map<String, Map<String, dynamic>>? deferredPayments){
+
+    if(stops == null || order == null){
+      return false;
+    }
 
     for(var i = 0; i < stops.length; i++){
 
@@ -477,6 +533,23 @@ class RunModel {
 
         stops[i]['orderData'] = order.data();
         stops[i]['stopStatus'] = "Pending";
+
+        if(deferredPayments != null){
+          
+          String stopPrimaryKey = "${order.id}_${stops[i]['stopType']}";
+          print("$i - $stopPrimaryKey");
+
+          if(deferredPayments[stopPrimaryKey] != null){
+
+            print("Found deferred payment for order: ${order.data()['ID']}");
+            print(deferredPayments[stopPrimaryKey]);
+            stops[i]['deferredPayment'] = true;
+            stops[i]['deferredPaymentDoc'] = deferredPayments[stopPrimaryKey];
+
+          }
+
+        }
+
         return true;
 
       }

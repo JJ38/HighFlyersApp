@@ -86,7 +86,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         itemCount: driverHomeScreenController.model.driverRunDocs.length,
                         itemBuilder: (BuildContext context, int i) {
                  
-                          final numberOfAssignedRuns = driverHomeScreenController.model.driverDoc['assignedRuns'].length; //1
+                          final numberOfAssignedRuns = driverHomeScreenController.model.driverDoc['assignedRuns'].length;
 
                           dynamic runIndex = i;
 
@@ -96,6 +96,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
                           final runType = i > numberOfAssignedRuns - 1 ? "progressedRuns" : "assignedRuns";
 
+
+                          if (!driverHomeScreenController.model.driverRunDocs[i].exists){
+                            return Text("Unknown run");
+                          }
+
                           return GestureDetector(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
@@ -103,8 +108,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                 Column(                        
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'], style: Theme.of(context).textTheme.titleMedium,),
-                                    Text(driverHomeScreenController.model.driverRunDocs[i]['runName'], style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
+                                    Text(driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'] ?? "", style: Theme.of(context).textTheme.titleMedium,),
+                                    Text(driverHomeScreenController.model.driverRunDocs[i]['runName'] ?? "", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
 
                                     runType == "assignedRuns" ? 
 
@@ -124,7 +129,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                   ]
                                 ),
                             ),                      
-                            onTap: () { driverHomeScreenController.onRunTileTap(driverHomeScreenController.model.driverRunDocs[i], driverHomeScreenController.model.runStatuses[i], driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'], context);},
+                            onTap: () { driverHomeScreenController.onRunTileTap(driverHomeScreenController.model.driverRunDocs[i], driverHomeScreenController.model.runStatuses[i], driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'] ?? "", context);},
                           );
                         },
                       )
