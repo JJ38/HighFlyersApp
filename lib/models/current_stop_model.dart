@@ -131,10 +131,11 @@ class CurrentStopModel {
       }
 
       if(!foundStop){
+        Sentry.logger.fmt.info("Couldnt find stop %s", [currentStopPrimaryKey]);
         return false;
       }
 
-      String runStatus = "Enroute";
+      String runStatus = "En route";
 
       //is there a stop to show next? - is the run completed?
       if(newStopNumber > stops.length){
@@ -149,7 +150,8 @@ class CurrentStopModel {
       {
         'currentStopNumber': newStopNumber,
         'runStatus': runStatus,
-        'stops': newStops
+        'stops': newStops,
+        'updatedAt': FieldValue.serverTimestamp()
       };
 
       bool runDocExists = true;

@@ -393,12 +393,14 @@ class RunModel {
 
       Map<String, dynamic> progressedRunDocument = {
         'driverID': driverDocRef.id,
+        'driverName': driverData['driverName'],
         'runName': run!['runName'],
         'runTime': run!['runTime'],
-        'runStatus': 'In Progress',
+        'runStatus': 'En route',
         'optimisedRun': run!['optimisedRoute'],
         'currentStopNumber': 1,
         'stops': newStopsCopy,
+        'updatedAt': FieldValue.serverTimestamp()
       };
 
       //add document to progress documents collection and add progressed doc ref to assigned runs in driver doc
@@ -443,8 +445,8 @@ class RunModel {
         transaction.update(driverDocRef, {
           'assignedRuns': newAssignedRuns,
           'progressedRuns': newProgressedRuns,
-          'driverStatus': "Online",
-          'updated_at': FieldValue.serverTimestamp(), // Optional: use a server timestamp
+          'driverStatus': "En Route",
+          'updatedAt': FieldValue.serverTimestamp(),
         });
 
       });
