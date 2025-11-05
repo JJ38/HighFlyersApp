@@ -58,9 +58,6 @@ class CurrentStopModel {
     
     final Map<String, dynamic>? deferredPayment = shouldDeferPayment(stopStatus, stop, formDetails, expectedPayment, didPay);
 
-    print("expectedPayment != didPay: ${expectedPayment != didPay}");
-    print("stopType: ${stop['stopType'] == "delivery"}");
-
     final bool isDeferredPayment = stop['deferredPayment'] ?? false;
 
     bool isLateDeferredPayment = false;
@@ -68,9 +65,6 @@ class CurrentStopModel {
     if(isDeferredPayment){
       isLateDeferredPayment = !stop['deferredPaymentDoc']['deferredPaymentType']; //true is early deferred payment. In that case no need to withhold next stop
     }
-
-    print("isLateDeferredPayment: $isLateDeferredPayment");
-    print("stop['stopData']['payment']: ${stop['stopData']['payment']}");
 
 
     //if they didnt pay on delivery and they should have. If theyve not tapped "call kev". If the payment is a late deferred payment rather than an early one

@@ -400,6 +400,7 @@ class RunModel {
         'optimisedRun': run!['optimisedRoute'],
         'currentStopNumber': 1,
         'stops': newStopsCopy,
+        'shipmentName': shipmentName,
         'updatedAt': FieldValue.serverTimestamp()
       };
 

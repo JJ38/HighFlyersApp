@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 @pragma('vm:entry-point')
@@ -82,6 +83,26 @@ class DriverScreenModel {
 
 
   Future<bool> initialiseLocationTracking() async{
+    
+
+    PermissionStatus status = await Permission.location.status;
+
+    if (status.isDenied) {
+      //ask for permission if on android
+      status = await Permission.location.request();
+    }
+
+    print("premission status selected: ${status.toString()}");
+
+    if (status.isPermanentlyDenied) {
+      await openAppSettings(); // let user fix it manually
+      return false;
+    }
+
+    if (!status.isGranted) {
+      return false;
+    }
+
 
     IsolateNameServer.registerPortWithName(port.sendPort, _isolateName);
     port.listen((dynamic driverLocationData) {
@@ -120,7 +141,7 @@ class DriverScreenModel {
         ),
         androidSettings: AndroidSettings(
           accuracy: LocationAccuracy.NAVIGATION,
-          interval: 5,
+          interval: 60,
           distanceFilter: 0,
           androidNotificationSettings: AndroidNotificationSettings(
             notificationChannelName: 'Location tracking',
