@@ -75,9 +75,7 @@ class DriverModel {
     try{
 
       driverRunDocs = await FirebaseModel.fetchMultipleDocuments(documentReferences);
-      print(driverRunDocs);
-
-      print("fetched driver run documents");
+      driverLoadedSuccessfully = true;
 
     }catch(error, stack){
 
@@ -142,5 +140,6 @@ class DriverModel {
 
     return true;
   }
+
 
 }

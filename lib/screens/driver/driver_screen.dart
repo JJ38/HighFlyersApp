@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:high_flyers_app/controllers/driver_screen_controller.dart';
 import 'package:high_flyers_app/screens/driver/driver_home_screen.dart';
 import 'package:high_flyers_app/screens/driver/driver_settings_screen.dart';
 
@@ -12,9 +13,20 @@ class DriverScreen extends StatefulWidget {
 }
 
 class _DriverScreenState extends State<DriverScreen> {
-  var currentPageIndex = 0;
+
+  late final DriverScreenController driverScreenController;
+  int currentPageIndex = 0;
 
   List<Widget> screens = [DriverHomeScreen(), DriverSettingsScreen()];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    driverScreenController = DriverScreenController();
+    driverScreenController.initialisedLocationTracking();
+
+  }
 
   @override
   Widget build(BuildContext context) {

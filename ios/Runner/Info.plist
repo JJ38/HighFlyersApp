@@ -71,5 +71,16 @@
 		<string>neshan</string>
 		<string>tel</string>
 	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your location is used for delivery tracking</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is used for delivery tracking</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your location is used for delivery tracking</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>processing</string>
+	</array>
 </dict>
 </plist>

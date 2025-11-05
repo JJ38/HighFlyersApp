@@ -17,9 +17,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   void initState() {
 
     super.initState();
-    driverHomeScreenController = DriverHomeScreenController(initialiseDriver: initialiseDriver, updateState: updateState);
-
-    initialiseDriver();
+    driverHomeScreenController = DriverHomeScreenController(updateState: updateState);
+    driverHomeScreenController.initialiseDriver();
 
   }
 
@@ -31,31 +30,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     }
   }
 
-  void initialiseDriver() async {
-
-    final initialisedDriver = await driverHomeScreenController.model.initialiseDriver();
- 
-    if (initialisedDriver) {
-
-      final driverRunsFetched = await driverHomeScreenController.model.fetchDriverRuns();
-
-      if (driverRunsFetched) {
-
-        driverHomeScreenController.model.driverLoadedSuccessfully = true;
-
-      }
-    }
-
-    driverHomeScreenController.model.isLoading = false;
-
-    if(mounted){
-      setState(() {
-        driverHomeScreenController.model.driverLoadedSuccessfully;
-        driverHomeScreenController.model.isLoading;
-      });
-    }
-
-  }
+  
 
   @override
   Widget build(BuildContext context) {

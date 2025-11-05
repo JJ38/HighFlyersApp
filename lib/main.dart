@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:background_locator_2/background_locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -37,6 +38,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await BackgroundLocator.initialize(); 
+
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
