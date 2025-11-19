@@ -82,5 +82,11 @@
 		<string>location</string>
 		<string>processing</string>
 	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.example.highflyerseukcouriers.refresh</string>
+		<string>com.example.highflyersukcouriers.processing</string>
+	</array>
+
 </dict>
 </plist>

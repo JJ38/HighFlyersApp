@@ -83,23 +83,40 @@ class DriverScreenModel {
 
 
   Future<bool> initialiseLocationTracking() async{
-    
 
-    PermissionStatus status = await Permission.location.status;
+    PermissionStatus foregroundStatus = await Permission.locationWhenInUse.status;
 
-    if (status.isDenied) {
-      //ask for permission if on android
-      status = await Permission.location.request();
+    print(foregroundStatus);
+
+    if (foregroundStatus.isDenied){
+      foregroundStatus = await Permission.locationWhenInUse.request();
     }
 
-    print("premission status selected: ${status.toString()}");
+    if (foregroundStatus.isPermanentlyDenied){
+      print(foregroundStatus);
 
-    if (status.isPermanentlyDenied) {
-      await openAppSettings(); // let user fix it manually
+      await openAppSettings();
       return false;
     }
 
-    if (!status.isGranted) {
+    if(!foregroundStatus.isGranted){
+      return false;
+    }
+
+    // 2. Request background (always)
+    PermissionStatus alwaysStatus = await Permission.locationAlways.status;
+
+    if (alwaysStatus.isDenied) {
+      alwaysStatus = await Permission.locationAlways.request();
+    }
+
+    if (alwaysStatus.isPermanentlyDenied) {
+      openAppSettings();
+      return false;
+    }
+
+    if (!alwaysStatus.isGranted) {
+      print("Always permission denied");
       return false;
     }
 
@@ -127,7 +144,6 @@ class DriverScreenModel {
     try{
       print("attempting location tracking");
 
-
       BackgroundLocator.registerLocationUpdate(
         callback,
         initCallback: initCallback,
@@ -136,12 +152,12 @@ class DriverScreenModel {
         autoStop: false,
         iosSettings: IOSSettings(
           accuracy: LocationAccuracy.NAVIGATION, 
-          distanceFilter: 30,
+          distanceFilter: 300,
           showsBackgroundLocationIndicator: true
         ),
         androidSettings: AndroidSettings(
           accuracy: LocationAccuracy.NAVIGATION,
-          interval: 60,
+          interval: 30,
           distanceFilter: 0,
           androidNotificationSettings: AndroidNotificationSettings(
             notificationChannelName: 'Location tracking',
