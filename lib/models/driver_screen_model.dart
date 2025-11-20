@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -10,6 +11,7 @@ import 'package:background_locator_2/settings/locator_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -19,6 +21,7 @@ class DriverScreenModel {
 
   static const String _isolateName = "LocatorIsolate";
   ReceivePort port = ReceivePort();
+  BuildContext? driverScreenContext;
 
   Future<void> initPlatformState() async {
     await BackgroundLocator.initialize();
@@ -26,6 +29,7 @@ class DriverScreenModel {
 
   @pragma('vm:entry-point')
   static void callback(LocationDto locationDto) async {
+
     print("callback");
     final SendPort? send = IsolateNameServer.lookupPortByName(_isolateName);
 
@@ -58,6 +62,8 @@ class DriverScreenModel {
 
   Future<void> updateDriverLocation(Map<String, dynamic> driverLocationData) async {
 
+    print("updateDriverLocation");
+
     try{
 
       final databaseName = dotenv.env['DATABASE_NAME'];
@@ -81,8 +87,56 @@ class DriverScreenModel {
 
   }
 
+  Future<bool> showBackgroundExplanationDialog() async {
+
+    if(driverScreenContext == null){
+      print("context was null");
+      return false;
+    }
+
+    return await showDialog<bool>(
+      context: driverScreenContext!,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Background Location Needed"),
+          content: Text(
+            "To track your location even when the app is closed, "
+            "we need background location access."
+          ),
+          actions: [
+            TextButton(
+              child: Text("No thanks"),
+              onPressed: () => Navigator.pop(context, false),
+            ),
+            TextButton(
+              child: Text("Continue"),
+              onPressed: () => Navigator.pop(context, true),
+            ),
+          ],
+        );
+      },
+    ) ?? false;
+  }
+
+
 
   Future<bool> initialiseLocationTracking() async{
+
+    // if(Platform.isIOS){
+
+    // PermissionStatus batteryOptimisationStatus = await Permission.ignoreBatteryOptimizations.status;
+    // print("Battery optimization ignored: $batteryOptimisationStatus");
+
+    // if(batteryOptimisationStatus.isDenied){
+    //   print("batteryOptimisationStatus.isDenied asking for permission");
+    //   batteryOptimisationStatus = await Permission.ignoreBatteryOptimizations.request();
+    // }
+
+    // if(!batteryOptimisationStatus.isGranted){
+    //   print("battery in optimised mode so cant access background location");
+    //   return false;
+    // }
+
 
     PermissionStatus foregroundStatus = await Permission.locationWhenInUse.status;
 
@@ -93,7 +147,7 @@ class DriverScreenModel {
     }
 
     if (foregroundStatus.isPermanentlyDenied){
-      print(foregroundStatus);
+      print("foregroundStatus.isPermanentlyDenied");
 
       await openAppSettings();
       return false;
@@ -103,6 +157,9 @@ class DriverScreenModel {
       return false;
     }
 
+    // final bool userAgreed = await showBackgroundExplanationDialog();
+
+
     // 2. Request background (always)
     PermissionStatus alwaysStatus = await Permission.locationAlways.status;
 
@@ -111,7 +168,8 @@ class DriverScreenModel {
     }
 
     if (alwaysStatus.isPermanentlyDenied) {
-      openAppSettings();
+      print("alwaysStatus.isPermanentlyDenied");
+      await openAppSettings();
       return false;
     }
 
@@ -120,6 +178,7 @@ class DriverScreenModel {
       return false;
     }
 
+    print("location permissions granted");
 
     IsolateNameServer.registerPortWithName(port.sendPort, _isolateName);
     port.listen((dynamic driverLocationData) {
@@ -142,6 +201,7 @@ class DriverScreenModel {
     });
 
     try{
+
       print("attempting location tracking");
 
       BackgroundLocator.registerLocationUpdate(
@@ -157,7 +217,7 @@ class DriverScreenModel {
         ),
         androidSettings: AndroidSettings(
           accuracy: LocationAccuracy.NAVIGATION,
-          interval: 30,
+          interval: 5,
           distanceFilter: 0,
           androidNotificationSettings: AndroidNotificationSettings(
             notificationChannelName: 'Location tracking',
@@ -174,7 +234,7 @@ class DriverScreenModel {
 
 
     }catch(error, stack){
-      print(error);
+      print("error ${error}");
       print(stack);
 
       return false;

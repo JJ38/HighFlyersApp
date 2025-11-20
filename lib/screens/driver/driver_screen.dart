@@ -30,6 +30,8 @@ class _DriverScreenState extends State<DriverScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    driverScreenController.model.driverScreenContext = context;
  
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
