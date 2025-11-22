@@ -149,23 +149,19 @@ abstract class OrderController<T extends OrderModel> {
   }
 
   void loadForm() async {
-    
+
     //fetch animal types
-    await model.fetchBirdSpecies();
+    await model.fetchFormData();
 
-    model.isLoaded = true;
-
-    //parse birdSpecies
-    model.parseBirdSpecies();
-
-    updateState();
-
-    if(model.birdSpeciesData.isEmpty){
+    if(!model.isSuccessfullyLoaded){
+      updateState();
       showToastWidget(ToastNotification(message: "Failed to load form", isError: true));
       return;
     }
 
-    //fetch postcodes
+    model.parseBirdSpecies();
+
+    updateState();
 
   }
 

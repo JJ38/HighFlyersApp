@@ -23,6 +23,7 @@ class _AdminEditOrderScreenState extends State<AdminEditOrderScreen> {
     
     super.initState();
     adminEditOrderScreenController = AdminEditOrderScreenController(updateState: updateState, order: widget.order, uuid: widget.uuid);
+    adminEditOrderScreenController.loadForm();
 
   }
 
@@ -47,50 +48,62 @@ class _AdminEditOrderScreenState extends State<AdminEditOrderScreen> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsetsGeometry.symmetric(horizontal: screenWidth * 0.05),
-          child: ListView(
-            children: [
-              GestureDetector(
-                onTap: (){adminEditOrderScreenController.onBackArrowTap(context);},
-                child: Padding(
-                  padding: EdgeInsetsGeometry.symmetric(vertical:  10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: adminEditOrderScreenController.model.isLoaded ? 
+
+              adminEditOrderScreenController.model.isSuccessfullyLoaded ? 
+
+                  ListView(
                     children: [
-                      Row(
-                        children: [
-                          Icon(Icons.arrow_back_sharp),
-                          Text("Back", style: Theme.of(context).textTheme.titleSmall),
-                        ],
+                      GestureDetector(
+                        onTap: (){adminEditOrderScreenController.onBackArrowTap(context);},
+                        child: Padding(
+                          padding: EdgeInsetsGeometry.symmetric(vertical:  10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.arrow_back_sharp),
+                                  Text("Back", style: Theme.of(context).textTheme.titleSmall),
+                                ],
+                              ),
+                              Text("Edit", style: Theme.of(context).textTheme.titleSmall),
+                            ]
+                          ),
+                        ),
                       ),
-                      Text("Edit", style: Theme.of(context).textTheme.titleSmall),
-                    ]
-                  ),
-                ),
-              ),
-              AdminOrderForm(orderController: adminEditOrderScreenController, buttonText: "Update Order", isDeletingHook: adminEditOrderScreenController.model.getIsDeleting,),
+                      AdminOrderForm(orderController: adminEditOrderScreenController, buttonText: "Update Order", isDeletingHook: adminEditOrderScreenController.model.getIsDeleting,),
 
-              adminEditOrderScreenController.model.isSubmitting ? 
+                      adminEditOrderScreenController.model.isSubmitting ? 
 
-                  SizedBox(height: 0,)
-                
-                :
-                
-                  Padding(
-                    padding: EdgeInsetsGeometry.fromLTRB(1,0,1,20),
-                    child: Center(
-                      child: ActionSlider.standard(
-                        icon: Icon(Icons.delete_forever_rounded, color: Colors.white,),
-                        toggleColor: Colors.red,
-                        backgroundColor: const Color.fromARGB(255, 246, 246, 246),
-                        boxShadow: [BoxShadow(color: Colors.red, blurRadius: 0, spreadRadius: 1)],
-                        borderWidth: 4,
-                        child: Text("Slide to delete order", style: TextStyle(color: Colors.black),),
-                        action: (controller) async { await adminEditOrderScreenController.deleteOrder(context, controller);}
-                      )
-                    )
+                          SizedBox(height: 0,)
+                        
+                        :
+                        
+                          Padding(
+                            padding: EdgeInsetsGeometry.fromLTRB(1,0,1,20),
+                            child: Center(
+                              child: ActionSlider.standard(
+                                icon: Icon(Icons.delete_forever_rounded, color: Colors.white,),
+                                toggleColor: Colors.red,
+                                backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+                                boxShadow: [BoxShadow(color: Colors.red, blurRadius: 0, spreadRadius: 1)],
+                                borderWidth: 4,
+                                child: Text("Slide to delete order", style: TextStyle(color: Colors.black),),
+                                action: (controller) async { await adminEditOrderScreenController.deleteOrder(context, controller);}
+                              )
+                            )
+                          )
+                    ],
                   )
-            ],
-          )
+
+                :
+
+                  Center(child: Text("Error loading form"))
+            
+            :
+
+              Center(child: CircularProgressIndicator(),)
         )
       )
     );

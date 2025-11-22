@@ -17,7 +17,9 @@ class _AdminAddOrderScreenState extends State<AdminAddOrderScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("add order init state");
     adminAddOrderScreenController = AdminAddOrderScreenController(updateState: updateState);
+    adminAddOrderScreenController.loadForm();
   }
 
   void updateState(){
@@ -39,29 +41,43 @@ class _AdminAddOrderScreenState extends State<AdminAddOrderScreen> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsetsGeometry.symmetric(horizontal: screenWidth * 0.05),
-          child: ListView(
-            children: [
-              GestureDetector(
-                onTap: (){adminAddOrderScreenController.onBackArrowTap(context);},
-                child: Padding(
-                  padding: EdgeInsetsGeometry.symmetric(vertical:  10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.arrow_back_sharp),
-                          Text("Back", style: Theme.of(context).textTheme.titleSmall),
-                        ],
+            child: adminAddOrderScreenController.model.isLoaded ? 
+
+              adminAddOrderScreenController.model.isSuccessfullyLoaded ? 
+
+                ListView(
+                  children: [
+                    GestureDetector(
+                      onTap: (){adminAddOrderScreenController.onBackArrowTap(context);},
+                      child: Padding(
+                        padding: EdgeInsetsGeometry.symmetric(vertical:  10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.arrow_back_sharp),
+                                Text("Back", style: Theme.of(context).textTheme.titleSmall),
+                              ],
+                            ),
+                            Text("Add", style: Theme.of(context).textTheme.titleSmall),
+                          ]
+                        ),
                       ),
-                      Text("Add", style: Theme.of(context).textTheme.titleSmall),
-                    ]
-                  ),
-                ),
-              ),
-              AdminOrderForm(orderController: adminAddOrderScreenController, buttonText: "Add Order",)
-            ],
-          )
+                    ),
+                    AdminOrderForm(orderController: adminAddOrderScreenController, buttonText: "Add Order",)
+                  ],
+                )
+
+              :
+
+                Center(child: Text("Error loading form"))
+
+            :
+
+              Center(
+                child: CircularProgressIndicator(),
+              )
         )
       )
     );

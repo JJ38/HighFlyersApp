@@ -11,6 +11,7 @@ abstract class OrderModel extends RequestModel{
   final Validator validator = Validator();
   late Map<String, dynamic> birdSpeciesData;
   late Map<String, dynamic> postcodes;
+  late List<QueryDocumentSnapshot<Map<String, dynamic>>> customerAccounts;
   Map<String, dynamic> customerProfileData = {};
   Set<String> birdSpeciesSet = {};
   String? animalType;
@@ -44,9 +45,6 @@ abstract class OrderModel extends RequestModel{
   
   Future<bool> fetchBirdSpecies() async {
 
-    isLoaded = false;
-    isSuccessfullyLoaded = false;
-
     try{
 
       final databaseName = dotenv.env['DATABASE_NAME'];
@@ -55,7 +53,7 @@ abstract class OrderModel extends RequestModel{
         return false;
       }
 
-      DocumentReference<Map<String, dynamic>> birdSpeciesDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: "development").collection('Settings').doc('birdSpecies');
+      DocumentReference<Map<String, dynamic>> birdSpeciesDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Settings').doc('birdSpecies');
       DocumentSnapshot<Map<String, dynamic>> response = await birdSpeciesDocRef.get();
 
       if (response.data() == null) {
@@ -63,8 +61,6 @@ abstract class OrderModel extends RequestModel{
       }
 
       birdSpeciesData = response.data()!;
-
-      isSuccessfullyLoaded = true;
 
     }catch(error, stack){
       
@@ -104,6 +100,72 @@ abstract class OrderModel extends RequestModel{
     }
 
   }
+
+
+  Future<bool> fetchCustomerAccounts() async {
+
+    try{
+
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Users').where('role', isEqualTo: 'customer').get();
+
+      if (response.docs.isEmpty) {
+        return false;
+      }
+
+      customerAccounts = response.docs;
+
+    }catch(error, stack){
+      
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_customer_accounts_error', {
+            'module': 'order_form_error',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
+      return false;
+    }
+
+    return true;
+
+  }
+
+  Future<void> fetchFormData() async {
+
+    print("fetchOrderData");
+
+    isLoaded = false;
+    isSuccessfullyLoaded = false;
+
+    List<Future<bool>> futures = [];
+
+    futures.add(fetchBirdSpecies());
+    futures.add(fetchCustomerAccounts());
+    
+    final futuresResult = await Future.wait(futures);
+
+    isLoaded = true;
+
+    if(futuresResult.contains(false)){
+      print("form failed to load");
+      return;
+    }
+    
+    isSuccessfullyLoaded = true;
+
+  }
+
 
   bool validateOrder(){
 
