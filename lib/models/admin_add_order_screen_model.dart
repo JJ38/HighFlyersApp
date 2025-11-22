@@ -10,5 +10,4 @@ class AdminAddOrderScreenModel extends OrderModel{
     return AddOrderRequest(order: getOrder());
   }
 
-
 }

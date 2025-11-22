@@ -8,6 +8,9 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AdminManageOrdersScreenModel{
 
+  
+  late List<QueryDocumentSnapshot<Map<String, dynamic>>> customerAccountsDocuments;
+  Map<String, String> customerAccounts = {};
   Stream<QuerySnapshot>? orderListener;
   StreamSubscription<QuerySnapshot<Object?>>? orderSubscription;
   Query<Map<String, dynamic>>? baseQuery;
@@ -325,5 +328,64 @@ class AdminManageOrdersScreenModel{
     return true;
 
   }
+
+   Future<bool> fetchCustomerAccounts() async {
+
+    try{
+
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Users').where('role', isEqualTo: 'customer').orderBy('username').get();
+
+      if (response.docs.isEmpty) {
+        return false;
+      }
+
+      customerAccountsDocuments = response.docs;
+
+    }catch(error, stack){
+      
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('get_customer_accounts_error', {
+            'module': 'order_form_error',
+            'details': error.toString(),
+          });
+        },
+      );
+      
+      print(error);
+      return false;
+    }
+
+    return true;
+
+  }
+
+  void parseCustomerAccounts(){
+
+    for(var i = 0;  i < customerAccountsDocuments.length; i++){
+
+      final data = customerAccountsDocuments[i].data();
+      customerAccounts.addAll({customerAccountsDocuments[i].id: data['username'].replaceAll("@placeholder.com", "")});
+
+    }
+
+    // //does key exist in map?
+    // if(!customerAccounts.containsKey(account)){
+
+    //   //must be a legacy order where account is account name and not user id
+    //   customerAccounts.addAll({account ?? "unknown": account ?? "unknown"});
+
+    // }
+
+  }
+
 
 }

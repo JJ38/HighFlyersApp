@@ -30,9 +30,8 @@ class AdminManageOrdersScreenController {
 
     model.orders = [];
 
+    await getInitialOrders();
     updateState();
-
-    getInitialOrders();
   }
 
   void onFilterFieldChange(String? field){
@@ -67,7 +66,8 @@ class AdminManageOrdersScreenController {
 
     if(!success){
       showToastWidget(ToastNotification(message: "Error fetching filtered orders", isError: true));
-      getInitialOrders();
+      await getInitialOrders();
+      updateState();
       return;
     }
 
@@ -86,13 +86,14 @@ class AdminManageOrdersScreenController {
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AdminAddOrderScreen(),
+            builder: (context) => AdminAddOrderScreen(knownCustomerAccounts: model.customerAccounts,),
             settings: RouteSettings(name: '/Add Order Screen')));
 
     model.cancelOrderSubscription();
     model.orders = [];
     updateState();
-    getInitialOrders();
+    await getInitialOrders();
+    updateState();
 
   }
 
@@ -103,36 +104,63 @@ class AdminManageOrdersScreenController {
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AdminEditOrderScreen(order: data, uuid: uuid),
+            builder: (context) => AdminEditOrderScreen(order: data, uuid: uuid, knownCustomerAccounts: model.customerAccounts),
             settings: RouteSettings(name: '/Edit Order Screen')));
 
     //refetch orders
 
-    print("popped add order");
-
     model.cancelOrderSubscription();
     model.orders = [];
-    getInitialOrders();
+    await getInitialOrders();
+    updateState();
 
   }
 
-  void getInitialOrders() async{
+  Future<bool> getInitialOrders() async{
     print("getInitialOrders");
 
     model.isLoadingOrders = true;
     updateState();
 
     final successfullyFetchedOrders = await model.getInitialOrders();
+
     model.isLoadingOrders = false;
 
 
     if(!successfullyFetchedOrders){
       showToastWidget(ToastNotification(message: "Error loading orders", isError: true));
-      return;
+      return false;
     }
 
     model.isShowingFilteredOrders = false;
     await model.initialiseNewOrderListener(updateState);
+
+    updateState();
+
+    return true;
+
+  }
+
+  void initialiseManageOrders() async {
+    
+    final successfullyFetchedInitialOrders = await getInitialOrders();
+
+    if(!successfullyFetchedInitialOrders){
+      updateState();
+      return;
+    }
+
+    final successfullyFetchedCustomerAccounts = await model.fetchCustomerAccounts();
+
+    if(!successfullyFetchedCustomerAccounts){
+      //will show orders with account names as ids
+      updateState();
+      showToastWidget(ToastNotification(message: "Error loading customer accounts", isError: true));
+      return;
+    }
+
+    //parse customer accounts
+    model.parseCustomerAccounts();
 
     updateState();
 

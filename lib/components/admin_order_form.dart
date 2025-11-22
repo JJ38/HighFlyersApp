@@ -73,7 +73,36 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
           SizedBox(height: 20,),
           SquaredInput(label: "Email", value: orderController.model.email, icon: Icons.alternate_email_outlined, onChange: orderController.emailOnChange, keyboardType: TextInputType.emailAddress,),
           SizedBox(height: 20,),
-          SquaredInput(label: "Account", value: orderController.model.account, icon: Icons.my_library_books_outlined, onChange: orderController.accountOnChange),
+
+          DropdownButtonFormField<String?>(
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.clip),
+            decoration: InputDecoration(
+              icon: Icon(Icons.account_balance_outlined),
+              label: Text("Account"),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              fillColor: Colors.grey,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                  width: 2.0, 
+                ),
+              ),
+            ),
+            value: orderController.model.account,  
+            hint: Text("Select Account", overflow: TextOverflow.clip,),                    
+            onChanged: (value){orderController.accountOnChange(value);},
+            items:  orderController.model.customerAccounts.entries.map((account) =>
+                      DropdownMenuItem<String?>(
+                        value: account.key,
+                        child: Text(account.value, overflow: TextOverflow.clip),
+                      ),
+                    ).toList(),
+          ),
+
           SizedBox(height: 20,),
           SquaredInput(label: "Delivery Week", value: orderController.model.deliveryWeek, icon: Icons.calendar_month, onChange: orderController.deliveryWeekOnChange, keyboardType: TextInputType.number,),
           SizedBox(height: 20,),

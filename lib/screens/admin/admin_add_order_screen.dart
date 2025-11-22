@@ -3,7 +3,10 @@ import 'package:high_flyers_app/components/admin_order_form.dart';
 import 'package:high_flyers_app/controllers/admin_add_order_screen_controller.dart';
 
 class AdminAddOrderScreen extends StatefulWidget {
-  const AdminAddOrderScreen({super.key});
+
+  final Map<String, String> knownCustomerAccounts;
+
+  const AdminAddOrderScreen({super.key, this.knownCustomerAccounts = const <String, String> {}});
 
   @override
   State<AdminAddOrderScreen> createState() => _AdminAddOrderScreenState();
@@ -19,6 +22,7 @@ class _AdminAddOrderScreenState extends State<AdminAddOrderScreen> {
     super.initState();
     print("add order init state");
     adminAddOrderScreenController = AdminAddOrderScreenController(updateState: updateState);
+    adminAddOrderScreenController.model.knownCustomerAccounts = widget.knownCustomerAccounts;
     adminAddOrderScreenController.loadForm();
   }
 

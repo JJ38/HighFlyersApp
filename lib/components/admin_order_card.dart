@@ -3,9 +3,10 @@ import 'package:high_flyers_app/components/icon_label.dart';
 
 class AdminOrderCard extends StatelessWidget {
 
-  final Map<String, dynamic> order;
+  final Map<String, dynamic> order; 
+  final Map<String, String> customerAccounts;
 
-  const AdminOrderCard({super.key, required this.order});
+  const AdminOrderCard({super.key, required this.order, this.customerAccounts = const <String, String> {}});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class AdminOrderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("#${order['ID']}"),
-                  Text(order['account'].toString()),
+                  Text(customerAccounts[order['account']] ??  order['account'].toString()),
                 ]
               )
             ),

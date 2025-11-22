@@ -11,7 +11,9 @@ abstract class OrderModel extends RequestModel{
   final Validator validator = Validator();
   late Map<String, dynamic> birdSpeciesData;
   late Map<String, dynamic> postcodes;
-  late List<QueryDocumentSnapshot<Map<String, dynamic>>> customerAccounts;
+  late List<QueryDocumentSnapshot<Map<String, dynamic>>> customerAccountsDocuments;
+  Map<String, String> knownCustomerAccounts = {};
+  Map<String, String> customerAccounts = {};
   Map<String, dynamic> customerProfileData = {};
   Set<String> birdSpeciesSet = {};
   String? animalType;
@@ -101,7 +103,6 @@ abstract class OrderModel extends RequestModel{
 
   }
 
-
   Future<bool> fetchCustomerAccounts() async {
 
     try{
@@ -112,13 +113,13 @@ abstract class OrderModel extends RequestModel{
         return false;
       }
 
-      QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Users').where('role', isEqualTo: 'customer').get();
+      QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Users').where('role', isEqualTo: 'customer').orderBy('username').get();
 
       if (response.docs.isEmpty) {
         return false;
       }
 
-      customerAccounts = response.docs;
+      customerAccountsDocuments = response.docs;
 
     }catch(error, stack){
       
@@ -141,6 +142,20 @@ abstract class OrderModel extends RequestModel{
 
   }
 
+  void parseCustomerAccounts(){
+
+    //does key exist in map?
+    if(!knownCustomerAccounts.containsKey(account)){
+
+      //must be a legacy order where account is account name and not user id
+      customerAccounts.addAll({account ?? "": account ?? ""});
+
+    }
+
+    customerAccounts.addAll(knownCustomerAccounts);
+
+  }
+
   Future<void> fetchFormData() async {
 
     print("fetchOrderData");
@@ -148,16 +163,11 @@ abstract class OrderModel extends RequestModel{
     isLoaded = false;
     isSuccessfullyLoaded = false;
 
-    List<Future<bool>> futures = [];
-
-    futures.add(fetchBirdSpecies());
-    futures.add(fetchCustomerAccounts());
-    
-    final futuresResult = await Future.wait(futures);
+    final fetchedBirdSpeciesSuccessfully = await fetchBirdSpecies();
 
     isLoaded = true;
 
-    if(futuresResult.contains(false)){
+    if(!fetchedBirdSpeciesSuccessfully){
       print("form failed to load");
       return;
     }

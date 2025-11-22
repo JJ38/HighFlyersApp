@@ -20,7 +20,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
     // TODO: implement initState
     super.initState();
     adminManageOrdersScreenController = AdminManageOrdersScreenController(updateState: updateState);
-    adminManageOrdersScreenController.getInitialOrders();
+    adminManageOrdersScreenController.initialiseManageOrders();
     adminManageOrdersScreenController.initialiseListViewScrollController();
 
     print("init state manage orders screen");
@@ -223,7 +223,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
                           padding: EdgeInsetsGeometry.only(top: 10),
                           child: GestureDetector(
                             onTap: (){ adminManageOrdersScreenController.onAdminOrderTap(context, data, uuid); },
-                            child: AdminOrderCard(order: data)
+                            child: AdminOrderCard(order: data, customerAccounts: adminManageOrdersScreenController.model.customerAccounts,)
                           )
                         );
                       },

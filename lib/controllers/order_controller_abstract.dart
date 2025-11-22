@@ -40,7 +40,7 @@ abstract class OrderController<T extends OrderModel> {
 
   }
 
-  void accountOnChange(String input){
+  void accountOnChange(String? input){
 
     model.account = input;
 
@@ -160,6 +160,7 @@ abstract class OrderController<T extends OrderModel> {
     }
 
     model.parseBirdSpecies();
+    model.parseCustomerAccounts();
 
     updateState();
 
