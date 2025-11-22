@@ -27,6 +27,10 @@ class AdminEditOrderScreenController extends OrderController<AdminEditOrderScree
   @override
   void submitOrder(context) async {
 
+    if(model.payment == "Collection"){
+      model.payment = "Pickup";
+    }
+
     final isValidOrder = model.validateOrder();
 
     if(!isValidOrder){

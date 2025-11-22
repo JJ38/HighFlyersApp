@@ -132,6 +132,10 @@ abstract class OrderController<T extends OrderModel> {
 
   void paymentOnChange(String? input){
 
+    if(input == "Collection"){
+      input = "Pickup";
+    }
+
     model.payment = input;
 
   }

@@ -205,6 +205,10 @@ class AdminManageOrdersScreenModel{
     
     orderSubscription = orderListener!.listen((snapshot) {
 
+      print("order subscription");
+      print(snapshot.docChanges);
+      print(snapshot.docChanges.length);
+
       for (var docChange in snapshot.docChanges) {
 
         if (docChange.type == DocumentChangeType.added) {
@@ -214,7 +218,6 @@ class AdminManageOrdersScreenModel{
 
       }
 
-      // Update your latestID tracker
       if (snapshot.docs.isNotEmpty) {
         final newest = snapshot.docs.last;
         latestOrderID = newest.get('ID');
@@ -377,15 +380,6 @@ class AdminManageOrdersScreenModel{
 
     }
 
-    // //does key exist in map?
-    // if(!customerAccounts.containsKey(account)){
-
-    //   //must be a legacy order where account is account name and not user id
-    //   customerAccounts.addAll({account ?? "unknown": account ?? "unknown"});
-
-    // }
-
   }
-
 
 }

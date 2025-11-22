@@ -135,8 +135,6 @@ class AdminManageOrdersScreenController {
     model.isShowingFilteredOrders = false;
     await model.initialiseNewOrderListener(updateState);
 
-    updateState();
-
     return true;
 
   }
@@ -161,7 +159,7 @@ class AdminManageOrdersScreenController {
 
     //parse customer accounts
     model.parseCustomerAccounts();
-
+    print("initialiseManageOrders finished");
     updateState();
 
   }

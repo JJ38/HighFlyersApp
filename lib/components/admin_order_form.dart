@@ -173,10 +173,21 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
             value: orderController.model.payment,
             onChanged: (value){orderController.paymentOnChange(value);},
             items: [
-              DropdownMenuItem(
-                value: 'Collection',
-                child: Text('Collection'),
-              ),
+
+              orderController.model.payment == "Collection" ? 
+
+                  DropdownMenuItem(
+                    value: 'Collection',
+                    child: Text('Pickup'),
+                  )
+
+                :
+
+                  DropdownMenuItem(
+                    value: 'Pickup',
+                    child: Text('Pickup'),
+                  ),
+
               DropdownMenuItem(
                 value: 'Delivery',
                 child: Text('Delivery'),

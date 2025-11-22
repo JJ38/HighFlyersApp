@@ -244,7 +244,7 @@ abstract class OrderModel extends RequestModel{
 
     //payment
 
-    if(!validator.isValidValueInList(payment, ["Collection", "Delivery", "Account"])){
+    if(!validator.isValidValueInList(payment, ["Pickup", "Delivery", "Account"])){
       errorMessage = "${validator.validationErrorMessage} - Payment";
       return false;
     }
