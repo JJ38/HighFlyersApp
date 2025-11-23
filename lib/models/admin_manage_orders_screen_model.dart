@@ -141,6 +141,8 @@ class AdminManageOrdersScreenModel{
 
     }catch(error, stack){
 
+      print("first try catch");
+
       await Sentry.captureException(
         error,
         stackTrace: stack,
@@ -160,6 +162,10 @@ class AdminManageOrdersScreenModel{
     try{
 
       final filteredOrders = await baseQuery!.get();
+
+      if(filteredOrders.docs.isEmpty){
+        return true;
+      }
 
       oldestOrderID = filteredOrders.docs.last.get('ID');
 
