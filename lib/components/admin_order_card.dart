@@ -143,7 +143,7 @@ class AdminOrderCard extends StatelessWidget {
               children: [
                 IconLabel(icon: Icons.payment, child: Text(order['payment'] ?? "")),
                 IconLabel(icon: Icons.currency_pound, spacing: 0, child: Text(order['price'].toString())),
-                if(order['code'] != "")
+                if(order['code'] != "" && order['code'] != null)
                   IconLabel(icon: Icons.discount, spacing: 0, child: Text(order['code'].toString()))
               ],
             )

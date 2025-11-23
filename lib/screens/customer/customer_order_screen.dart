@@ -80,17 +80,24 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                   const SizedBox(height: 10),
                  
                   customerOrderScreenController.model.isLoaded ?
+
                     customerOrderScreenController.model.isSuccessfullyLoaded ?
-                      Expanded(
-                        child: ListView(
-                          children: [
-                            CustomerOrderForm(customerOrderScreenController: customerOrderScreenController)
-                          ],
-                        ),
-                      ) :
-                      const Center(
-                        child: Text("Error loading profile"),
-                      ) :
+
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              CustomerOrderForm(customerOrderScreenController: customerOrderScreenController)
+                            ],
+                          ),
+                        ) 
+
+                      :
+
+                        const Center(
+                          child: Text("Error loading profile"),
+                        ) 
+                        
+                    :
                       const Center(
                         child: CircularProgressIndicator(),
                       ),

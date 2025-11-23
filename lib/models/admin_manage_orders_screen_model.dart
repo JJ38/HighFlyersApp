@@ -129,19 +129,39 @@ class AdminManageOrdersScreenModel{
     try{
 
       final databaseName = dotenv.env['DATABASE_NAME'];
+
+      //the string literal name of the account and if exists the id of the customer account
+      switch(selectedFilterField){
+
+        case 'account':
+
+          baseQuery = FirebaseFirestore.instanceFor(
+            app: Firebase.app(),
+            databaseId: databaseName,
+          )
+          .collection('Orders')
+          .orderBy('ID', descending: true)
+          .where(selectedFilterField!, whereIn: getCustomerAccountIdentifiers())
+          .limit(10);
+
+          break;
+
+        default:
+
+          baseQuery = FirebaseFirestore.instanceFor(
+            app: Firebase.app(),
+            databaseId: databaseName,
+          )
+          .collection('Orders')
+          .orderBy('ID', descending: true)
+          .where(selectedFilterField!, isEqualTo: getTypeCorrectSearchValue())
+          .limit(10);
+
+          break;
+
+      }
     
-      baseQuery = FirebaseFirestore.instanceFor(
-        app: Firebase.app(),
-        databaseId: databaseName,
-      )
-      .collection('Orders')
-      .orderBy('ID', descending: true)
-      .where(selectedFilterField!, isEqualTo: getTypeCorrectSearchValue())
-      .limit(10);
-
     }catch(error, stack){
-
-      print("first try catch");
 
       await Sentry.captureException(
         error,
@@ -192,6 +212,30 @@ class AdminManageOrdersScreenModel{
     }
 
   }
+
+  List<String> getCustomerAccountIdentifiers(){
+
+    List<String> customerAccountIdentifiers = [searchValue!];
+
+    if(customerAccounts.containsValue(searchValue)){
+
+      for(MapEntry<String, String> entry in customerAccounts.entries){
+
+        if(entry.value == searchValue){
+
+          customerAccountIdentifiers.add(entry.key);
+          break;
+
+        }
+        
+      }
+
+    }
+
+    return customerAccountIdentifiers;
+
+  }
+
 
   dynamic getTypeCorrectSearchValue(){
 

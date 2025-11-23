@@ -183,8 +183,8 @@ class _CustomerOrderFormState extends State<CustomerOrderForm> {
                   onChanged: (value){customerOrderScreenController.paymentOnChange(value);},
                   items: [
                     DropdownMenuItem(
-                      value: 'Collection',
-                      child: Text('Collection'),
+                      value: 'Pickup',
+                      child: Text('Pickup'),
                     ),
                     DropdownMenuItem(
                       value: 'Delivery',

@@ -43,12 +43,18 @@ class CustomerOrderScreenController extends OrderController<CustomerOrderModel>{
       showToastWidget(ToastNotification(message: "Failed to load form", isError: true));
       return;
     }
+
+    print("model.customerProfileData: ${model.customerProfileData}");
+
     
     if(model.customerProfileData.isEmpty){
       showToastWidget(ToastNotification(message: "Failed to load profile", isError: true));
     }
 
-    //fetch postcodes
+    model.isSuccessfullyLoaded = true;
+
+    updateState();
+
 
   }
 
