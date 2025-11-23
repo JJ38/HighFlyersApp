@@ -43,6 +43,8 @@ class _CurrentStopState extends State<CurrentStop> {
 
     widget.updateMapMarker(currentStopController.model.stop);
 
+    
+
   }
 
   void updateState(){
@@ -56,6 +58,8 @@ class _CurrentStopState extends State<CurrentStop> {
 
   @override
   Widget build(BuildContext context) {
+
+    print(currentStopController.model.stop);
 
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -89,7 +93,7 @@ class _CurrentStopState extends State<CurrentStop> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Stop type: ", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                        Text(currentStopController.model.stop['stopType'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                        Text("${currentStopController.model.stop['stopType'][0].toUpperCase()}${currentStopController.model.stop['stopType'].substring(1)}", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
                       ],
                     ),
                   )
@@ -97,6 +101,8 @@ class _CurrentStopState extends State<CurrentStop> {
               ),
               Divider(height: 1,),
               SizedBox(height: 10),
+
+
               Row(
                 children:[
                   Padding(
@@ -106,7 +112,7 @@ class _CurrentStopState extends State<CurrentStop> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                      Text("${currentStopController.model.stop['stopType'][0].toUpperCase()}${currentStopController.model.stop['stopType'].substring(1)} Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
                       Text(currentStopController.model.stop['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
                     ],
                   ),
@@ -123,7 +129,7 @@ class _CurrentStopState extends State<CurrentStop> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                        Text("${currentStopController.model.stop['stopType'][0].toUpperCase()}${currentStopController.model.stop['stopType'].substring(1)} Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
                         Row(
                           children: [
                             Text(currentStopController.model.stop['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),  
@@ -140,10 +146,69 @@ class _CurrentStopState extends State<CurrentStop> {
                       ]              
                     )
                   ),
-                ]
-                
+                ]              
               ),
               SizedBox(height: 10),
+
+              //if stop is collection need to show delivery address so drivers can write on the boxes
+
+              if(currentStopController.model.stop['stopType'] == "collection") 
+
+                ...[
+                  Divider(height: 1,),
+                  SizedBox(height: 10,),
+                  Row(
+                    children:[
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Icon(Icons.person),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Delivery Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                          Text(currentStopController.model.stop['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                        ],
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children:[
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Icon(Icons.location_on),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                            Row(
+                              children: [
+                                Text(currentStopController.model.stop['orderData']['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),  
+                              ],
+                            ),
+
+                            Row(
+                              children: [
+                                Text("${currentStopController.model.stop['orderData']['deliveryAddress2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                                Text(currentStopController.model.stop['orderData']['deliveryAddress3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                              ]
+                            ),
+                            Text(currentStopController.model.stop['orderData']['deliveryPostcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                          ]              
+                        )
+                      ),
+                    ]              
+                  ),
+                  
+                  SizedBox(height: 10),
+
+
+                ],
+
+
               Center(
                 child: Material(
                   color: Theme.of(context).colorScheme.secondary,
