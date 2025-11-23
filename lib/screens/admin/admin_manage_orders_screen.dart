@@ -186,7 +186,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
                   ),
                 ),
 
-                adminManageOrdersScreenController.model.isLoadingOrders ? 
+                adminManageOrdersScreenController.model.isLoadingOrders || adminManageOrdersScreenController.model.isLoadingCustomerAccounts ? 
 
                     Center(
                       child: CircularProgressIndicator()

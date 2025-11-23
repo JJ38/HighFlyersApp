@@ -140,7 +140,7 @@ class AdminManageOrdersScreenController {
   }
 
   void initialiseManageOrders() async {
-    
+
     final successfullyFetchedInitialOrders = await getInitialOrders();
 
     if(!successfullyFetchedInitialOrders){
@@ -148,7 +148,9 @@ class AdminManageOrdersScreenController {
       return;
     }
 
+
     final successfullyFetchedCustomerAccounts = await model.fetchCustomerAccounts();
+
 
     if(!successfullyFetchedCustomerAccounts){
       //will show orders with account names as ids

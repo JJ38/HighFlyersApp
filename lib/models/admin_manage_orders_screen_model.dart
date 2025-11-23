@@ -52,6 +52,8 @@ class AdminManageOrdersScreenModel{
   bool isLoadingAdditionalOrders = false;
   bool showFilters = false;
   bool hasLoadedAllOrders = false;
+  bool isLoadingCustomerAccounts = true;
+
 
 
   Future<bool> getInitialOrders() async {
@@ -334,6 +336,8 @@ class AdminManageOrdersScreenModel{
 
    Future<bool> fetchCustomerAccounts() async {
 
+    isLoadingCustomerAccounts = true;
+
     try{
 
       final databaseName = dotenv.env['DATABASE_NAME'];
@@ -350,6 +354,7 @@ class AdminManageOrdersScreenModel{
 
       customerAccountsDocuments = response.docs;
 
+
     }catch(error, stack){
       
       await Sentry.captureException(
@@ -364,8 +369,13 @@ class AdminManageOrdersScreenModel{
       );
       
       print(error);
+
+      isLoadingCustomerAccounts = false;
+
       return false;
+
     }
+    isLoadingCustomerAccounts = false;
 
     return true;
 
