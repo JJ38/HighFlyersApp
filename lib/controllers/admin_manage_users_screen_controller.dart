@@ -28,6 +28,7 @@ class AdminManageUsersScreenController {
       showToastWidget(ToastNotification(message: "Error loading users", isError: true));
       return;
     }
+
   }
 
   void onDeleteUserTap(BuildContext context, dynamic userDoc){
@@ -42,14 +43,13 @@ class AdminManageUsersScreenController {
 
   void onChangeUserPasswordTap(BuildContext context, dynamic userDoc){
 
-    print(userDoc.id);
-
     showDialog(
       context: context, 
       builder: (context){
         return ChangeUserPasswordDialogBox(uid: userDoc.id);
       }
     );
+    
   }
 
   void onAddUserTap(BuildContext context){

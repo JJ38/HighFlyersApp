@@ -325,7 +325,7 @@ class _CurrentStopState extends State<CurrentStop> {
 
                     SizedBox(height: 10),
                         
-                    Text("Message:",  style: Theme.of(context).textTheme.labelSmall), 
+                    Text("Customer Message:",  style: Theme.of(context).textTheme.labelSmall), 
                         
                     
                     Text(currentStopController.model.stop['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
@@ -337,6 +337,71 @@ class _CurrentStopState extends State<CurrentStop> {
               SizedBox(height: 10),
               Divider(height: 1,),
               SizedBox(height: 10),
+
+              //staff labels 
+
+              if(currentStopController.model.stop['label'] != null)
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // SizedBox(height: 10),
+                    Row(
+                      children:[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(Icons.handshake),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Method of contact", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                            Text(currentStopController.model.stop['label']['methodOfContact'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                          ],
+                        ),
+                      ]
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children:[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(Icons.phone),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Call before arrival", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                              Text(currentStopController.model.stop['label']['arrivalNotice'] == "yes" ? (currentStopController.model.stop['label']['noticePeriod'] ?? "N/A") + " mins" : currentStopController.model.stop['label']['arrivalNotice'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                            ]              
+                          )
+                        ),
+                      ]              
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children:[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(Icons.message),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Staff Message", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                              Text(currentStopController.model.stop['label']['message'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                            ]              
+                          )
+                        ),
+                      ]              
+                    ),
+                    SizedBox(height: 10),
+                    Divider(height: 1,),
+                  ]
+                ),
+
 
               ...currentStopController.model.showStopForm ?
 
