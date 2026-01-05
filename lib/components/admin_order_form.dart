@@ -125,7 +125,7 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
           SizedBox(height: 20,),
           SquaredInput(label: "Collection Postcode", value: orderController.model.collectionPostcode, icon: Icons.local_post_office_outlined, onChange: orderController.collectionPostcodeOnChange),
           SizedBox(height: 20,),
-          SquaredInput(label: "Collection Phone number", value: orderController.model.collectionPhoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: orderController.collectionPhoneNumberOnChange),
+          SquaredInput(label: "Collection Phone number", value: orderController.model.collectionPhoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: orderController.collectionPhoneNumberOnChange, maxLength: 11,),
           SizedBox(height: 20,),
                           
           Divider(height: 1,),
@@ -143,7 +143,7 @@ class _AdminOrderFormState extends State<AdminOrderForm> {
           SizedBox(height: 20,),
           SquaredInput(label: "Delivery Postcode", value: orderController.model.deliveryPostcode, icon: Icons.local_post_office_outlined, onChange: orderController.deliveryPostcodeOnChange),
           SizedBox(height: 20,),
-          SquaredInput(label: "Delivery Phone number", value: orderController.model.deliveryPhoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: orderController.deliveryPhoneNumberOnChange),
+          SquaredInput(label: "Delivery Phone number", value: orderController.model.deliveryPhoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: orderController.deliveryPhoneNumberOnChange, maxLength: 11,),
           SizedBox(height: 20,),
         
           

@@ -196,6 +196,11 @@ abstract class OrderModel extends RequestModel{
       return false;
     }
 
+    if(!validator.isValidEmail(email)){
+      errorMessage = "${validator.validationErrorMessage} - Email";
+      return false;
+    }
+
 
     //collection
 

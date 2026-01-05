@@ -18,7 +18,6 @@ class Validator {
   
   bool isValidPositiveNumber(String? number){
 
-
     if(number == null || number == ""){
       validationErrorMessage = "Please enter a value";
       return false;
@@ -36,7 +35,7 @@ class Validator {
   
   bool isValidEmail(String? email){
 
-    if(email == null){
+    if(email == null || email == ""){
       validationErrorMessage = "Please enter an email address";
       return false;
     }

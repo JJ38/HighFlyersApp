@@ -104,7 +104,7 @@ class AdminManageOrdersScreenController {
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AdminEditOrderScreen(order: data, uuid: uuid, knownCustomerAccounts: model.customerAccounts),
+            builder: (context) => AdminEditOrderScreen(order: data, uuid: uuid, knownCustomerAccounts: model.customerAccounts, role: model.role),
             settings: RouteSettings(name: '/Edit Order Screen')));
 
     //refetch orders
@@ -197,6 +197,15 @@ class AdminManageOrdersScreenController {
     model.updateOrderListener();
     updateState();
 
+  }
+
+  
+  Future<void> getRole() async{
+
+    final bool getRoleResult = await model.getRole();
+
+    updateState();
+    
   }
 
 }

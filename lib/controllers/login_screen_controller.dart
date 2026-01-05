@@ -52,7 +52,7 @@ class LoginScreenController {
 
       Navigator.pushNamed(context, CustomerScreen.id);
 
-    } else if (model.role == "admin") {
+    } else if (model.role == "admin" || model.role == "staff") {
 
       Navigator.pushNamed(context, AdminScreen.id);
 

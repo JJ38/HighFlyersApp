@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -53,7 +54,7 @@ class AdminManageOrdersScreenModel{
   bool showFilters = false;
   bool hasLoadedAllOrders = false;
   bool isLoadingCustomerAccounts = true;
-
+  String? role;
 
 
   Future<bool> getInitialOrders() async {
@@ -440,6 +441,24 @@ class AdminManageOrdersScreenModel{
 
     }
 
+  }
+
+  Future<bool> getRole() async{
+
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      // Not signed in
+      return false;
+    } 
+
+    final jwt = await user.getIdTokenResult();
+    role = jwt.claims?['role']; 
+
+    print(role);
+
+    return true;
+    
   }
 
 }

@@ -8,8 +8,9 @@ class AdminEditOrderScreen extends StatefulWidget {
   final Map<String, dynamic> order;
   final Map<String, String> knownCustomerAccounts;
   final String uuid;
+  final String? role;
 
-  const AdminEditOrderScreen({super.key, required this.order, required this.uuid, this.knownCustomerAccounts = const <String, String>{}});
+  const AdminEditOrderScreen({super.key, required this.order, required this.uuid, this.knownCustomerAccounts = const <String, String>{}, required this.role});
 
   @override
   State<AdminEditOrderScreen> createState() => _AdminEditOrderScreenState();
@@ -81,21 +82,27 @@ class _AdminEditOrderScreenState extends State<AdminEditOrderScreen> {
                           SizedBox(height: 0,)
                         
                         :
+
+                          widget.role == "admin" ? 
                         
-                          Padding(
-                            padding: EdgeInsetsGeometry.fromLTRB(1,0,1,20),
-                            child: Center(
-                              child: ActionSlider.standard(
-                                icon: Icon(Icons.delete_forever_rounded, color: Colors.white,),
-                                toggleColor: Colors.red,
-                                backgroundColor: const Color.fromARGB(255, 246, 246, 246),
-                                boxShadow: [BoxShadow(color: Colors.red, blurRadius: 0, spreadRadius: 1)],
-                                borderWidth: 4,
-                                child: Text("Slide to delete order", style: TextStyle(color: Colors.black),),
-                                action: (controller) async { await adminEditOrderScreenController.deleteOrder(context, controller);}
+                              Padding(
+                                padding: EdgeInsetsGeometry.fromLTRB(1,0,1,20),
+                                child: Center(
+                                  child: ActionSlider.standard(
+                                    icon: Icon(Icons.delete_forever_rounded, color: Colors.white,),
+                                    toggleColor: Colors.red,
+                                    backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+                                    boxShadow: [BoxShadow(color: Colors.red, blurRadius: 0, spreadRadius: 1)],
+                                    borderWidth: 4,
+                                    child: Text("Slide to delete order", style: TextStyle(color: Colors.black),),
+                                    action: (controller) async { await adminEditOrderScreenController.deleteOrder(context, controller);}
+                                  )
+                                )
                               )
-                            )
-                          )
+
+                            :
+
+                              Container()
                     ],
                   )
 

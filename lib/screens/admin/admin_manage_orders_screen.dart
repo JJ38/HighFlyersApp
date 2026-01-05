@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/admin_order_card.dart';
 import 'package:high_flyers_app/components/squared_input.dart';
@@ -14,6 +15,7 @@ class AdminManageOrdersScreen extends StatefulWidget {
 class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
 
   late AdminManageOrdersScreenController adminManageOrdersScreenController;
+  late final String role;
 
   @override
   void initState() {
@@ -22,8 +24,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
     adminManageOrdersScreenController = AdminManageOrdersScreenController(updateState: updateState);
     adminManageOrdersScreenController.initialiseManageOrders();
     adminManageOrdersScreenController.initialiseListViewScrollController();
-
-    print("init state manage orders screen");
+    adminManageOrdersScreenController.getRole();
  
   }
 
@@ -224,7 +225,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
                           padding: EdgeInsetsGeometry.only(top: 10),
                           child: GestureDetector(
                             onTap: (){ adminManageOrdersScreenController.onAdminOrderTap(context, data, uuid); },
-                            child: AdminOrderCard(order: data, customerAccounts: adminManageOrdersScreenController.model.customerAccounts,)
+                            child: AdminOrderCard(order: data, customerAccounts: adminManageOrdersScreenController.model.customerAccounts)
                           )
                         );
                       },
