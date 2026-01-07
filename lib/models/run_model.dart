@@ -111,18 +111,29 @@ class RunModel {
 
   }
 
-  String getEstimatedRunTime(){
+  String getEstimatedRunTime() {
 
-    final trimmedRunTimeSeconds = run!['runTime'].replaceAll("s", "");
+    try{
 
-    final timeSeconds = int.parse(trimmedRunTimeSeconds)/60;
+      print(run!['runTime']);
 
-    final timeMinutes = (timeSeconds / 60).floor();
+      final trimmedRunTimeSeconds = run!['runTime'].toString().replaceAll("s", "");
 
-    final numberOfHours = timeMinutes.floor();
-    final numberOfRemainingMinutes = timeMinutes % 60;
+      final timeSeconds = int.parse(trimmedRunTimeSeconds)/60;
 
-    return "${numberOfHours}h ${numberOfRemainingMinutes}m";
+      final timeMinutes = (timeSeconds / 60).floor();
+
+      final numberOfHours = timeMinutes.floor();
+      final numberOfRemainingMinutes = timeMinutes % 60;
+
+      return "${numberOfHours}h ${numberOfRemainingMinutes}m";
+
+    }catch(error, stack){
+      print(error);
+      return "unknown";
+    }
+
+
   }
 
   Future<BitmapDescriptor> customMarker(String label) async {

@@ -23,10 +23,21 @@ class Validator {
       return false;
     }
 
-    if(int.parse(number) < 0){
-      validationErrorMessage = "Please enter a value greater than 0";
+    try{
+
+      if(int.parse(number) < 0){
+        validationErrorMessage = "Please enter a value greater than 0";
+        return false;
+      }
+
+    }catch(e){
+
+      validationErrorMessage = "Please enter a valid number";
       return false;
+
     }
+
+   
 
     return true;
 

@@ -30,7 +30,6 @@ class DriverScreenModel {
   @pragma('vm:entry-point')
   static void callback(LocationDto locationDto) async {
 
-    print("callback");
     final SendPort? send = IsolateNameServer.lookupPortByName(_isolateName);
 
     try{
@@ -61,8 +60,6 @@ class DriverScreenModel {
   }
 
   Future<void> updateDriverLocation(Map<String, dynamic> driverLocationData) async {
-
-    print("updateDriverLocation");
 
     try{
 
@@ -183,7 +180,6 @@ class DriverScreenModel {
     IsolateNameServer.registerPortWithName(port.sendPort, _isolateName);
     port.listen((dynamic driverLocationData) {
 
-      print(driverLocationData);
       if(driverLocationData == null){
         return;
       }

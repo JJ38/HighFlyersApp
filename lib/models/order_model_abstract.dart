@@ -201,6 +201,11 @@ abstract class OrderModel extends RequestModel{
       return false;
     }
 
+    if(!validator.isValidPositiveNumber(deliveryWeek)){
+      errorMessage = "${validator.validationErrorMessage} - Delivery Week";
+      return false;
+    }
+
 
     //collection
 
