@@ -64,7 +64,7 @@ class StopCard extends StatelessWidget {
             Row(
               children: [
                 Text("Notice period: ", style: Theme.of(context).textTheme.labelMedium),
-                Text("${stop['label']?['noticePeriod']}", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14)),
+                Text("${stop['label']?['noticePeriod']} mins", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14)),
               ],
             ),
 

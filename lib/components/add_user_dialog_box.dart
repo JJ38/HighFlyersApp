@@ -61,7 +61,7 @@ class _AddUserDialogBoxState extends State<AddUserDialogBox> {
                   DropdownButtonFormField(
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                     decoration: InputDecoration(
-                      label: Text("Collected Payment"),
+                      label: Text("Select Role"),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       fillColor: Colors.grey,
                       border: OutlineInputBorder(
