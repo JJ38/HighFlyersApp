@@ -283,7 +283,7 @@ class CurrentStopModel {
       if(adminPhoneNumber == null){
         return false;
       }
-      final Uri uriPhoneNumber = Uri(scheme: 'tel', path: "07842133519");
+      final Uri uriPhoneNumber = Uri(scheme: 'tel', path: adminPhoneNumber);
 
       if (await canLaunchUrl(uriPhoneNumber)) {
 

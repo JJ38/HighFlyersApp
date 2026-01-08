@@ -9,6 +9,9 @@ class StopCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final bool shouldHighlightStop = stop['label']?['arrivalNotice'] == "yes" || stop['label']?['message'] != "" && stop['label']?['message'] != null; 
+    print(stop);
     return Container(
       clipBehavior: Clip.hardEdge,
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -18,8 +21,8 @@ class StopCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
-          BoxShadow(color: Color.fromARGB(64, 0, 0, 0), blurRadius: 10, spreadRadius: -4)
-        ]
+          BoxShadow(color: shouldHighlightStop ? const Color(0xFF2881FF) : Color.fromARGB(69, 0, 0, 0), blurRadius: 10, spreadRadius: -4)
+        ]//
       ),
       child: Column(
         children:[
@@ -52,6 +55,31 @@ class StopCard extends StatelessWidget {
               )
             ],
           ),
+
+          if(shouldHighlightStop)
+            SizedBox(height: 5,),
+
+          if(stop['label']?['arrivalNotice'] == "yes")
+
+            Row(
+              children: [
+                Text("Notice period: ", style: Theme.of(context).textTheme.labelMedium),
+                Text("${stop['label']?['noticePeriod']}", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14)),
+              ],
+            ),
+
+          if(stop['label']?['message'] != "" && stop['label']?['message'] != null)
+
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Staff message: ", style: Theme.of(context).textTheme.labelMedium),
+                Expanded(
+                  child: Text("${stop['label']?['message']}", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, overflow: TextOverflow.visible)),
+                )
+              ],
+            )
+
         ]
       )
     );

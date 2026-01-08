@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/stop.dart';
+import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/controllers/run_screen_controller.dart';
 import 'package:high_flyers_app/screens/driver/stop_screen.dart';
 
@@ -293,7 +294,8 @@ class _RunScreenState extends State<RunScreen> {
                                         padding: const EdgeInsets.all(8),
                                         itemCount: run['stops'].length,
                                         itemBuilder: (BuildContext context, int index) {
-                                          return Stop(
+                                          print(run['stops'][index]);
+                                          return StopCard(
                                             stop: run['stops'][index],
                                             width: screenWidth,
                                           );
