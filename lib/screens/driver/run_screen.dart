@@ -41,6 +41,9 @@ class _RunScreenState extends State<RunScreen> {
     runScreenController = RunScreenController(updateState: updateState);
   
     run = widget.runDocument.data()! as Map<String, dynamic>;
+
+    (run['stops'] as List).sort((a, b) => (a['stopNumber'] as int).compareTo(b['stopNumber'] as int));
+
     runID = widget.runDocument.id;
     runDocument = widget.runDocument;
     shipmentName = widget.shipmentName;

@@ -53,6 +53,9 @@ class RunModel {
       print('error merging stop and order data');
       return false;
     } 
+
+    //order stops as staff labelling will cause them to go out of order
+    
     
     return true;
   }
