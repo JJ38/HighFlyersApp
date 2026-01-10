@@ -155,6 +155,22 @@ class CurrentStopController {
 
   }
 
+  
+  Future<void> callCustomer(controller, context) async {
+
+    controller.loading();
+
+    final bool calledCustomerSuccessfully = await model.callCustomer();
+
+    updateState();
+    controller.reset();
+
+    if(!calledCustomerSuccessfully){
+      showToastWidget(ToastNotification(message: "Error calling customer", isError: true));
+    }
+
+  }
+
   void updateMapMarkerNextStop(){
     updateMapMarker(model.stop);
   }

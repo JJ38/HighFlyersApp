@@ -320,6 +320,58 @@ class CurrentStopModel {
 
   }
 
+
+  
+  Future<bool> callCustomer() async {
+
+   
+
+    try{
+
+      final String? customerPhoneNumber = stop['stopData']?['phoneNumber'];
+
+      if(customerPhoneNumber == null){
+        return false;
+      }
+      
+      final Uri uriPhoneNumber = Uri(scheme: 'tel', path: customerPhoneNumber);
+
+      if (await canLaunchUrl(uriPhoneNumber)) {
+
+        await launchUrl(uriPhoneNumber);
+
+        calledAdmin = true;
+
+      } else {
+
+        throw Exception("Error calling customer phonenumber");
+
+      }
+
+      return true;
+
+    }catch(error, stack){
+
+      print(error);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('call_customer_error', {
+            'module': 'current_stop',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      return false;
+
+    }
+
+
+  }
+
   Future<MapType?> getMapPreference() async {
 
     try{

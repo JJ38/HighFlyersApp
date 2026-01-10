@@ -323,11 +323,22 @@ class _CurrentStopState extends State<CurrentStop> {
                       ],
                     ),
 
-                    SizedBox(height: 10),
+                    if(currentStopController.model.stop['stopData']['payment'])
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text("Amount to collect:",  style: Theme.of(context).textTheme.labelSmall), 
+                          ),
+                          Expanded(
+                            child: Text(currentStopController.model.stop['orderData']['price'] == null ? "N/A" : "£${currentStopController.model.stop['orderData']['price']}",  style: Theme.of(context).textTheme.labelSmall), 
+                          ),
+                        ],
+                      ),
+
+                    SizedBox(height: 10), 
                         
-                    Text("Customer Message:",  style: Theme.of(context).textTheme.labelSmall), 
-                        
-                    
+                    Text("Customer Message:",  style: Theme.of(context).textTheme.labelSmall),                   
                     Text(currentStopController.model.stop['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
                     
                         
@@ -335,6 +346,21 @@ class _CurrentStopState extends State<CurrentStop> {
                 ),
               ),
               SizedBox(height: 10),
+
+              Center(
+                child: ActionSlider.standard(
+                  icon: Icon(Icons.phone),
+                  toggleColor: const Color.fromARGB(128, 229, 0, 46),
+                  backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+                  boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
+                  borderWidth: 4,
+                  child: Text("Slide to call customer", style: TextStyle(color: Colors.black),),
+                  action: (controller) async { await currentStopController.callCustomer(controller, context);}
+                )
+              ),
+
+              SizedBox(height: 10),
+
               Divider(height: 1,),
               SizedBox(height: 10),
 
