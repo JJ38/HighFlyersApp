@@ -235,7 +235,6 @@ class CurrentStopModel {
     print("stopStatus: $stopStatus");
 
 
-
     //If the stop was skipped or payment wasnt made when expected on ***delivery*** no adjustments should be made in any circumstance
     //As if it was skipped on collection no payment is needed as nothing has been fufilled and if payment wasnt made on delivery
     //When expected there are no stops left to adjust the payment status for

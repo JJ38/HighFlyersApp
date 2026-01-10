@@ -95,10 +95,10 @@ class _AddUserDialogBoxState extends State<AddUserDialogBox> {
                       ),
                     ],
                   ),
-                    addUserDialogBoxController.model.isCreatingUser?
-                        Center(
-                        child: CircularProgressIndicator()
-                      )
+                  addUserDialogBoxController.model.isCreatingUser?
+                    Center(
+                    child: CircularProgressIndicator()
+                  )
                 
                     :
                         Center(

@@ -35,7 +35,7 @@ class _AdminManageOrdersScreenState extends State<AdminManageOrdersScreen> {
   }
 
   void updateState(){
-    print("updateState manage orders");
+    debugPrint("updateState manage orders");
     if(mounted){
       setState(() {
         

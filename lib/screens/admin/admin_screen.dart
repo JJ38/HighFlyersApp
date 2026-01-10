@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:high_flyers_app/screens/admin/admin_label_runs_screen.dart';
 import 'package:high_flyers_app/screens/admin/admin_manage_orders_screen.dart';
 import 'package:high_flyers_app/screens/admin/admin_manage_users_screen.dart';
 
@@ -18,7 +19,9 @@ class _AdminScreenState extends State<AdminScreen> {
   late final String role;
   bool hasLoaded = false;
 
-  List<Widget> screens = [AdminManageOrdersScreen(), AdminManageUsersScreen()];
+  List<Widget> adminScreens = [AdminManageOrdersScreen(), AdminLabelRunsScreen(), AdminManageUsersScreen()];
+  List<Widget> staffScreens = [AdminManageOrdersScreen(), AdminLabelRunsScreen()];
+
 
   @override
   void initState(){
@@ -35,8 +38,8 @@ class _AdminScreenState extends State<AdminScreen> {
       // Not signed in
       return;
     } else {
-      print('UID: ${user.uid}');
-      print('Email: ${user.email}');
+      debugPrint('UID: ${user.uid}');
+      debugPrint('Email: ${user.email}');
     }
 
     final jwt = await user.getIdTokenResult();
@@ -58,7 +61,7 @@ class _AdminScreenState extends State<AdminScreen> {
         role == "admin" ? 
 
             Scaffold(
-              body: screens[currentPageIndex],
+              body: adminScreens[currentPageIndex],
               bottomNavigationBar: NavigationBar(
                 destinations: [
                   NavigationDestination(icon: Icon(Icons.receipt), label: "Orders"),
@@ -78,7 +81,20 @@ class _AdminScreenState extends State<AdminScreen> {
           :
 
             Scaffold(
-              body: screens[currentPageIndex],
+              body: staffScreens[currentPageIndex],
+              bottomNavigationBar: NavigationBar(
+                destinations: [
+                  NavigationDestination(icon: Icon(Icons.receipt), label: "Orders"),
+                  NavigationDestination(icon: Icon(Icons.discount), label: "Label Runs")
+                ],
+                selectedIndex: currentPageIndex,
+                onDestinationSelected: (int index) {
+                  setState(() {
+                    currentPageIndex = index;
+                  });
+                },
+                indicatorColor: Theme.of(context).colorScheme.secondary,
+              ),
             )
       :
 
