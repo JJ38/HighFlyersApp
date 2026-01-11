@@ -66,7 +66,7 @@ class AdminRunLabellingScreenModel {
 
   void orderStopsByID(){
 
-    (runData?['stops'] as List).sort((a, b) => (a['orderData']['ID'] as int).compareTo(b['orderData']['ID'] as int));
+    (runData?['stops'] as List).sort((a, b) => (a['orderData']?['ID'] as int).compareTo(b['orderData']?['ID'] as int));
 
   }
 

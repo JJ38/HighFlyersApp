@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AdminLabelOrderFormScreenModel {
@@ -16,6 +17,7 @@ class AdminLabelOrderFormScreenModel {
 
   bool shouldShowNoticeInput = false;
   String message = "";
+  String noticePeriod = "";
 
   AdminLabelOrderFormScreenModel({required this.runDocID, required this.stop, required this.runData});
   
@@ -23,6 +25,8 @@ class AdminLabelOrderFormScreenModel {
   void setFormData(){
 
     final initialLabelData = stop['label'];
+
+    print(initialLabelData);
 
     if(initialLabelData == null){
       print("No previous label data");
@@ -38,9 +42,18 @@ class AdminLabelOrderFormScreenModel {
 
     if(callBeforeArrivalIndex != -1){
       callBeforeArrivalIsSelected[callBeforeArrivalIndex] = true;
+
+      if(callBeforeArrival[callBeforeArrivalIndex] == "yes"){
+        shouldShowNoticeInput = true;
+        noticePeriod = initialLabelData['noticePeriod'] ?? "";
+        print(noticePeriod);
+      }
+
     }
 
     message = initialLabelData['message'] ?? "";
+
+    print("shouldShowNoticeInput: $shouldShowNoticeInput");
 
   }
 
@@ -70,7 +83,7 @@ class AdminLabelOrderFormScreenModel {
 
     }
 
-    if(callBeforeArrival[index] == "Yes"){
+    if(callBeforeArrival[index] == "yes"){
       shouldShowNoticeInput = true;
       return;
     }
@@ -81,24 +94,25 @@ class AdminLabelOrderFormScreenModel {
 
   void onMessageChange(String input){
     message = input;
-    print(message);
+  }
+
+  void noticePeriodOnChange(String input){
+    noticePeriod = input;
   }
 
   Future<bool> saveLabel() async{
-    
-    print(stop['orderID']);
-    
+        
     final indexOfMethodOfContact = findIndexOfValue(methodOfContactIsSelected, true);
 
     if(indexOfMethodOfContact == -1){
-      print("indexOfMethodOfContact == -1");
+      debugPrint("indexOfMethodOfContact == -1");
       return false;
     }
 
     final indexOfArrivalNotice = findIndexOfValue(callBeforeArrivalIsSelected, true);
 
     if(indexOfArrivalNotice == -1){
-      print("indexOfArrivalNotice == -1");
+      debugPrint("indexOfArrivalNotice == -1");
       return false;
     }
 
@@ -119,15 +133,12 @@ class AdminLabelOrderFormScreenModel {
         "methodOfContact": methodsOfContact[indexOfMethodOfContact],
         "arrivalNotice": callBeforeArrival[indexOfArrivalNotice],
       };
-
-      print(stop);
       
       bool foundStop = false;
 
       for(int i = 0; i <  stopsCopy.length; i++){
 
         if(stopsCopy[i]['orderID'] == stop['orderID']){
-          print(i);
           stopsCopy[i] = stop;
           foundStop = true;
           break;
@@ -138,9 +149,6 @@ class AdminLabelOrderFormScreenModel {
       if(!foundStop){
         return false;
       }
-
-      print(stopsCopy);
-
 
       //attempt save
       DocumentReference<Map<String, dynamic>> runDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Runs').doc(runDocID);

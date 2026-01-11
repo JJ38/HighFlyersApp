@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/radio_buttons.dart';
+import 'package:high_flyers_app/components/squared_input.dart';
 import 'package:high_flyers_app/components/stop_info_card.dart';
 import 'package:high_flyers_app/controllers/admin_label_order_form_screen_controller.dart';
 
@@ -47,11 +48,12 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
         body:SafeArea(
           child: Expanded(
             child: Padding(
-              padding: EdgeInsetsGeometry.fromLTRB(screenWidth * 0.05, screenWidth * 0.05, screenWidth * 0.05, 0),
+              padding: EdgeInsetsGeometry.fromLTRB(screenWidth * 0.05, 0, screenWidth * 0.05, 0),
               child: 
                 ListView(
                   shrinkWrap: true,
                   children: [
+                    SizedBox(height: screenWidth * 0.05,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -108,7 +110,7 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
-                        Text("Method Of Contact:", style: Theme.of(context).textTheme.labelMedium,),                        
+                        Text("Method of contact:", style: Theme.of(context).textTheme.labelMedium,),                        
                         RadioButtons(
                           radioValues: adminLabelOrderFormScreenController.model.methodsOfContact, 
                           onPressed: adminLabelOrderFormScreenController.methodOfContactOnPressed,
@@ -130,6 +132,17 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
                         )
                       ]
                     ),
+
+                    if(adminLabelOrderFormScreenController.model.shouldShowNoticeInput)
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:[
+                          SizedBox(height: 10,),
+                          Text("Notice period:", style: Theme.of(context).textTheme.labelMedium,),                        
+                          SquaredInput(onChange: adminLabelOrderFormScreenController.noticePeriodOnChange, keyboardType: TextInputType.number, value: adminLabelOrderFormScreenController.model.noticePeriod,)
+                        ]
+                      ),
 
                     SizedBox(height: 10,),
 

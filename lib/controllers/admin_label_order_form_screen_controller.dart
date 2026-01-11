@@ -37,6 +37,12 @@ class AdminLabelOrderFormScreenController {
 
   }
 
+  void noticePeriodOnChange(String input){
+
+    model.noticePeriodOnChange(input);
+
+  }
+
   void onUpdateOrderTap(){
 
   }
