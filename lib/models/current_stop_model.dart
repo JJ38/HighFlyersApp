@@ -324,7 +324,6 @@ class CurrentStopModel {
   
   Future<bool> callCustomer() async {
 
-   
 
     try{
 

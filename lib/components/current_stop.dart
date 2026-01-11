@@ -331,7 +331,7 @@ class _CurrentStopState extends State<CurrentStop> {
                             child: Text("Amount to collect:",  style: Theme.of(context).textTheme.labelSmall), 
                           ),
                           Expanded(
-                            child: Text(currentStopController.model.stop['orderData']['price'] == null ? "N/A" : "£${currentStopController.model.stop['orderData']['price']}",  style: Theme.of(context).textTheme.labelSmall), 
+                            child: Text(currentStopController.model.stop['orderData']['price'] == null ? "N/A" : "£${currentStopController.model.stop['orderData']['price']}",  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)), 
                           ),
                         ],
                       ),
