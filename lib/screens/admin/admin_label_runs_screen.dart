@@ -81,7 +81,7 @@ class _AdminLabelRunsScreenState extends State<AdminLabelRunsScreen> {
 
                             return GestureDetector(
                               onTap: () {
-                                adminLabelRunsScreenController.runCardOnTap(context, adminLabelRunsScreenController.model.staffRunDocs[i]);
+                                adminLabelRunsScreenController.runCardOnTap(context, adminLabelRunsScreenController.model.staffRunDocs[i].id);
                               },
                               child: Padding(           
                                 padding: EdgeInsetsGeometry.only(top: 10),

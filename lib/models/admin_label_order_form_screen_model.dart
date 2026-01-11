@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class AdminLabelOrderFormScreenModel {
 
-  Map<String, dynamic> stop;
+  final String runDocID;
+  late Map<String, dynamic> stop;
+  late Map<String, dynamic> runData;
 
-  final List<String> methodsOfContact = ["Told", "Text", "Voicemail"];
-  final List<String> callBeforeArrival = ["Yes", "No"];
+  final List<String> methodsOfContact = ["told", "text", "voicemail"];
+  final List<String> callBeforeArrival = ["yes", "no"];
 
   final List<bool> methodOfContactIsSelected = [false, false, false];
   final List<bool> callBeforeArrivalIsSelected = [false, false];
@@ -11,7 +17,32 @@ class AdminLabelOrderFormScreenModel {
   bool shouldShowNoticeInput = false;
   String message = "";
 
-  AdminLabelOrderFormScreenModel({required this.stop});
+  AdminLabelOrderFormScreenModel({required this.runDocID, required this.stop, required this.runData});
+  
+
+  void setFormData(){
+
+    final initialLabelData = stop['label'];
+
+    if(initialLabelData == null){
+      print("No previous label data");
+      return;
+    }
+
+    final int methodOfContactIndex = findIndexOfValue(methodsOfContact, initialLabelData['methodOfContact']);
+    final int callBeforeArrivalIndex = findIndexOfValue(callBeforeArrival, initialLabelData['arrivalNotice']);
+
+    if(methodOfContactIndex != -1){
+      methodOfContactIsSelected[methodOfContactIndex] = true;
+    }
+
+    if(callBeforeArrivalIndex != -1){
+      callBeforeArrivalIsSelected[callBeforeArrivalIndex] = true;
+    }
+
+    message = initialLabelData['message'] ?? "";
+
+  }
 
   void methodOfContactOnPressed(int index){
 
@@ -27,7 +58,6 @@ class AdminLabelOrderFormScreenModel {
 
   }
 
-  
   void callBeforeArrivalOnPressed(int index){
 
     for(int i = 0; i < callBeforeArrivalIsSelected.length; i++){
@@ -52,6 +82,97 @@ class AdminLabelOrderFormScreenModel {
   void onMessageChange(String input){
     message = input;
     print(message);
+  }
+
+  Future<bool> saveLabel() async{
+    
+    print(stop['orderID']);
+    
+    final indexOfMethodOfContact = findIndexOfValue(methodOfContactIsSelected, true);
+
+    if(indexOfMethodOfContact == -1){
+      print("indexOfMethodOfContact == -1");
+      return false;
+    }
+
+    final indexOfArrivalNotice = findIndexOfValue(callBeforeArrivalIsSelected, true);
+
+    if(indexOfArrivalNotice == -1){
+      print("indexOfArrivalNotice == -1");
+      return false;
+    }
+
+    try{
+
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      //create copy of list of stops
+      final stopsCopy = List<dynamic>.from(runData['stops']);
+    
+      //add label
+      stop['label'] = {
+        "message": message,
+        "methodOfContact": methodsOfContact[indexOfMethodOfContact],
+        "arrivalNotice": callBeforeArrival[indexOfArrivalNotice],
+      };
+
+      print(stop);
+      
+      bool foundStop = false;
+
+      for(int i = 0; i <  stopsCopy.length; i++){
+
+        if(stopsCopy[i]['orderID'] == stop['orderID']){
+          print(i);
+          stopsCopy[i] = stop;
+          foundStop = true;
+          break;
+        }
+
+      }
+
+      if(!foundStop){
+        return false;
+      }
+
+      print(stopsCopy);
+
+
+      //attempt save
+      DocumentReference<Map<String, dynamic>> runDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Runs').doc(runDocID);
+
+      runDocRef.update(
+        {
+          "stops": stopsCopy
+        }
+      );
+
+      //update client
+
+
+    }catch(error, stack){
+
+      return false;
+    }
+
+    return true;
+
+  }
+
+  int findIndexOfValue(list, value){
+
+    for(int i = 0; i < list.length; i++){
+      if(list[i] == value){
+        return i;
+      }
+    }
+
+    return -1;
+
   }
   
 }

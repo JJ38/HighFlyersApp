@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:high_flyers_app/components/button_pill.dart';
 import 'package:high_flyers_app/components/radio_buttons.dart';
-import 'package:high_flyers_app/components/squared_input.dart';
 import 'package:high_flyers_app/components/stop_info_card.dart';
 import 'package:high_flyers_app/controllers/admin_label_order_form_screen_controller.dart';
 
 class AdminLabelOrderFormScreen extends StatefulWidget {
 
   static final String id = "Admin label order form screen";
-  final Map<String, dynamic>? stop;
+  Map<String, dynamic>? runData;
+  Map<String, dynamic> stop;
+  final String runDocID;
 
-  const AdminLabelOrderFormScreen({super.key, required this.stop});
+  AdminLabelOrderFormScreen({super.key, required this.runDocID, required this.stop, required this.runData});
 
   @override
   State<AdminLabelOrderFormScreen> createState() => _AdminLabelOrderFormScreenState();
@@ -25,7 +24,8 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    adminLabelOrderFormScreenController = AdminLabelOrderFormScreenController(stop: widget.stop, updateState: updateState);
+    adminLabelOrderFormScreenController = AdminLabelOrderFormScreenController(runDocID: widget.runDocID, stop: widget.stop, runData: widget.runData, updateState: updateState);
+    adminLabelOrderFormScreenController.setFormData();
   }
 
   void updateState(){
@@ -95,7 +95,7 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
                         shadowColor: Color(0x00000000),                                
                         borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                         child: MaterialButton(
-                          onPressed: () { },
+                          onPressed: adminLabelOrderFormScreenController.onUpdateOrderTap,
                           minWidth: screenWidth * 0.9,
                           height: screenWidth * 0.1,
                           child: Text("Update Order", style: TextStyle(color: Colors.white)),
@@ -157,7 +157,23 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
                     ),              
 
                     SizedBox(height: 10,),
-                              
+
+                    Center(
+                      child: Material(
+                        color: Theme.of(context).colorScheme.secondary,
+                        shadowColor: Color(0x00000000),                                
+                        borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                        child: MaterialButton(
+                          onPressed: adminLabelOrderFormScreenController.onSaveTap,
+                          minWidth: screenWidth * 0.9,
+                          height: screenWidth * 0.1,
+                          child: Text("Save", style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    ),              
+
+                    SizedBox(height: 10,),
+
                   ],                
                 ),
             ),

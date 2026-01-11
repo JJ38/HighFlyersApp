@@ -30,12 +30,12 @@ class AdminLabelRunsScreenController {
 
   }
 
-  void runCardOnTap(context, runDocument) async{
+  void runCardOnTap(context, runDocID) async{
 
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => AdminRunLabellingScreen(runDocument: runDocument),
+          builder: (context) => AdminRunLabellingScreen(runDocID: runDocID),
           settings: RouteSettings(name: '/${AdminRunLabellingScreen.id}')
         )
       );
