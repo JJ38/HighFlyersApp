@@ -97,7 +97,7 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
                         shadowColor: Color(0x00000000),                                
                         borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                         child: MaterialButton(
-                          onPressed: adminLabelOrderFormScreenController.onUpdateOrderTap,
+                          onPressed: (){adminLabelOrderFormScreenController.onUpdateOrderTap(context);},
                           minWidth: screenWidth * 0.9,
                           height: screenWidth * 0.1,
                           child: Text("Update Order", style: TextStyle(color: Colors.white)),
@@ -139,7 +139,7 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:[
                           SizedBox(height: 10,),
-                          Text("Notice period:", style: Theme.of(context).textTheme.labelMedium,),                        
+                          Text("Notice period (mins):", style: Theme.of(context).textTheme.labelMedium,),                        
                           SquaredInput(onChange: adminLabelOrderFormScreenController.noticePeriodOnChange, keyboardType: TextInputType.number, value: adminLabelOrderFormScreenController.model.noticePeriod,)
                         ]
                       ),

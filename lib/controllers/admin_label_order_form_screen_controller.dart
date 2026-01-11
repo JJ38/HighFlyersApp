@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
+import 'package:high_flyers_app/components/update_order_dialog.dart';
 import 'package:high_flyers_app/models/admin_label_order_form_screen_model.dart';
 
 class AdminLabelOrderFormScreenController {
@@ -43,7 +45,15 @@ class AdminLabelOrderFormScreenController {
 
   }
 
-  void onUpdateOrderTap(){
+  void onUpdateOrderTap(context){
+
+    showDialog(
+      context: context, 
+      builder: (context){
+        return UpdateOrderDialog(order: model.stop, runID: model.runDocID, runData: model.runData);
+      }
+    );
+
 
   }
 

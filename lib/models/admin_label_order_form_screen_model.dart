@@ -128,11 +128,17 @@ class AdminLabelOrderFormScreenModel {
       final stopsCopy = List<dynamic>.from(runData['stops']);
     
       //add label
-      stop['label'] = {
+      Map<String, dynamic> label = {
         "message": message,
         "methodOfContact": methodsOfContact[indexOfMethodOfContact],
         "arrivalNotice": callBeforeArrival[indexOfArrivalNotice],
       };
+
+      if(callBeforeArrival[indexOfArrivalNotice] == "yes"){
+        label.addAll({"noticePeriod": noticePeriod});
+      }
+
+      stop['label'] = label;
       
       bool foundStop = false;
 
