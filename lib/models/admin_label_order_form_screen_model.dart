@@ -16,11 +16,17 @@ class AdminLabelOrderFormScreenModel {
   final List<bool> callBeforeArrivalIsSelected = [false, false];
 
   bool shouldShowNoticeInput = false;
+  bool hasPreviouslyBeenMarkedAsUnassigned = false;
   String message = "";
   String noticePeriod = "";
+  String errorMessage = "";
 
   AdminLabelOrderFormScreenModel({required this.runDocID, required this.stop, required this.runData});
   
+
+  void markAsUnassignedCallback(){
+    hasPreviouslyBeenMarkedAsUnassigned = true;
+  }
 
   void setFormData(){
 
@@ -54,6 +60,25 @@ class AdminLabelOrderFormScreenModel {
     message = initialLabelData['message'] ?? "";
 
     print("shouldShowNoticeInput: $shouldShowNoticeInput");
+
+  }
+
+  bool validateLabelForm(){
+
+    final int methodOfContactIndex = findIndexOfValue(methodOfContactIsSelected, true);
+    final int callBeforeArrivalIndex = findIndexOfValue(callBeforeArrivalIsSelected, true);
+
+    if(methodOfContactIndex == -1){
+      errorMessage = "Please select a method of contact";
+      return false;
+    }
+
+    if(callBeforeArrivalIndex == -1){
+      errorMessage = "Please select if the driver should call before arrival";
+      return false;
+    }
+
+    return true;
 
   }
 

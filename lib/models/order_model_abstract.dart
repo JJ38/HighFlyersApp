@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/request_model.dart';
 import 'package:high_flyers_app/models/validator.dart';
@@ -88,6 +89,9 @@ abstract class OrderModel extends RequestModel{
   void parseBirdSpecies(){
 
     createBirdSpeciesSet();
+    
+    //add animal type to set for legacy reasons
+    birdSpeciesSet.add(animalType.toString());
 
   }
 
@@ -100,6 +104,8 @@ abstract class OrderModel extends RequestModel{
       birdSpeciesSet.add(species[i]['name']);
 
     }
+
+    print(birdSpeciesSet);
 
   }
 
@@ -158,7 +164,7 @@ abstract class OrderModel extends RequestModel{
 
   Future<void> fetchFormData() async {
 
-    print("fetchOrderData");
+    debugPrint("fetchOrderData");
 
     isLoaded = false;
     isSuccessfullyLoaded = false;
@@ -168,7 +174,7 @@ abstract class OrderModel extends RequestModel{
     isLoaded = true;
 
     if(!fetchedBirdSpeciesSuccessfully){
-      print("form failed to load");
+      debugPrint("form failed to load");
       return;
     }
     

@@ -11,7 +11,6 @@ class EditOrderRequest extends JSONRequest{
     setBody({"orderDetails": order, "uuid": uuid});
   }
 
-
   @override
   String getEndpoint(){
 

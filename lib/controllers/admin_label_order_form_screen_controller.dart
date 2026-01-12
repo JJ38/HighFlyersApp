@@ -45,21 +45,38 @@ class AdminLabelOrderFormScreenController {
 
   }
 
-  void onUpdateOrderTap(context){
+  void onUpdateOrderTap(context) async {
 
-    showDialog(
+    //check that the forms been fill in as if the order is updated without filling in the form the staff member wont be able to add a label later if they want to.
+
+    final isFormValid = model.validateLabelForm();
+
+    if(!isFormValid){
+      showToastWidget(ToastNotification(message: "Please fill in the label form before updating order details", isError: true));
+      return;
+    }
+
+    await showDialog(
       context: context, 
       builder: (context){
-        return UpdateOrderDialog(order: model.stop, runID: model.runDocID, runData: model.runData);
+        return UpdateOrderDialog(stop: model.stop, runID: model.runDocID, runData: model.runData, markAsUnassignedCallback: model.markAsUnassignedCallback, hasPreviouslyBeenMarkedAsUnassigned: model.hasPreviouslyBeenMarkedAsUnassigned);
       }
     );
 
+    updateState();
 
   }
 
   void onSaveTap() async{
     
     final successfullySavedLabel = await model.saveLabel();
+
+    final isFormValid = model.validateLabelForm();
+
+    if(!isFormValid){
+      showToastWidget(ToastNotification(message: model.errorMessage, isError: true));
+      return;
+    }
 
     if(!successfullySavedLabel){
       showToastWidget(ToastNotification(message: "Error saving label to order", isError: true));

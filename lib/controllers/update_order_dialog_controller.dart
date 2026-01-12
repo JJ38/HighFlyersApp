@@ -1,22 +1,33 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/controllers/order_controller_abstract.dart';
 import 'package:high_flyers_app/models/update_order_dialog_model.dart';
 
 class UpdateOrderDialogController extends OrderController<UpdateOrderDialogModel>{
-
-  Map<String, dynamic> order;
+  
+  final void Function() markAsUnassignedCallback;
+  final bool hasPreviouslyBeenMarkedAsUnassigned;
+  Map<String, dynamic> stop;
   Map<String, dynamic> runData;
   String orderID;
   String runID;
 
 
-  UpdateOrderDialogController({required super.updateState, required this.order, required this.orderID, required this.runID, required this.runData});
+  UpdateOrderDialogController({
+    required super.updateState, 
+    required this.stop, 
+    required this.orderID, 
+    required this.runID, 
+    required this.runData, 
+    required this.markAsUnassignedCallback, 
+    required this.hasPreviouslyBeenMarkedAsUnassigned}
+  );
 
   
   @override
   UpdateOrderDialogModel createModel(){
-    return UpdateOrderDialogModel(order: order, orderID: orderID, runID: runID, runData: runData);
+    return UpdateOrderDialogModel(stop: stop, orderID: orderID, runID: runID, runData: runData, markAsUnassignedCallback: markAsUnassignedCallback, hasPreviouslyBeenMarkedAsUnassigned: hasPreviouslyBeenMarkedAsUnassigned);
   }
   
   @override
@@ -36,18 +47,22 @@ class UpdateOrderDialogController extends OrderController<UpdateOrderDialogModel
     }
 
     model.isSubmitting = true;
-    // updateState(); 
+    updateState(); 
 
     final successfullyUpdateOrderAndRuns = await model.updateOrderAndRuns();
 
     model.isSubmitting = false;
-    // updateState();
+    print("ATTEMPING UPDATE STATE");
+    updateState();
 
     if(!successfullyUpdateOrderAndRuns){
       showToastWidget(ToastNotification(message: "Error updating order and runs", isError: true));
       return;
     }
 
+    showToastWidget(ToastNotification(message: "Successfully updated order and runs", isError: false));
+    Navigator.of(context).pop();
+    
   }
 
 }

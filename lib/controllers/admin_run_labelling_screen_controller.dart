@@ -11,19 +11,18 @@ class AdminRunLabellingScreenController {
 
   AdminRunLabellingScreenController({required this.updateState, required runDocID}){
     model = AdminRunLabellingScreenModel(runDocID: runDocID);
-    fetchRunDocument();
+    initialisePage();
   }
 
-  void fetchRunDocument() async{
+  Future<void> initialisePage() async {
 
-    await model.fetchRunDocument();
+    final bool succesfullyInitialisedPage = await model.initialisePage();
 
-    if(!model.successfullyFetchedRunDocument){
+    if(!succesfullyInitialisedPage){
       showToastWidget(ToastNotification(message: "Error fetching run", isError: true));
+      return;
     }
-
-    model.orderStopsByID();
-
+  
     updateState();
 
   }
@@ -39,12 +38,11 @@ class AdminRunLabellingScreenController {
       )
     );
 
-    model.successfullyFetchedRunDocument = false;
+    model.successfullyInitialisedPage = false;
 
     updateState();
 
-    await model.fetchRunDocument();
-    model.orderStopsByID();
+    await model.initialisePage();
 
     updateState();
 

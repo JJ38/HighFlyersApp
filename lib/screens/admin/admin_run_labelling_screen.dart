@@ -47,7 +47,7 @@ class _AdminRunLabellingScreenState extends State<AdminRunLabellingScreen> {
           SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: adminRunLabellingScreenController.model.successfullyFetchedRunDocument ? 
+              children: adminRunLabellingScreenController.model.successfullyInitialisedPage ? 
               
                 [
           
