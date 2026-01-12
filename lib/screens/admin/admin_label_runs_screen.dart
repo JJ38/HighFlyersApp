@@ -98,19 +98,17 @@ class _AdminLabelRunsScreenState extends State<AdminLabelRunsScreen> {
 
                       if(adminLabelRunsScreenController.model.isLoaded && !adminLabelRunsScreenController.model.initialisedStaffMember)
 
-                        Expanded(
-                          child: Center(
-                            child: Text("Error loading runs")
-                          ,)
-                        ),
+                        Center(
+                          child: Text("Error loading runs")
+                        ,),
+                      
 
                       if(!adminLabelRunsScreenController.model.isLoaded)
 
-                        Expanded(
-                          child: Center(
-                            child: CircularProgressIndicator()
-                          ,)
-                        )
+                        Center(
+                          child: CircularProgressIndicator()
+                        ,)
+                        
                     ]
                   )
                 )
