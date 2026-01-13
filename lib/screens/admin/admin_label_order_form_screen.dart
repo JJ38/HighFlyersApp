@@ -45,7 +45,7 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
     final stop = adminLabelOrderFormScreenController.model.stop;
 
     return Scaffold(
-        body:SafeArea(
+        body: SafeArea(
           child: Padding(
             padding: EdgeInsetsGeometry.fromLTRB(screenWidth * 0.05, 0, screenWidth * 0.05, 0),
             child: 

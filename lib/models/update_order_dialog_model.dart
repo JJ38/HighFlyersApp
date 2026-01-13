@@ -153,7 +153,7 @@ class UpdateOrderDialogModel extends OrderModel{
   }
 
 
-  Future<bool> updateRuns(formOrder, adminEditOrderScreenModel, request) async {
+  Future<bool> updateRuns(formOrder, AdminEditOrderScreenModel adminEditOrderScreenModel, request) async {
 
     print('updateRuns');
 

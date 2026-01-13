@@ -18,6 +18,24 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def getBuildNumber() {
+    def propsFile = file("${rootProject.projectDir}/version.properties")
+    if (!propsFile.exists()) {
+        propsFile.createNewFile()
+        propsFile.text = "BUILD_NUMBER=1"
+    }
+
+    def Properties props = new Properties()
+    props.load(new FileInputStream(propsFile))
+
+    def buildNumber = props['BUILD_NUMBER'].toInteger()
+    props['BUILD_NUMBER'] = (buildNumber + 1).toString()
+    props.store(propsFile.newWriter(), null)
+
+    return buildNumber
+}
+
+
 
 android {
     namespace = "com.example.high_flyers_app"
@@ -41,7 +59,7 @@ android {
         minSdk = flutter.minSdkVersion
         minSdkVersion 23
         targetSdk = 36
-        versionCode = flutter.versionCode
+        versionCode = getBuildNumber()
         versionName = flutter.versionName
     }
 

@@ -213,8 +213,8 @@ class DriverScreenModel {
         ),
         androidSettings: AndroidSettings(
           accuracy: LocationAccuracy.NAVIGATION,
-          interval: 5,
-          distanceFilter: 0,
+          interval: 30,
+          distanceFilter: 300,
           androidNotificationSettings: AndroidNotificationSettings(
             notificationChannelName: 'Location tracking',
             notificationTitle: 'Start Location Tracking',

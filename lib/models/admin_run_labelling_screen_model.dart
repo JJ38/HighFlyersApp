@@ -39,7 +39,7 @@ class AdminRunLabellingScreenModel {
     }
 
     successfullyInitialisedPage = true;
-    orderStopsByID();
+    orderStopsByStopNumber();
 
     return true;
 
@@ -188,6 +188,12 @@ class AdminRunLabellingScreenModel {
   void orderStopsByID(){
 
     (runData?['stops'] as List).sort((a, b) => (a['orderData']?['ID'] as int).compareTo(b['orderData']?['ID'] as int));
+
+  }
+
+  void orderStopsByStopNumber(){
+
+    (runData?['stops'] as List).sort((a, b) => (a['stopNumber'] as int).compareTo(b['stopNumber'] as int));
 
   }
 
