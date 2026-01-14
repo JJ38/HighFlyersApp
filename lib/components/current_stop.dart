@@ -129,17 +129,18 @@ class _CurrentStopState extends State<CurrentStop> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${currentStopController.model.stop['stopType'][0].toUpperCase()}${currentStopController.model.stop['stopType'].substring(1)} Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                        Text("${currentStopController.model.stop['stopType'][0].toUpperCase()}${currentStopController.model.stop['stopType'].substring(1)} Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),                      
+                        Text(currentStopController.model.stop['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
                         Row(
                           children: [
-                            Text(currentStopController.model.stop['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),  
-                          ],
-                        ),
-
-                        Row(
-                          children: [
-                            Text("${currentStopController.model.stop['stopData']['address2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
-                            Text(currentStopController.model.stop['stopData']['address3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                            Expanded(
+                              child: Text(
+                                "${currentStopController.model.stop['stopData']['address2']}, "
+                                "${currentStopController.model.stop['stopData']['address3']}",
+                                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),
+                                maxLines: 100,
+                              ),
+                            ),
                           ]
                         ),
                         Text(currentStopController.model.stop['stopData']['postcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
@@ -184,16 +185,16 @@ class _CurrentStopState extends State<CurrentStop> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                            Text(currentStopController.model.stop['orderData']['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
                             Row(
                               children: [
-                                Text(currentStopController.model.stop['orderData']['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),  
-                              ],
-                            ),
-
-                            Row(
-                              children: [
-                                Text("${currentStopController.model.stop['orderData']['deliveryAddress2']}, ", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
-                                Text(currentStopController.model.stop['orderData']['deliveryAddress3'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                                Expanded(
+                                  child:Text(
+                                    "${currentStopController.model.stop['orderData']['deliveryAddress2']}, "
+                                    "${currentStopController.model.stop['orderData']['deliveryAddress3']}", 
+                                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,
+                                  ),
+                                )
                               ]
                             ),
                             Text(currentStopController.model.stop['orderData']['deliveryPostcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),

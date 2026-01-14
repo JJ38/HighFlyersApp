@@ -43,20 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // ElevatedButton(
-            //   onPressed: () async {
-              
-            //     try {
-            //       throw StateError('Sentry Test Exception');
-            //     } catch (exception, stackTrace) {
-            //       await Sentry.captureException(
-            //         exception,
-            //         stackTrace: stackTrace,
-            //       );
-            //     }
-            //   },
-            //   child: const Text('Verify Sentry Setup'),
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
