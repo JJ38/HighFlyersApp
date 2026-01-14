@@ -37,7 +37,7 @@ class StopCard extends StatelessWidget {
             spacing: 20,
             children: [
               Text(stop['stopNumber'].toString(), style: Theme.of(context).textTheme.labelLarge, selectionColor: Color(0xFF2881FF)),
-              //give the width of the row to the columnn to make sure it doenst overflow and text overflow works
+              //give the width of the row to the column to make sure it doenst overflow and text overflow works
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,6 +50,8 @@ class StopCard extends StatelessWidget {
                       ],
                     ),
                     Text(stop['stopData']['postcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                    Text("Phone Number: ${stop['stopData']['phoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+
                   ]
                 )
               )

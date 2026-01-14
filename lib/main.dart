@@ -127,7 +127,7 @@ class MyApp extends StatelessWidget {
                 overflow: TextOverflow.ellipsis),
           ),
         ),
-        home: !kReleaseMode ? const AuthBootstrap() : const LoginScreen(),
+        home: kReleaseMode ? const AuthBootstrap() : const LoginScreen(),
         routes: {
           // AuthBootstrap.id: (context) => AuthBootstrap(),
           LoginScreen.id: (context) => LoginScreen(),

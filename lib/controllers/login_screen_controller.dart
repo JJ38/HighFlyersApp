@@ -48,7 +48,7 @@ class LoginScreenController {
 
     }
 
-    if(kDebugMode){
+    if(!kDebugMode){
       //If in prod a different auth flow is being used to handle auto sign in on cold restart
       return;
     }
