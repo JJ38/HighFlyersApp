@@ -10,5 +10,3 @@
 - Find bug in updating order from run labelling form thats causing the update request to be sent twice
 
 - Make sure address info wraps and doesnt go off screen on stop screen
-
-- 

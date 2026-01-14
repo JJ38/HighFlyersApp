@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/squared_input.dart';
 import 'package:high_flyers_app/components/stateful_button.dart';
+import 'package:high_flyers_app/controllers/auth_controller.dart';
 import 'package:high_flyers_app/controllers/customer_profile_screen_controller.dart';
 import 'package:high_flyers_app/models/validator.dart';
 
@@ -57,6 +58,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   Expanded(
                     child: ListView(
                       children: [
+                        SizedBox(height: 5,),
                         SquaredInput(label: "Name", value: customerProfileScreenController.model.name, icon: Icons.person_outline_outlined, onChange: customerProfileScreenController.nameOnChange),
                         SizedBox(height: 20,),
                         SquaredInput(label: "Email", value: customerProfileScreenController.model.email, icon: Icons.alternate_email_outlined, keyboardType: TextInputType.emailAddress, onChange: customerProfileScreenController.emailOnChange),
@@ -71,7 +73,32 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         SizedBox(height: 20,),
                         SquaredInput(label: "Phone number", value: customerProfileScreenController.model.phoneNumber, icon: Icons.phone_outlined, keyboardType: TextInputType.phone, onChange: customerProfileScreenController.phoneNumberOnChange),
                         SizedBox(height: 20,),
-                        StatefulButton(controller: customerProfileScreenController)
+                        StatefulButton(controller: customerProfileScreenController),
+
+                        SizedBox(height: 20),
+                        Text("Account", style: Theme.of(context).textTheme.titleMedium),
+                        SizedBox(height: 10),
+                        Center(
+                          child: Material(
+                            color: const Color.fromARGB(255, 227, 24, 10),
+                            shadowColor: Colors.red,                                
+                            borderRadius: BorderRadius.all(Radius.circular(8)),  
+                                                                
+                            child: MaterialButton(
+                              onPressed: AuthController.signOut,
+                              minWidth: screenWidth * 0.9,
+                              height: screenWidth * 0.1,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text("Sign out", style: TextStyle(color: Colors.white)),
+                                  ),
+                                  Icon(Icons.logout, color: Colors.white)
+                                ]
+                              ),
+                            ),
+                          ),
+                        ),                 
                       ],
                     )
                   )

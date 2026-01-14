@@ -10,20 +10,18 @@ class SplashScreen extends StatelessWidget {
 
     return Scaffold(
 
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),  
-          child: Center(
-            child: Image.asset(
-                  "assets/images/pigeon.png",
-                  scale: screenWidth * 0.15,
-                ),
-          ),
-        )
-      ),
-
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),  
+        child: Center(
+          child: Image.asset(
+                "assets/images/pigeon.png",
+                width: screenWidth * 0.25,
+                fit: BoxFit.contain,
+              ),
+        ),
+      )
     );
   }
 }

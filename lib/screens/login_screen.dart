@@ -28,9 +28,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void updateState(){
-    setState(() {
-      
-    });
+    if(mounted){
+      setState(() {
+        
+      });
+    }
   }
 
   @override

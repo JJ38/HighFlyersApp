@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -22,6 +23,9 @@ class LoginScreenController {
     model.password = password;
   }
 
+
+  //This code is essentially deadcode in prod. However leave for debug as AuthBootstrap, which is what makes this code redundant in prod, isnt used in debug. 
+  //This is because if AuthBootstap was used in debug on every hot reload a splach screen would show and the state of the application will be lost.
   void login(context) async {
 
     model.isLoading = true;
@@ -42,6 +46,11 @@ class LoginScreenController {
 
       return;
 
+    }
+
+    if(kDebugMode){
+      //If in prod a different auth flow is being used to handle auto sign in on cold restart
+      return;
     }
 
     if (model.role == "driver") {

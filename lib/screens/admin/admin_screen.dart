@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:high_flyers_app/screens/admin/admin_label_runs_screen.dart';
 import 'package:high_flyers_app/screens/admin/admin_manage_orders_screen.dart';
 import 'package:high_flyers_app/screens/admin/admin_manage_users_screen.dart';
+import 'package:high_flyers_app/screens/admin/admin_settings_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   static String id = "Admin Screen";
@@ -19,8 +20,8 @@ class _AdminScreenState extends State<AdminScreen> {
   late final String role;
   bool hasLoaded = false;
 
-  List<Widget> adminScreens = [AdminManageOrdersScreen(), AdminLabelRunsScreen(), AdminManageUsersScreen()];
-  List<Widget> staffScreens = [AdminManageOrdersScreen(), AdminLabelRunsScreen()];
+  List<Widget> adminScreens = [AdminManageOrdersScreen(), AdminLabelRunsScreen(), AdminManageUsersScreen(), AdminSettingsScreen()];
+  List<Widget> staffScreens = [AdminManageOrdersScreen(), AdminLabelRunsScreen(), AdminSettingsScreen()];
 
 
   @override
@@ -66,8 +67,8 @@ class _AdminScreenState extends State<AdminScreen> {
                 destinations: [
                   NavigationDestination(icon: Icon(Icons.receipt), label: "Orders"),
                   NavigationDestination(icon: Icon(Icons.receipt), label: "Label Runs"),
-                  NavigationDestination(
-                      icon: Icon(Icons.verified_user_sharp), label: "Users")
+                  NavigationDestination(icon: Icon(Icons.verified_user_sharp), label: "Users"),
+                  NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
                 ],
                 selectedIndex: currentPageIndex,
                 onDestinationSelected: (int index) {
@@ -86,7 +87,8 @@ class _AdminScreenState extends State<AdminScreen> {
               bottomNavigationBar: NavigationBar(
                 destinations: [
                   NavigationDestination(icon: Icon(Icons.receipt), label: "Orders"),
-                  NavigationDestination(icon: Icon(Icons.discount), label: "Label Runs")
+                  NavigationDestination(icon: Icon(Icons.discount), label: "Label Runs"),
+                  NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
                 ],
                 selectedIndex: currentPageIndex,
                 onDestinationSelected: (int index) {

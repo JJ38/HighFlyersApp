@@ -30,8 +30,6 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -45,6 +43,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: screenWidth * 0.05,),
                   Text("Your Runs", style: Theme.of(context).textTheme.titleLarge),
 
                   driverHomeScreenController.model.driverLoadedSuccessfully ? 

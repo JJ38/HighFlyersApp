@@ -63,6 +63,10 @@ class AdminLabelRunsScreenModel {
       return false;
     }
 
+    if(FirebaseAuth.instance.currentUser == null){
+      return false;
+    }
+
     final uid = FirebaseAuth.instance.currentUser!.uid;
     DocumentReference<Map<String, dynamic>> staffDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Staff').doc(uid);
 

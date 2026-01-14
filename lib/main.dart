@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:high_flyers_app/components/auth_bootstrap.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
@@ -126,8 +127,9 @@ class MyApp extends StatelessWidget {
                 overflow: TextOverflow.ellipsis),
           ),
         ),
-        initialRoute: LoginScreen.id,
+        home: !kReleaseMode ? const AuthBootstrap() : const LoginScreen(),
         routes: {
+          // AuthBootstrap.id: (context) => AuthBootstrap(),
           LoginScreen.id: (context) => LoginScreen(),
           DriverScreen.id: (context) => DriverScreen(),
           CustomerScreen.id: (context) => CustomerScreen(),

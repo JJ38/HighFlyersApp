@@ -43,9 +43,13 @@ class _DriverScreenState extends State<DriverScreen> {
         ],
         selectedIndex: currentPageIndex,
         onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
+          
+          if(mounted){
+            setState(() {
+              currentPageIndex = index;
+            });
+          }
+         
         },
         indicatorColor: Theme.of(context).colorScheme.secondary,
       ),
