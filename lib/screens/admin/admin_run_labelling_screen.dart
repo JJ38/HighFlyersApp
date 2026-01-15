@@ -87,6 +87,7 @@ class _AdminRunLabellingScreenState extends State<AdminRunLabellingScreen> {
                                 padding: EdgeInsetsGeometry.only(top: 10),
                                 child: AdminOrderCard(
                                   order: stop['orderData'] ?? <String, dynamic>{},
+                                  labelData: stop['label'],
                                 )
                               ),
                             );

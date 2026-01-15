@@ -24,7 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState(){
     super.initState();
     loginScreenController = LoginScreenController(updateState: updateState);
-
   }
 
   void updateState(){
@@ -65,14 +64,17 @@ class _LoginScreenState extends State<LoginScreen> {
             Column(
               spacing: 20,
               children: [
+
                 InputPill(
                   text: "Username",
                   onChange: loginScreenController.usernameInputController,
                 ),
+
                 InputPill(
                     text: "Password",
                     obscureText: true,
-                    onChange: loginScreenController.passwordInputController),
+                    onChange: loginScreenController.passwordInputController
+                  ),
 
                 loginScreenController.model.isLoading ?
 

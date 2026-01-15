@@ -4,19 +4,21 @@ import 'package:high_flyers_app/components/icon_label.dart';
 class AdminOrderCard extends StatelessWidget {
 
   final Map<String, dynamic> order; 
+  final Map<String, dynamic>? labelData; 
   final Map<String, String> customerAccounts;
 
-  const AdminOrderCard({super.key, required this.order, this.customerAccounts = const <String, String> {}});
+  const AdminOrderCard({super.key, required this.order, this.customerAccounts = const <String, String> {}, this.labelData});
 
   @override
   Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
+    print(order);
 
     return Container(
       // height: 400,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: labelData == null ? Colors.white : const Color.fromARGB(255, 110, 233, 114),
         borderRadius: BorderRadius.circular(10)
       ),
       child: Padding(
