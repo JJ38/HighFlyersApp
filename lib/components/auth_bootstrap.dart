@@ -109,6 +109,8 @@ class _AuthBootstrapState extends State<AuthBootstrap> {
         return const CustomerScreen(key: ValueKey('customer'));
       case 'admin':
         return const AdminScreen(key: ValueKey('admin'));
+      case 'staff':
+        return const AdminScreen(key: ValueKey('admin'));
       default:
         return const LoginScreen(key: ValueKey('login-default'));
     }

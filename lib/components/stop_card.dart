@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
 
-class StopCard extends StatelessWidget {
+class StopCard extends StatefulWidget {
 
   final dynamic stop;
   final double width;
 
-  const StopCard({super.key, required this.stop, required this.width});
+  const StopCard({super.key, required this.width, required this.stop});
+
+  @override
+  State<StopCard> createState() => _StopCardState();
+}
+
+class _StopCardState extends State<StopCard> {
+
 
   @override
   Widget build(BuildContext context) {
 
+    final dynamic stop = widget.stop;
     final bool shouldHighlightStop = stop['label']?['arrivalNotice'] == "yes" || stop['label']?['message'] != "" && stop['label']?['message'] != null; 
+    
     print(stop);
     return Container(
       clipBehavior: Clip.hardEdge,
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       margin: EdgeInsets.all(5),
-      width: width,
+      width: widget.width,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -86,4 +95,5 @@ class StopCard extends StatelessWidget {
       )
     );
   }
+
 }
