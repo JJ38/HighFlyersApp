@@ -6,5 +6,3 @@
 - Mark stuff as cancelled in staff labelling form
 
 - Find bug in updating order from run labelling form thats causing the update request to be sent twice
-
-- change label runs or orders icons as they are both currently the same 

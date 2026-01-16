@@ -11,10 +11,8 @@ class StopCardModel {
     shouldHighlightStop = stop['label']?['arrivalNotice'] == "yes" || stop['label']?['message'] != "" && stop['label']?['message'] != null;
   }
   
-  
 
   Future<bool> callCustomer() async {
-
 
     try{
 

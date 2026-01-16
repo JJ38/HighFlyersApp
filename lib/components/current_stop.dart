@@ -434,6 +434,7 @@ class _CurrentStopState extends State<CurrentStop> {
               ...currentStopController.model.showStopForm ?
 
                 [
+                  SizedBox(height: 10,),
                   StopForm(updateStopScreenState: updateState, updateMapMarker: currentStopController.updateMapMarkerNextStop, hideStopForm: currentStopController.hideStopFrom, completeStop: currentStopController.model.completeStop, getShouldCallAdmin: currentStopController.model.getShouldCallAdmin, callAdmin: currentStopController.model.callAdmin,),
                 ]
 

@@ -66,7 +66,7 @@ class _AdminScreenState extends State<AdminScreen> {
               bottomNavigationBar: NavigationBar(
                 destinations: [
                   NavigationDestination(icon: Icon(Icons.receipt), label: "Orders"),
-                  NavigationDestination(icon: Icon(Icons.receipt), label: "Label Runs"),
+                  NavigationDestination(icon: Icon(Icons.discount), label: "Label Runs"),
                   NavigationDestination(icon: Icon(Icons.verified_user_sharp), label: "Users"),
                   NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
                 ],

@@ -39,9 +39,8 @@ class _StopCardState extends State<StopCard> {
   @override
   Widget build(BuildContext context) {
 
-    final dynamic stop = widget.stop;
-    
-    print(stop);
+                            print(stopCardController.model.stop['stopStatus']);
+
     return GestureDetector(
       onTap: stopCardController.onTap,
       child: Container(
@@ -50,10 +49,29 @@ class _StopCardState extends State<StopCard> {
         margin: EdgeInsets.all(5),
         width: widget.width,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: switch(stopCardController.model.stop['stopStatus']){
+                    'Skipped' => const Color.fromARGB(255, 255, 241, 119),
+                    'Complete' => const Color.fromARGB(255, 148, 255, 152),               
+                    _ => Colors.white
+                  }, 
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
-            BoxShadow(color: stopCardController.model.shouldHighlightStop ? const Color(0xFF2881FF) : Color.fromARGB(69, 0, 0, 0), blurRadius: 10, spreadRadius: -4)
+            BoxShadow(
+              color: stopCardController.model.shouldHighlightStop ?
+
+                const Color(0xFF2881FF) 
+
+                    : 
+
+                  switch(stopCardController.model.stop['stopStatus']){
+                    'Skipped' => Colors.yellow,
+                    'Complete' => Color.fromARGB(255, 148, 255, 152),               
+                    _ => Color.fromARGB(69, 0, 0, 0)
+                  }, 
+
+              blurRadius: 10, 
+              spreadRadius: -4
+            )
           ]//
         ),
         child: stopCardController.model.expandCard ?
@@ -66,10 +84,9 @@ class _StopCardState extends State<StopCard> {
                 Row(  
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:[
-                    Text("#${stop['stopData']['ID']}", style: Theme.of(context).textTheme.labelMedium),
+                    Text("#${stopCardController.model.stop['stopData']['ID']}", style: Theme.of(context).textTheme.labelMedium),
                     // Text(stop['stopType'] == "collection" ? "Collection" : "Delivery", style: Theme.of(context).textTheme.labelMedium)
-                    Text(stop['stopNumber'].toString(), style: Theme.of(context).textTheme.labelLarge, selectionColor: Color(0xFF2881FF)),
-
+                    Text(stopCardController.model.stop['stopNumber'].toString(), style: Theme.of(context).textTheme.labelLarge, selectionColor: Color(0xFF2881FF)),
                   ],
                 ),
 
@@ -79,7 +96,7 @@ class _StopCardState extends State<StopCard> {
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadiusGeometry.circular(20),
-                    color: const Color.fromARGB(255, 246, 246, 246)
+                    color: const Color.fromARGB(255, 246, 246, 246)                                       
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +222,7 @@ class _StopCardState extends State<StopCard> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       width: 2,
-                      color: stop['stopType'] == "collection" ? Colors.red : const Color.fromARGB(0, 33, 149, 243)
+                      color: stopCardController.model.stop['stopType'] == "collection" ? Colors.red : const Color.fromARGB(0, 33, 149, 243)
                     )
                   ),
                   child: Column(
@@ -218,7 +235,7 @@ class _StopCardState extends State<StopCard> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(stop['orderData']['collectionAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
+                            Text(stopCardController.model.stop['orderData']['collectionAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
                             Row(
                               children: [
                                 Expanded(
@@ -232,8 +249,8 @@ class _StopCardState extends State<StopCard> {
                               ]
                             ),
                             
-                            Text(stop['orderData']['collectionPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
-                            Text("Phone Number: ${stop['orderData']['collectionPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+                            Text(stopCardController.model.stop['orderData']['collectionPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                            Text("Phone Number: ${stopCardController.model.stop['orderData']['collectionPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
                           ]
                         ),
                       ),
@@ -251,7 +268,7 @@ class _StopCardState extends State<StopCard> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       width: 2,
-                      color: stop['stopType'] == "delivery" ? Colors.blue : const Color.fromARGB(0, 33, 149, 243)
+                      color: stopCardController.model.stop['stopType'] == "delivery" ? Colors.blue : const Color.fromARGB(0, 33, 149, 243)
                     )
                   ),
                   child: Column(
@@ -264,7 +281,7 @@ class _StopCardState extends State<StopCard> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(stop['orderData']['deliveryAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
+                            Text(stopCardController.model.stop['orderData']['deliveryAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
                             Row(
                               children: [
                                 Expanded(
@@ -277,8 +294,8 @@ class _StopCardState extends State<StopCard> {
                                 )                      
                               ]
                             ),
-                            Text(stop['orderData']['deliveryPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
-                            Text("Phone Number: ${stop['orderData']['deliveryPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+                            Text(stopCardController.model.stop['orderData']['deliveryPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                            Text("Phone Number: ${stopCardController.model.stop['orderData']['deliveryPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
                           ]
                         ),
                       ),
@@ -351,7 +368,6 @@ class _StopCardState extends State<StopCard> {
                     ]
                   ),
 
-
                 SizedBox(height: 20,),
                    
                 Center(
@@ -365,6 +381,7 @@ class _StopCardState extends State<StopCard> {
                     action: (controller) async { await stopCardController.callCustomer(controller, context);}
                   )
                 ),
+                
                 SizedBox(height: 20,),
                     
               ],
@@ -377,28 +394,28 @@ class _StopCardState extends State<StopCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:[
-                    Text("#${stop['stopData']['ID']}", style: Theme.of(context).textTheme.labelMedium),
-                    Text(stop['stopType'] == "collection" ? "Collection" : "Delivery", style: Theme.of(context).textTheme.labelMedium)
+                    Text("#${stopCardController.model.stop['stopData']['ID']}", style: Theme.of(context).textTheme.labelMedium),
+                    Text(stopCardController.model.stop['stopType'] == "collection" ? "Collection" : "Delivery", style: Theme.of(context).textTheme.labelMedium)
                   ]
                 ),
                 Row(
                   spacing: 20,
                   children: [
-                    Text(stop['stopNumber'].toString(), style: Theme.of(context).textTheme.labelLarge, selectionColor: Color(0xFF2881FF)),
+                    Text(stopCardController.model.stop['stopNumber'].toString(), style: Theme.of(context).textTheme.labelLarge, selectionColor: Color(0xFF2881FF)),
                     //give the width of the row to the column to make sure it doenst overflow and text overflow works
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(stop['stopData']['address1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 1),
+                          Text(stopCardController.model.stop['stopData']['address1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 1),
                           Row(
                             children: [
-                              Text(stop['stopData']['address2'].trim() + ", ", style: Theme.of(context).textTheme.labelSmall),
-                              Text(stop['stopData']['address3'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                              Text(stopCardController.model.stop['stopData']['address2'].trim() + ", ", style: Theme.of(context).textTheme.labelSmall),
+                              Text(stopCardController.model.stop['stopData']['address3'].trim(), style: Theme.of(context).textTheme.labelSmall),
                             ],
                           ),
-                          Text(stop['stopData']['postcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
-                          Text("Phone Number: ${stop['stopData']['phoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+                          Text(stopCardController.model.stop['stopData']['postcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                          Text("Phone Number: ${stopCardController.model.stop['stopData']['phoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
                           ]
                       )
                     )
@@ -407,21 +424,21 @@ class _StopCardState extends State<StopCard> {
                 if(stopCardController.model.shouldHighlightStop)
                   SizedBox(height: 5,),
 
-                if(stop['label']?['arrivalNotice'] == "yes")
+                if(stopCardController.model.stop['label']?['arrivalNotice'] == "yes")
                   Row(
-                  children: [
-                    Text("Notice period: ", style: Theme.of(context).textTheme.labelMedium),
-                    Text("${stop['label']?['noticePeriod']} mins", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14)),
-                  ],               
-                ),
+                    children: [
+                      Text("Notice period: ", style: Theme.of(context).textTheme.labelMedium),
+                      Text("${stopCardController.model.stop['label']?['noticePeriod']} mins", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14)),
+                    ],               
+                  ),
 
-                if(stop['label']?['message'] != "" && stop['label']?['message'] != null)
+                if(stopCardController.model.stop['label']?['message'] != "" && stopCardController.model.stop['label']?['message'] != null)
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Staff message: ", style: Theme.of(context).textTheme.labelMedium),
                       Expanded(
-                        child: Text("${stop['label']?['message']}", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, overflow: TextOverflow.visible)),
+                        child: Text("${stopCardController.model.stop['label']?['message']}", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, overflow: TextOverflow.visible)),
                       )
                     ],
                   )
