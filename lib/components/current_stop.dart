@@ -346,24 +346,11 @@ class _CurrentStopState extends State<CurrentStop> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
 
-              Center(
-                child: ActionSlider.standard(
-                  icon: Icon(Icons.phone),
-                  toggleColor: const Color.fromARGB(128, 229, 0, 46),
-                  backgroundColor: const Color.fromARGB(255, 246, 246, 246),
-                  boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
-                  borderWidth: 4,
-                  child: Text("Slide to call customer", style: TextStyle(color: Colors.black),),
-                  action: (controller) async { await currentStopController.callCustomer(controller, context);}
-                )
-              ),
 
               SizedBox(height: 10),
 
               Divider(height: 1,),
-              SizedBox(height: 10),
 
               //staff labels 
 
@@ -372,7 +359,7 @@ class _CurrentStopState extends State<CurrentStop> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Row(
                       children:[
                         Padding(
@@ -429,6 +416,20 @@ class _CurrentStopState extends State<CurrentStop> {
                   ]
                 ),
 
+              SizedBox(height: 20),
+                
+              Center(
+                child: ActionSlider.standard(
+                  icon: Icon(Icons.phone),
+                  toggleColor: const Color.fromARGB(128, 229, 0, 46),
+                  backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+                  boxShadow: [BoxShadow(color: const Color.fromARGB(255, 206, 206, 206), blurRadius: 0, spreadRadius: 1)],
+                  borderWidth: 4,
+                  child: Text("Slide to call customer", style: TextStyle(color: Colors.black),),
+                  action: (controller) async { await currentStopController.callCustomer(controller, context);}
+                )
+              ),
+
 
               ...currentStopController.model.showStopForm ?
 
@@ -439,10 +440,10 @@ class _CurrentStopState extends State<CurrentStop> {
               :
                 [
                   
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   Center(
                     child: Material(
-                      color: Colors.black,
+                      color: Colors.green,
                       shadowColor: Color(0x00000000),                                
                       borderRadius: BorderRadius.all(Radius.circular(8)),                                     
                       child: MaterialButton(

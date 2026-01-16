@@ -13,7 +13,6 @@ class AdminOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
-    print(order);
 
     return Container(
       // height: 400,
@@ -27,13 +26,16 @@ class AdminOrderCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             Flexible(
               fit: FlexFit.loose,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+
                   Text("#${order['ID']}"),
-                  Text(customerAccounts[order['account']] ??  order['account'].toString()),
+                  Text(customerAccounts[order['account']] ?? order['account'].toString()),
+                  
                 ]
               )
             ),
@@ -49,6 +51,7 @@ class AdminOrderCard extends StatelessWidget {
               ),
               child: Column(
                 children: [ 
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -56,7 +59,9 @@ class AdminOrderCard extends StatelessWidget {
                       Text("${order['quantity']}x ${order['animalType']}", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),  
                       ],
                   ),
+
                   SizedBox(height: 5,),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -66,7 +71,9 @@ class AdminOrderCard extends StatelessWidget {
                       )
                     ]
                   ),
+
                   SizedBox(height: 5,),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -84,6 +91,7 @@ class AdminOrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Flexible(
                   fit: FlexFit.loose,
                   child: Column(
@@ -105,6 +113,7 @@ class AdminOrderCard extends StatelessWidget {
                     ]              
                   )
                 ),
+
                 Flexible(
                   fit: FlexFit.loose,
                   child: Column(
@@ -127,6 +136,7 @@ class AdminOrderCard extends StatelessWidget {
                 ),  
               ],
             ),
+
             SizedBox(height: 20,),
 
             if(order['message'] != "" && order['message'] != null)
