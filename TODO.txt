@@ -1,14 +1,10 @@
 - (URGENT!) Reorder stops when an order is removed from a run due to it being updated by staff labelling. 
   URGENT! as the run wil not start if first stop is missing and will likely crash mid run if N+1 doesnt exist. *Will only show missing stops in order if forgotten to recalculate*
 
-- Long lasting sign in
-
 - Storing runs in offline mode to help with bad signal
 
 - Mark stuff as cancelled in staff labelling form
 
 - Find bug in updating order from run labelling form thats causing the update request to be sent twice
-
-- Make sure address info wraps and doesnt go off screen on stop screen
 
 - change label runs or orders icons as they are both currently the same 

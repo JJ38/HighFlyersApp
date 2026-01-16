@@ -273,7 +273,7 @@ class _CurrentStopState extends State<CurrentStop> {
                     Row(
                       children: [
                         Expanded(
-                          child: Text("Collecting payment:",  style: Theme.of(context).textTheme.labelSmall), 
+                          child: Text("Collect payment:",  style: Theme.of(context).textTheme.labelSmall), 
                         ),
                         Expanded(
                           child: currentStopController.model.stop['deferredPayment'] == true ?
@@ -405,7 +405,7 @@ class _CurrentStopState extends State<CurrentStop> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Staff Message", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                              Text(currentStopController.model.stop['label']['message'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                              Text(currentStopController.model.stop['label']['message'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),
                             ]              
                           )
                         ),
