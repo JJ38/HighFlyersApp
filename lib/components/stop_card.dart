@@ -7,8 +7,9 @@ class StopCard extends StatefulWidget {
 
   final Map<String, dynamic> stop;
   final double width;
+  final bool shouldShowOpenFormButton;
 
-  const StopCard({super.key, required this.width, required this.stop});
+  const StopCard({super.key, required this.width, required this.stop, this.shouldShowOpenFormButton = false});
 
   @override
   State<StopCard> createState() => _StopCardState();
@@ -39,7 +40,9 @@ class _StopCardState extends State<StopCard> {
   @override
   Widget build(BuildContext context) {
 
-                            print(stopCardController.model.stop['stopStatus']);
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    print(stopCardController.model.stop['stopStatus']);
 
     return GestureDetector(
       onTap: stopCardController.onTap,
@@ -383,7 +386,28 @@ class _StopCardState extends State<StopCard> {
                 ),
                 
                 SizedBox(height: 20,),
-                    
+
+                if(widget.shouldShowOpenFormButton) 
+                  
+                  Column(
+                    children: [
+                      Center(
+                        child: Material(
+                          color: Theme.of(context).colorScheme.secondary,
+                          shadowColor: Color(0x00000000),                                
+                          borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                          child: MaterialButton(
+                            onPressed: () {stopCardController.openStopFormDialog(context);},
+                            minWidth: screenWidth * 0.9,
+                            height: screenWidth * 0.1,
+                            child: Text("Open Form", style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10,)
+                    ]
+                  )
+                  
               ],
             )
           

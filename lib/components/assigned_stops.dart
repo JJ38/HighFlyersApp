@@ -32,6 +32,7 @@ class _AssignedStopsState extends State<AssignedStops> {
               return StopCard(
                 stop: stop,
                 width: screenWidth,
+                shouldShowOpenFormButton: true,
               );
             }).toList()                               
           );       

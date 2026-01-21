@@ -1,6 +1,7 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:high_flyers_app/components/stop_form_dialog.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/stop_card_model.dart';
 
@@ -31,6 +32,21 @@ class StopCardController {
 
     if(!calledCustomerSuccessfully){
       showToastWidget(ToastNotification(message: "Error calling customer", isError: true));
+    }
+
+  }
+
+  Future<void> openStopFormDialog(BuildContext context) async {
+
+    if(context.mounted){
+
+      showDialog(
+        context: context, 
+        builder: (context){
+          return StopFormDialog(stop: model.stop);
+        }
+      );
+
     }
 
   }

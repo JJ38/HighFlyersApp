@@ -6,3 +6,8 @@
 - Mark stuff as cancelled in staff labelling form
 
 - Find bug in updating order from run labelling form thats causing the update request to be sent twice
+
+- make form submittable through stop overview list
+
+- store all iterations of forms
+

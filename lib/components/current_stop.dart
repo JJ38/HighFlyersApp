@@ -40,10 +40,7 @@ class _CurrentStopState extends State<CurrentStop> {
     currentStopController.model.updateCurrentStop = widget.updateCurrentStop;
     // currentStopController.model.isRunCompleted = widget.isRunCompleted;
 
-
     widget.updateMapMarker(currentStopController.model.stop);
-
-    
 
   }
 

@@ -113,7 +113,7 @@ class CurrentStopController {
 
   }
 
-  Future<void> skipStop(controller, context) async {
+  Future<void> skipStop(controller, BuildContext context) async {
 
     controller.loading();
 
@@ -125,13 +125,17 @@ class CurrentStopController {
       if(model.shouldCallAdmin){
 
         showToastWidget(ToastNotification(message: "You must call kev before skipping this stop", isError: true));
+        
+        if(context.mounted){
 
-        showDialog(
-          context: context, 
-          builder: (context){
-            return CallAdminDialogBox(callAdmin: model.callAdmin);
-          }
-        );
+          showDialog(
+            context: context, 
+            builder: (context){
+              return CallAdminDialogBox(callAdmin: model.callAdmin);
+            }
+          );
+
+        }
 
         controller.reset();
         return;
