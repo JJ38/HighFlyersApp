@@ -11,3 +11,8 @@
 
 - store all iterations of forms
 
+- add prices to label runs form. Put in delivery box if delivery payment and in collection box if a collection payment
+
+- Add start times to driver app
+
+- fix runtimes as showing as unknown. e.g value that causes issues - 42400.799999999996

@@ -165,7 +165,7 @@ class _CurrentStopState extends State<CurrentStop> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("Delivery Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                          Text(currentStopController.model.stop['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                          Text(currentStopController.model.stop['orderData']['deliveryName'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
                         ],
                       ),
                     ]
