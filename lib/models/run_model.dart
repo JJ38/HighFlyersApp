@@ -71,8 +71,6 @@ class RunModel {
         icon: await customMarker(stopData['stopNumber'].toString()),
       )
     );
-    
-    print(markers);
 
     return true;
 
@@ -134,6 +132,46 @@ class RunModel {
     }catch(error, stack){
       print(error);
       return "unknown";
+    }
+
+
+  }
+
+  String getStartTime(){
+
+    try{
+
+      final settings = run!['settings'];
+
+      String startHour = settings['start']['time']['hour'].toString();
+      String startMinute = settings['start']['time']['minute'].toString();
+
+      bool startInAM = false;
+
+      if(startHour.length == 1){
+        startHour = "0$startHour";
+        startInAM = true;
+      }
+
+      if(startMinute.length == 1){
+        startMinute = "0$startMinute";
+      }
+
+      String startTime = "$startHour:$startMinute";
+
+      if(startInAM){
+        startTime += " am";
+      }else{
+        startTime += " pm";
+      }
+
+      return startTime;
+
+    }catch(error, stack){
+
+      print(error);
+      return "unknown";
+
     }
 
 
@@ -391,8 +429,6 @@ class RunModel {
       //check and fetch for all deferred payments associated with orders
       Map<String, Map<String, dynamic>>? deferredPayments = await getDeferredPayments(newStopsCopy, databaseName);
 
-      print(deferredPayments);
-
       //merge stop and order data
       for(var i = 0; i < orderDocuments.length; i++){
         
@@ -502,7 +538,6 @@ class RunModel {
       for(var i = 0; i < newStopsCopy.length; i++){
 
         String stopPrimaryKey = "${newStopsCopy[i]['orderID']}_${newStopsCopy[i]['stopType']}";
-        print("fetching: $stopPrimaryKey");
         deferredPaymentDocs.add(FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('DeferredPayments').where("stopID", isEqualTo: stopPrimaryKey).limit(1).get());
 
       }
@@ -521,7 +556,6 @@ class RunModel {
         if(deferredPaymentDoc.docs.isNotEmpty){
 
           String stopPrimaryKey = "${newStopsCopy[i]['orderID']}_${newStopsCopy[i]['stopType']}";
-          print("index at: $stopPrimaryKey");
           deferredPayments.addAll({stopPrimaryKey: deferredPaymentDoc.docs[0].data()});
 
         }
@@ -554,12 +588,9 @@ class RunModel {
         if(deferredPayments != null){
           
           String stopPrimaryKey = "${order.id}_${stops[i]['stopType']}";
-          print("$i - $stopPrimaryKey");
 
           if(deferredPayments[stopPrimaryKey] != null){
 
-            print("Found deferred payment for order: ${order.data()['ID']}");
-            print(deferredPayments[stopPrimaryKey]);
             stops[i]['deferredPayment'] = true;
             stops[i]['deferredPaymentDoc'] = deferredPayments[stopPrimaryKey];
 

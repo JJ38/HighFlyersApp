@@ -42,6 +42,8 @@ class _RunScreenState extends State<RunScreen> {
   
     run = widget.runDocument.data()! as Map<String, dynamic>;
 
+    print("runSettings: ${run['settings']}");
+
     (run['stops'] as List).sort((a, b) => (a['stopNumber'] as int).compareTo(b['stopNumber'] as int));
 
     runID = widget.runDocument.id;
@@ -178,135 +180,150 @@ class _RunScreenState extends State<RunScreen> {
                     ),
                     SafeArea(
                       child: DraggableScrollableSheet(
-                        initialChildSize: 0.3,
+                        initialChildSize: 0.35,
                         builder: (controller, scrollController) {
                         return Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
                               color: Colors.white,
-                              width: 1,
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                              borderRadius:
+                                  BorderRadius.circular(20.0), // Uniform radius
                             ),
-                            borderRadius:
-                                BorderRadius.circular(20.0), // Uniform radius
-                          ),
-                          child: Column(
+                            child: Column(
                               mainAxisSize: MainAxisSize.min, 
                               children: [
                                 Expanded(
-                                    flex: 0,
-                                    child: SingleChildScrollView(
-                                      physics: const ClampingScrollPhysics(),
-                                      controller: scrollController,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.all(15),
-                                            decoration: BoxDecoration(
-                                              color: const Color.fromARGB(255, 210, 209, 209),
-                                              borderRadius: BorderRadius.circular(
-                                                  50.0), // Uniform radius
-                                            ),
-                                            child: SizedBox(
-                                              height: 3,
-                                              width: 100,
-                                            ),
+                                  flex: 0,
+                                  child: SingleChildScrollView(
+                                    physics: const ClampingScrollPhysics(),
+                                    controller: scrollController,                           
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.all(15),
+                                          decoration: BoxDecoration(
+                                            color: const Color.fromARGB(255, 210, 209, 209),
+                                            borderRadius: BorderRadius.circular(
+                                                50.0), // Uniform radius
                                           ),
-                                          !runScreenController.model.runStarted ? 
-
+                                          child: SizedBox(
+                                            height: 3,
+                                            width: 100,
+                                          ),
+                                        ),
+                                        !runScreenController.model.runStarted ? 
                                             Text(run["runName"],
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge)
-
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleLarge)
                                             :
-
                                               SizedBox()
-                                        ],
-                                      ),
+                                      ],
                                     ),
+                                    
                                   ),
-                                ...runScreenController.model.runStarted ? 
-                                  [
-                                    StopScreen(
-                                      stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']), 
-                                      runData: runScreenController.model.run!, 
-                                      progressedRunID: runScreenController.model.progressedRunID,
-                                      updateMapMarker: runScreenController.updateMapMarker,
-                                      updateRunMapMarkers: runScreenController.updateRunMapMarkers,
-                                      scrollController: scrollController,
+                                ),
+                                  ...runScreenController.model.runStarted ? 
 
-                                    ),
-                                  ]
-                                 :          
-                                  [   
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text("Number of stops: ", 
-                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                            fontSize: 18.0,
-                                          ),
-                                        ),
-                                        Text(runScreenController.model.getNumberOfStops(), 
-                                          style: Theme.of(context).textTheme.titleMedium,
-                                        ),
+                                      [
+                                        StopScreen(
+                                          stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']), 
+                                          runData: runScreenController.model.run!, 
+                                          progressedRunID: runScreenController.model.progressedRunID,
+                                          updateMapMarker: runScreenController.updateMapMarker,
+                                          updateRunMapMarkers: runScreenController.updateRunMapMarkers,
+                                          scrollController: scrollController,
 
+                                        ),
                                       ]
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Estimated run time: ",
-                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                            fontSize: 18.0,
-                                          ),
-                                        ), 
-                                        Text(
-                                          runScreenController.model.getEstimatedRunTime(),
-                                          style: Theme.of(context).textTheme.titleMedium,
-                                        ), 
-                                      ]
-                                    ),
+                                    :          
+                                      [   
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text("Number of stops: ", 
+                                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                                fontSize: 18.0,
+                                              ),
+                                            ),
+                                            Text(runScreenController.model.getNumberOfStops(), 
+                                              style: Theme.of(context).textTheme.titleMedium,
+                                            ),
 
-                                    runScreenController.model.isStartingRun ? 
-
-                                        Center(
-                                          child: CircularProgressIndicator()
-                                        )
-
-                                      :
-
-                                        Material(
-                                          color: Theme.of(context).colorScheme.secondary,
-                                          shadowColor: Color(0x00000000),                                
-                                          borderRadius: BorderRadius.all(Radius.circular(8)),                                     
-                                          child: MaterialButton(
-                                            onPressed: () {runScreenController.startRun(context);},                                     
-                                            minWidth: screenWidth * 0.8,
-                                            height: screenWidth * 0.1,
-                                            child: Text("Start Run", style: TextStyle(color: Colors.white)),
-                                          ),
+                                          ]
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Estimated run time: ",
+                                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                                fontSize: 18.0,
+                                              ),
+                                            ), 
+                                            Text(
+                                              runScreenController.model.getEstimatedRunTime(),
+                                              style: Theme.of(context).textTheme.titleMedium,
+                                            ), 
+                                          ]
                                         ),
 
-                                    Expanded(
-                                      flex: 1,
-                                      child: ListView.builder(
-                                        padding: const EdgeInsets.all(8),
-                                        itemCount: run['stops'].length,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          print(run['stops'][index]);
-                                          return StopCard(
-                                            stop: run['stops'][index],
-                                            width: screenWidth,
-                                          );
-                                        }
-                                      )                       
-                                    )                                                              
-                                  ]
-                                ],
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Scheduled start time: ",
+                                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                                fontSize: 18.0,
+                                              ),
+                                            ), 
+                                            Text(
+                                              runScreenController.model.getStartTime(),
+                                              style: Theme.of(context).textTheme.titleMedium,
+                                            ), 
+                                          ]
+                                        ),
+
+                                        runScreenController.model.isStartingRun ? 
+
+                                            Center(
+                                              child: CircularProgressIndicator()
+                                            )
+
+                                          :
+
+                                            Material(
+                                              color: Theme.of(context).colorScheme.secondary,
+                                              shadowColor: Color(0x00000000),                                
+                                              borderRadius: BorderRadius.all(Radius.circular(8)),                                     
+                                              child: MaterialButton(
+                                                onPressed: () {runScreenController.startRun(context);},                                     
+                                                minWidth: screenWidth * 0.8,
+                                                height: screenWidth * 0.1,
+                                                child: Text("Start Run", style: TextStyle(color: Colors.white)),
+                                              ),
+                                            ),
+
+                                        Expanded(
+                                          flex: 1,
+                                          child: ListView.builder(
+                                            padding: const EdgeInsets.all(8),
+                                            itemCount: run['stops'].length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              print(run['stops'][index]);
+                                              return StopCard(
+                                                stop: run['stops'][index],
+                                                width: screenWidth,
+                                              );
+                                            }
+                                          )                       
+                                        )                                                              
+                                      ]
+                                    ],
                             ),
                           );
                     },),),
