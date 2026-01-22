@@ -59,11 +59,17 @@ class CurrentStopController {
     
     final coordinates = stop['coordinates'];
 
-    await MapLauncher.showMarker(
+    // await MapLauncher.showMarker(
+    //   mapType: mapType,
+    //   coords: Coords(coordinates['lat'], coordinates['lng']),
+    //   title: "Order: ${stop['orderData']['ID']} ${stop['stopType']}",
+    //   description: "${stop['stopData']['address1']}, ${stop['stopData']['address2']}, ${stop['stopData']['address3']}, ${stop['stopData']['postcode']},"
+    // );
+
+    await MapLauncher.showDirections(
       mapType: mapType,
-      coords: Coords(coordinates['lat'], coordinates['lng']),
-      title: "Order: ${stop['orderData']['ID']} ${stop['stopType']}",
-      description: "${stop['stopData']['address1']}, ${stop['stopData']['address2']}, ${stop['stopData']['address3']}, ${stop['stopData']['postcode']},"
+      destination: Coords(coordinates['lat'], coordinates['lng']),
+      destinationTitle: "Order: ${stop['orderData']['ID']} ${stop['stopType']}",
     );
 
   }
