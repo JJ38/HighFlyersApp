@@ -26,20 +26,24 @@ class AdminLabelRunsScreenController {
     }
 
     model.initialisedStaffMember = true;
+
     updateState();
 
   }
 
-  void runCardOnTap(context, runDocID) async{
+  void runCardOnTap(BuildContext context, runDocID) async{
 
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => AdminRunLabellingScreen(runDocID: runDocID),
-          settings: RouteSettings(name: '/${AdminRunLabellingScreen.id}')
-        )
-      );
+        builder: (context) => AdminRunLabellingScreen(runDocID: runDocID),
+        settings: RouteSettings(name: '/${AdminRunLabellingScreen.id}')
+      )
+    );
 
   }
 
+
 }
+
+

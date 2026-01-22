@@ -6,6 +6,7 @@ import 'package:high_flyers_app/screens/admin/admin_label_order_form_screen.dart
 
 class AdminRunLabellingScreenController {
 
+  final ScrollController scrollController = ScrollController();
   late final AdminRunLabellingScreenModel model;
   final void Function() updateState;
 
@@ -29,6 +30,8 @@ class AdminRunLabellingScreenController {
 
   void onOrderTap(BuildContext context, Map<String, dynamic> stop) async {
 
+    saveScrollPosition(context);
+
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -45,6 +48,16 @@ class AdminRunLabellingScreenController {
     await model.initialisePage();
 
     updateState();
+
+  }
+  
+  void saveScrollPosition(BuildContext context) {
+
+    PageStorage.of(context).writeState(
+      context,
+      scrollController.offset,
+      identifier: 'runsScrollOffset',
+    );
 
   }
 

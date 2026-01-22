@@ -125,8 +125,6 @@ class AdminRunLabellingScreenModel {
   
   Future<bool> fetchOrderDocuments() async {
 
-    print("fetchOrderDocuments");
-
     final databaseName = dotenv.env['DATABASE_NAME'];
 
     if(databaseName == null){
@@ -137,13 +135,9 @@ class AdminRunLabellingScreenModel {
 
       final stops = runData!['stops'];
 
-      print(stops);
-
       List<DocumentReference<Map<String, dynamic>>> orderDocReferences = [];
 
       for(int i = 0; i < stops.length; i++){
-
-        print("loop");
 
         if(stops[i]['orderID'] != null){
 
@@ -155,8 +149,6 @@ class AdminRunLabellingScreenModel {
         }
 
       }
-
-      print("fetchingOrders");
 
       //will throw exception if any documents fail to be fetched
       orderDocuments = await FirebaseModel.fetchMultipleDocuments(orderDocReferences);

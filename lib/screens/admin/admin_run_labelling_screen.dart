@@ -29,10 +29,31 @@ class _AdminRunLabellingScreenState extends State<AdminRunLabellingScreen> {
   void updateState(){
 
     if(mounted){
+
+      restoreScrollPosition();
+
       setState(() {
         
       });
+
     }
+    
+  }
+
+  void restoreScrollPosition() {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      final offset = PageStorage.of(context).readState(
+        context,
+        identifier: 'runsScrollOffset',
+      );
+
+      if (offset != null && adminRunLabellingScreenController.scrollController.hasClients) {
+        adminRunLabellingScreenController.scrollController.jumpTo(offset as double);
+      }
+
+    });
 
   }
 
@@ -74,6 +95,7 @@ class _AdminRunLabellingScreenState extends State<AdminRunLabellingScreen> {
                         ),
 
                         ListView.builder(
+                          controller: adminRunLabellingScreenController.scrollController,
                           shrinkWrap: true,
                           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
                           itemCount: adminRunLabellingScreenController.model.runData?['stops'].length,

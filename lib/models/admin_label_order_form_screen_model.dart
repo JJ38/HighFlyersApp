@@ -32,8 +32,6 @@ class AdminLabelOrderFormScreenModel {
 
     final initialLabelData = stop['label'];
 
-    print(initialLabelData);
-
     if(initialLabelData == null){
       print("No previous label data");
       return;
@@ -52,14 +50,11 @@ class AdminLabelOrderFormScreenModel {
       if(callBeforeArrival[callBeforeArrivalIndex] == "yes"){
         shouldShowNoticeInput = true;
         noticePeriod = initialLabelData['noticePeriod'] ?? "";
-        print(noticePeriod);
       }
 
     }
 
     message = initialLabelData['message'] ?? "";
-
-    print("shouldShowNoticeInput: $shouldShowNoticeInput");
 
   }
 
