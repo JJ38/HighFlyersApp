@@ -118,11 +118,11 @@ class RunModel {
 
     try{
 
-      print(run!['runTime']);
+      print("runTime: ${run!['runTime']}");
 
       final trimmedRunTimeSeconds = run!['runTime'].toString().replaceAll("s", "");
 
-      final timeSeconds = int.parse(trimmedRunTimeSeconds)/60;
+      final timeSeconds = double.parse(trimmedRunTimeSeconds)/60;
 
       final timeMinutes = (timeSeconds / 60).floor();
 
