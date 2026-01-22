@@ -10,6 +10,9 @@ class StopInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final String? paymentType = stop['orderData']?['payment']?.toString().toLowerCase() == "pickup" ? "collection" : stop['orderData']?['payment']?.toString().toLowerCase();
+
     return 
      Container(
         padding: EdgeInsets.all(10),
@@ -57,6 +60,17 @@ class StopInfoCard extends StatelessWidget {
                     ],
                   ),
                   Text(stop['orderData']?['${stopType}Postcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                  if(highlightStop && (paymentType == stopType))
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text("Total: ", style: Theme.of(context).textTheme.labelMedium),
+                            Text(stop['orderData']['price'] == null || stop['orderData']['price'] == "N/A" ? "N/A" : "£${stop['orderData']['price'].toString()}", style: Theme.of(context).textTheme.labelMedium),
+                          ],
+                        )
+                      ]
+                    ),
                 ]
               )
             )

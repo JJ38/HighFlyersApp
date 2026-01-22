@@ -69,7 +69,7 @@ class CurrentStopController {
     await MapLauncher.showDirections(
       mapType: mapType,
       destination: Coords(coordinates['lat'], coordinates['lng']),
-      destinationTitle: "Order: ${stop['orderData']['ID']} ${stop['stopType']}",
+      destinationTitle: "Order: ${stop['orderData']['ID']} ${stop['stopType']}", //Often blocked and uses "Drive" as title. Assumes currently driving in this mode so has restrictions
     );
 
   }

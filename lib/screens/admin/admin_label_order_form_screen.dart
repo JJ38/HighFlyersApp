@@ -82,6 +82,15 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
                       Text(stop['stopTime'], style: Theme.of(context).textTheme.titleSmall),
                     ],
                   ),
+                  SizedBox(height: 10,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Payment:", style: Theme.of(context).textTheme.titleSmall),
+                      Text(stop['orderData']['payment'], style: Theme.of(context).textTheme.titleSmall),
+                    ],
+                  ),
                   SizedBox(height: 20,),
                   
                   StopInfoCard(stop: stop, stopType: 'collection', highlightStop: stop['stopType'] == "collection"),
