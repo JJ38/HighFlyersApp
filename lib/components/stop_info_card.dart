@@ -14,11 +14,12 @@ class StopInfoCard extends StatelessWidget {
     final String? paymentType = stop['orderData']?['payment']?.toString().toLowerCase() == "pickup" ? "collection" : stop['orderData']?['payment']?.toString().toLowerCase();
 
     return 
-     Container(
+      Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: highlightStop ? 
+          
               Border.all(
                 width: 2,
                 color: stopType == "collection" ? Colors.red : Colors.blue
