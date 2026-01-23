@@ -6,8 +6,10 @@ import 'package:high_flyers_app/controllers/stop_form_dialog_controller.dart';
 class StopFormDialog extends StatefulWidget {
 
   final Map<String, dynamic> stop;
+  final Map<String, dynamic>? runData;
+  final String? progressedRunID;
 
-  const StopFormDialog({super.key, required this.stop});
+  const StopFormDialog({super.key, required this.stop, this.runData, this.progressedRunID});
 
   @override
   State<StopFormDialog> createState() => _StopFormDialogState();
@@ -21,7 +23,7 @@ class _StopFormDialogState extends State<StopFormDialog> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    stopFormDialogController = StopFormDialogController(updateState: updateState, stop: widget.stop);
+    stopFormDialogController = StopFormDialogController(updateState: updateState, stop: widget.stop, runData: widget.runData, progressedRunID: widget.progressedRunID);
     print(widget.stop['formDetails']);
   }
 
@@ -98,7 +100,7 @@ class _StopFormDialogState extends State<StopFormDialog> {
                             ),
                           ),
                         ),
-                        onChanged: (value) {},
+                        onChanged: (value) {stopFormDialogController.onAnimalTypeSelect(value);},
                         items: [
                           DropdownMenuItem(
                             value: 'Pigeons - Young Birds',
@@ -136,7 +138,7 @@ class _StopFormDialogState extends State<StopFormDialog> {
                       ),
                       SizedBox(height: 20),
                       TextField(
-                        controller: TextEditingController(text: stopFormDialogController.model.quantity),
+                        controller: TextEditingController(text: stopFormDialogController.model.quantity?.toString()),
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                         decoration: InputDecoration(
                           label: Text("Quantity"),
@@ -154,7 +156,7 @@ class _StopFormDialogState extends State<StopFormDialog> {
                           ),
                         ),
                         keyboardType: TextInputType.number,
-                        onChanged: (input) {},
+                        onChanged: (input) {stopFormDialogController.onQuantityInput(input);},
                       ),
                       SizedBox(height: 20),
                       
@@ -176,7 +178,7 @@ class _StopFormDialogState extends State<StopFormDialog> {
                             ),
                           ),
                         ),
-                        onChanged: (value){},
+                        onChanged: (value){stopFormDialogController.onCollectedPaymentSelect(value);},
                         items: [
                           DropdownMenuItem(
                             value: true,
@@ -208,7 +210,7 @@ class _StopFormDialogState extends State<StopFormDialog> {
                           ),
                         ),
                         keyboardType: TextInputType.text,
-                        onChanged: (input){},
+                        onChanged: (input){stopFormDialogController.onNotesInput(input);},
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
                       ),
                       SizedBox(height: 20),
@@ -228,7 +230,7 @@ class _StopFormDialogState extends State<StopFormDialog> {
 
                                 Text("Slide to update stop", style: TextStyle(color: Colors.black),),
 
-                          action: (controller) async {}
+                          action: (controller) async {stopFormDialogController.completeStop(controller, context);}
                         )
                       )
                     ]

@@ -11,13 +11,20 @@
 
 - store all iterations of forms
 
-- add prices to label runs form. Put in delivery box if delivery payment and in collection box if a collection payment
+- make your runs screen a list
+
 
 
 Release notes
 
+Staff
 
-- Added start times to driver app
-- Fixed estimated run time showing as unknown
-- Changed mode in which navigation is launched in apps. Its now set to navigation rather than marker. This means on opening an app it will immediately calculate the route. Please let me know if this is bothersome
-  I can add a setting where you can choose a preference. This is a potential fix for android auto.
+  - added prices to label run form. Payment type is now shown. Price of the order will be shown in the collection box if payment is promised on collection and shown in the delivery box if promised on delivery
+  - scroll position is now reinstated when navigating back from the label runs form
+
+Drivers
+
+  - Added start times to driver app
+  - Fixed estimated run time showing as unknown
+  - Changed mode in which navigation is launched in apps. Its now set to navigation rather than marker. This means on opening an app it will immediately calculate the route. Please let me know if this is bothersome
+    I can add a setting where you can choose a preference. This is a potential fix for android auto.

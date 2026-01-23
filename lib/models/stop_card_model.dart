@@ -4,11 +4,16 @@ import 'package:url_launcher/url_launcher.dart';
 class StopCardModel {
 
   Map<String, dynamic> stop;
+  Map<String, dynamic>? runData;
+  String? progressedRunID;
   bool expandCard = false;
   late bool shouldHighlightStop; 
 
-  StopCardModel({required this.stop}){
+  StopCardModel({required this.stop, required this.runData, required this.progressedRunID}){
     shouldHighlightStop = stop['label']?['arrivalNotice'] == "yes" || stop['label']?['message'] != "" && stop['label']?['message'] != null;
+    print(runData);
+    print(progressedRunID);
+
   }
   
 

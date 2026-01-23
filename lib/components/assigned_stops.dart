@@ -4,9 +4,10 @@ import 'package:high_flyers_app/components/stop_card.dart';
 
 class AssignedStops extends StatefulWidget {
 
-  final Map<String, dynamic> run;
+  final Map<String, dynamic>? runData;
+  final String? progressedRunID;
   
-  const AssignedStops({super.key, required this.run});
+  const AssignedStops({super.key, required this.runData, required this.progressedRunID});
 
   @override
   State<AssignedStops> createState() => _AssignedStopsState();
@@ -25,7 +26,7 @@ class _AssignedStopsState extends State<AssignedStops> {
   Widget build(BuildContext context) {
     
     final screenWidth = MediaQuery.of(context).size.width;
-    final stops = widget.run['stops'] as List<dynamic>? ?? [];
+    final stops = widget.runData?['stops'] as List<dynamic>? ?? [];
 
     return Column(
             children: stops.map<Widget>((stop){
@@ -33,6 +34,8 @@ class _AssignedStopsState extends State<AssignedStops> {
                 stop: stop,
                 width: screenWidth,
                 shouldShowOpenFormButton: true,
+                runData: widget.runData,
+                progressedRunID: widget.progressedRunID
               );
             }).toList()                               
           );       

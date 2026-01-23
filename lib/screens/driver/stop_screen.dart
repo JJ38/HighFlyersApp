@@ -53,7 +53,7 @@ class _StopScreenState extends State<StopScreen> {
         updateMapMarker: widget.updateMapMarker, 
         updateCurrentStop: stopScreenController.model.updateCurrentStop,
       ),
-      AssignedStops(run: widget.runData,)
+      AssignedStops(runData: widget.runData, progressedRunID: widget.progressedRunID)
     ];
 
   }

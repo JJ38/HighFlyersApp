@@ -1,14 +1,19 @@
+import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/stop_form_dialog_model.dart';
 
 class StopFormDialogController {
 
   late StopFormDialogModel model;
   Map<String, dynamic> stop;
+  Map<String, dynamic>? runData;
+  String? progressedRunID;
   void Function() updateState;
   
-  StopFormDialogController({required this.updateState, required this.stop}){
-    model = StopFormDialogModel(stop: stop);
+  StopFormDialogController({required this.updateState, required this.stop, this.runData, this.progressedRunID}){
+    model = StopFormDialogModel(stop: stop, runData: runData, progressedRunID: progressedRunID);
   }
 
   void closeDialog(BuildContext context){
@@ -16,6 +21,95 @@ class StopFormDialogController {
     if(context.mounted){
       Navigator.of(context).pop();
     }
+
+  }
+
+  void onAnimalTypeSelect(String? animalType){
+
+    model.animalType = animalType;
+    print(model.animalType);
+  }
+
+  void onQuantityInput(String? quantity){
+
+    if(quantity == null || quantity == ""){
+      return;
+    }
+
+    try{
+
+      model.quantity = int.parse(quantity); 
+
+    }catch(e){
+
+      print(e);
+
+    }
+
+  }
+
+  void onCollectedPaymentSelect(bool? collectedPayment){
+
+    model.collectedPayment = collectedPayment;
+
+  }
+
+  void onNotesInput(String? notes){
+    
+    model.notes = notes;
+
+  }
+
+  Future<void> completeStop(ActionSliderController controller, context) async {
+
+    controller.loading();
+
+    final isFormValid = model.isFormValid();
+
+    if(!isFormValid){
+      showToastWidget(ToastNotification(message: model.errorMessage, isError: true));
+      controller.reset();
+      return;
+    }
+
+    print("completeStopCOntroller");
+
+    final completedStopSuccessfully = await model.completeStop();
+
+    controller.reset();
+
+
+    if(!completedStopSuccessfully){}
+
+      
+    //   if(getShouldCallAdmin()){
+
+    //     showToastWidget(ToastNotification(message: "You must call kev before compeleting this stop", isError: true));
+
+    //     showDialog(
+    //       context: context, 
+    //       builder: (context){
+    //         return CallAdminDialogBox(callAdmin: callAdmin);
+    //       }
+    //     );
+
+    //     controller.reset();
+    //     return;
+
+    //   }
+
+    //   showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
+    //   controller.reset();
+    //   return;
+    // }
+
+    // await Future.delayed(Duration(seconds: 1));
+
+    // showToastWidget(ToastNotification(message: "Successfully completed stop", isError: false));
+
+    // updateMapMarker();
+    // hideStopForm();
+    // updateStopScreenState();
 
   }
 

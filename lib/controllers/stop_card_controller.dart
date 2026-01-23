@@ -10,8 +10,8 @@ class StopCardController {
   late StopCardModel model;
   void Function() updateState;
 
-  StopCardController({required this.updateState, required stop}){
-    model = StopCardModel(stop: stop);
+  StopCardController({required this.updateState, required stop, runData, progressedRunID}){
+    model = StopCardModel(stop: stop, runData: runData, progressedRunID: progressedRunID);
   }
 
   void onTap(){
@@ -43,7 +43,7 @@ class StopCardController {
       showDialog(
         context: context, 
         builder: (context){
-          return StopFormDialog(stop: model.stop);
+          return StopFormDialog(stop: model.stop, runData: model.runData, progressedRunID: model.progressedRunID);
         }
       );
 

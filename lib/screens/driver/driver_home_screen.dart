@@ -54,58 +54,46 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         child: Text("You have no assigned runs")
                       )
                     :
-                      ListView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.all(8),
-                        itemCount: driverHomeScreenController.model.driverRunDocs.length,
-                        itemBuilder: (BuildContext context, int i) {
-                 
-                          final numberOfAssignedRuns = driverHomeScreenController.model.driverDoc['assignedRuns'].length;
-
-                          dynamic runIndex = i;
-
-                          if(i > (numberOfAssignedRuns - 1)){
-                            runIndex = i - numberOfAssignedRuns;
-                          }
-
-                          final runType = i > numberOfAssignedRuns - 1 ? "progressedRuns" : "assignedRuns";
-
-
-                          if (!driverHomeScreenController.model.driverRunDocs[i].exists){
-                            return Text("Unknown run");
-                          }
-
-                          return GestureDetector(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: 
-                                Column(                        
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'] ?? "", style: Theme.of(context).textTheme.titleMedium,),
-                                    Text(driverHomeScreenController.model.driverRunDocs[i]['runName'] ?? "", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
-
-                                    runType == "assignedRuns" ? 
-
-                                        Text("New", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.blue),)
-                                      
-                                      :
-
-                                        driverHomeScreenController.model.driverRunDocs[i]['runStatus']  == "Completed" ? 
-
-                                            Text("Completed", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.green),)
-
-                                          :
-
-                                            Text("In Progress", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.amber),)
-                                            
-
-                                  ]
-                                ),
-                            ),                      
-                            onTap: () { driverHomeScreenController.onRunTileTap(driverHomeScreenController.model.driverRunDocs[i], driverHomeScreenController.model.runStatuses[i], driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'] ?? "", context);},
-                          );
-                        },
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(8),
+                          itemCount: driverHomeScreenController.model.driverRunDocs.length,
+                          itemBuilder: (BuildContext context, int i) {
+                                               final numberOfAssignedRuns = driverHomeScreenController.model.driverDoc['assignedRuns'].length;
+                              dynamic runIndex = i;
+                              if(i > (numberOfAssignedRuns - 1)){
+                              runIndex = i - numberOfAssignedRuns;
+                            }
+                              final runType = i > numberOfAssignedRuns - 1 ? "progressedRuns" : "assignedRuns";
+                                if (!driverHomeScreenController.model.driverRunDocs[i].exists){
+                              return Text("Unknown run");
+                            }
+                              return GestureDetector(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                child: 
+                                  Column(                        
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'] ?? "", style: Theme.of(context).textTheme.titleMedium,),
+                                      Text(driverHomeScreenController.model.driverRunDocs[i]['runName'] ?? "", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20),),
+                                        runType == "assignedRuns" ? 
+                                            Text("New", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.blue),)
+                                        
+                                        :
+                                            driverHomeScreenController.model.driverRunDocs[i]['runStatus']  == "Completed" ? 
+                                                Text("Completed", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.green),)
+                                              :
+                                                Text("In Progress", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 20, color: Colors.amber),)
+                                              
+                                      ]
+                                  ),
+                              ),                      
+                              onTap: () { driverHomeScreenController.onRunTileTap(driverHomeScreenController.model.driverRunDocs[i], driverHomeScreenController.model.runStatuses[i], driverHomeScreenController.model.driverDoc[runType][runIndex]['shipmentName'] ?? "", context);},
+                            );
+                          },
+                        )
                       )
                   :
                     driverHomeScreenController.model.isLoading ? 

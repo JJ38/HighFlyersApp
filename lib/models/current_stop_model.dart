@@ -93,7 +93,6 @@ class CurrentStopModel {
       
       DocumentReference<Map<String, dynamic>> deferredPaymentDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('DeferredPayments').doc();
 
-      //update ProgressedRun doc stops[i] with stop status to skipped
       DocumentReference<Map<String, dynamic>> runDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('ProgressedRuns').doc(progressedRunID);
       
       final stops = runData['stops'];
@@ -197,7 +196,6 @@ class CurrentStopModel {
         if(newStopNumber == newStops[i]['stopNumber']){
           stop = newStops[i];
           updateCurrentStop(stop);
-          print(stop['coordinates']);
           return true;
         }
 

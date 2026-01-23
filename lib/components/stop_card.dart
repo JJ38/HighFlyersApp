@@ -6,10 +6,12 @@ import 'package:high_flyers_app/controllers/stop_card_controller.dart';
 class StopCard extends StatefulWidget {
 
   final Map<String, dynamic> stop;
+  final Map<String, dynamic>? runData;
+  final String? progressedRunID;
   final double width;
   final bool shouldShowOpenFormButton;
 
-  const StopCard({super.key, required this.width, required this.stop, this.shouldShowOpenFormButton = false});
+  const StopCard({super.key, required this.width, required this.stop, this.shouldShowOpenFormButton = false, this.runData, this.progressedRunID});
 
   @override
   State<StopCard> createState() => _StopCardState();
@@ -23,7 +25,7 @@ class _StopCardState extends State<StopCard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    stopCardController = StopCardController(updateState: updateState, stop: widget.stop);
+    stopCardController = StopCardController(updateState: updateState, stop: widget.stop, runData: widget.runData, progressedRunID: widget.progressedRunID);
   }
 
   void updateState(){
