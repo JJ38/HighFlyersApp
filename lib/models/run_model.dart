@@ -116,16 +116,14 @@ class RunModel {
 
     try{
 
-      print("runTime: ${run!['runTime']}");
-
       final trimmedRunTimeSeconds = run!['runTime'].toString().replaceAll("s", "");
 
       final timeSeconds = double.parse(trimmedRunTimeSeconds);
-      print(timeSeconds);
 
       final timeMinutes = (timeSeconds / 60).floor();
 
       final numberOfHours = (timeMinutes / 60).floor();
+
       final numberOfRemainingMinutes = timeMinutes % 60;
 
       return "${numberOfHours}h ${numberOfRemainingMinutes}m";

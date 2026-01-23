@@ -13,6 +13,7 @@
 
 - make your runs screen a list
 
+- make run overview stop cards take into account deferred payments
 
 
 Release notes

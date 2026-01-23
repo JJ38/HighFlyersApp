@@ -236,14 +236,13 @@ class CurrentStopModel {
     //If the stop was skipped or payment wasnt made when expected on ***delivery*** no adjustments should be made in any circumstance
     //As if it was skipped on collection no payment is needed as nothing has been fufilled and if payment wasnt made on delivery
     //When expected there are no stops left to adjust the payment status for
-    if(stopStatus == "Complete" && currentStop['stopType'] == "collection"){
+    if(stopStatus == "Complete"){
 
       if(expectedPayment != didPay){
 
         print("Payment wasnt made when it should have been");
 
-        
-        String deferredStopType = currentStop['stopType'] == "collection" ? "delivery" : "chase";
+        String deferredStopType = currentStop['stopType'] == "collection" ? "delivery" : didPay ? "overpaid" : "chase";
 
         //create a deferred payment document
         final Map<String, dynamic> deferredPayment = {
@@ -252,6 +251,7 @@ class CurrentStopModel {
           "stopID": "${currentStop['orderID']}_$deferredStopType",//this refers to the stop that it updates
           "orderData": currentStop['orderData'],
           "formDetails": formDetails,
+          "deferredStopType": deferredStopType,
           "deferredPaymentType": didPay //If true it was an early payment if false its a late payment
 
         };

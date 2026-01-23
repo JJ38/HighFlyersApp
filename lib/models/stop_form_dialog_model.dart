@@ -233,7 +233,6 @@ class StopFormDialogModel{
 
         print("Payment wasnt made when it should have been");
 
-        
         String deferredStopType = currentStop['stopType'] == "collection" ? "delivery" : "chase";
 
         //create a deferred payment document
