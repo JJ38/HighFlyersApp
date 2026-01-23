@@ -11,7 +11,7 @@ class CurrentStop extends StatefulWidget {
   // final bool isRunCompleted;
   final void Function(Map<String, dynamic>) updateMapMarker;
   final void Function(Map<String, dynamic>) updateCurrentStop;
-  final Map<String, dynamic> Function() getStop;
+  final Map<String, dynamic>? Function() getStop;
 
 
   const CurrentStop({super.key, required this.getStop, required this.runData, required this.progressedRunID, required this.updateMapMarker, required this.updateCurrentStop});
@@ -32,19 +32,20 @@ class _CurrentStopState extends State<CurrentStop> {
     debugPrint("initstate current stop");
     debugPrint(widget.runData['runStatus']);
 
-    currentStopController = CurrentStopController(updateState: updateState, updateMapMarker: widget.updateMapMarker);
+    final stop = widget.getStop();
+
+    currentStopController = CurrentStopController(updateState: updateState, updateMapMarker: widget.updateMapMarker, stop: stop);
 
     currentStopController.model.runData = widget.runData;
     currentStopController.model.progressedRunID = widget.progressedRunID!;
-    currentStopController.model.stop = widget.getStop();
     currentStopController.model.updateCurrentStop = widget.updateCurrentStop;
-    // currentStopController.model.isRunCompleted = widget.isRunCompleted;
 
     widget.updateMapMarker(currentStopController.model.stop);
 
   }
 
   void updateState(){
+
     if(mounted){
       setState(() {
         
@@ -432,7 +433,16 @@ class _CurrentStopState extends State<CurrentStop> {
 
                 [
                   SizedBox(height: 10,),
-                  StopForm(updateStopScreenState: updateState, updateMapMarker: currentStopController.updateMapMarkerNextStop, hideStopForm: currentStopController.hideStopFrom, completeStop: currentStopController.model.completeStop, getShouldCallAdmin: currentStopController.model.getShouldCallAdmin, callAdmin: currentStopController.model.callAdmin,),
+                  StopForm(
+                    updateStopScreenState: updateState, 
+                    updateMapMarker: currentStopController.updateMapMarkerNextStop, 
+                    hideStopForm: currentStopController.hideStopFrom, 
+                    completeStop: currentStopController.model.completeStop, 
+                    getShouldCallAdmin: currentStopController.model.getShouldCallAdmin,
+                    callAdmin: currentStopController.model.callAdmin,
+                    getStop: widget.getStop,
+                    shouldAutoShowForm: currentStopController.model.shouldAutoShowForm
+                  ),
                 ]
 
               :

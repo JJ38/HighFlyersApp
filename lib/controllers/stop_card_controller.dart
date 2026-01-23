@@ -40,12 +40,14 @@ class StopCardController {
 
     if(context.mounted){
 
-      showDialog(
+      await showDialog(
         context: context, 
         builder: (context){
           return StopFormDialog(stop: model.stop, runData: model.runData, progressedRunID: model.progressedRunID);
         }
       );
+
+      updateState();
 
     }
 

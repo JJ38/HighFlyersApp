@@ -6,15 +6,32 @@ import 'package:high_flyers_app/models/stop_form_model.dart';
 
 class StopFormController {
 
-  StopFormModel model = StopFormModel();
+  late StopFormModel model;
+  final void Function() updateState;
   final void Function() updateStopScreenState;
   final void Function() hideStopForm;
   final void Function() updateMapMarker;
   final bool Function() getShouldCallAdmin;
   final void Function() callAdmin;
+  final void Function() shouldAutoShowForm;
 
 
-  StopFormController({required this.updateStopScreenState, required this.updateMapMarker, required this.hideStopForm, required this.getShouldCallAdmin, required this.callAdmin});
+
+  StopFormController({
+    required this.updateState,
+    required this.updateStopScreenState, 
+    required this.updateMapMarker, 
+    required this.hideStopForm, 
+    required this.getShouldCallAdmin, 
+    required this.callAdmin,
+    required completeStop,
+    required getStop,
+    required this.shouldAutoShowForm
+  }){
+
+    model = StopFormModel(getStop: getStop, completeStop: completeStop);
+
+  }
 
   void onAnimalTypeSelect(String? animalType){
 
@@ -103,12 +120,16 @@ class StopFormController {
     }
 
     await Future.delayed(Duration(seconds: 1));
+    controller.reset();
 
     showToastWidget(ToastNotification(message: "Successfully completed stop", isError: false));
 
     updateMapMarker();
     hideStopForm();
     updateStopScreenState();
+    model.updateStopFormData();
+    shouldAutoShowForm();
+    updateState();
 
   }
 

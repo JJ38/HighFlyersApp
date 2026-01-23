@@ -1,8 +1,8 @@
 class StopScreenModel {
 
-  Map<String, dynamic> currentStop = {};
+  Map<String, dynamic>? currentStop = {};
 
-  Map<String, dynamic> getCurrentStop(){
+  Map<String, dynamic>? getCurrentStop(){
     return currentStop;
   }
 

@@ -20,10 +20,6 @@ class StopScreenController {
       updateMapRunMarkers();
     }
 
-    // if(index == 0){
-    //   updateMapMarker();
-    // }
-
     updateState();
     
   }

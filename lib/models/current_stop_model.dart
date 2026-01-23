@@ -21,6 +21,19 @@ class CurrentStopModel {
   bool calledAdmin = false;
   bool shouldCallAdmin = false;
 
+
+  CurrentStopModel({required this.stop}){
+    shouldAutoShowForm();
+  }
+
+  void shouldAutoShowForm(){
+
+    if(stop['formDetails'] != null){
+      showStopForm = true;
+    }
+
+  }
+
   bool getShouldCallAdmin(){
     return shouldCallAdmin;
   }
@@ -116,6 +129,12 @@ class CurrentStopModel {
           newStops[i]['stopStatus'] = stopStatus;
           newStops[i]['formDetails'] = formDetails;
 
+          final List allForms = newStops[i]['allForms'] ?? [];
+
+          allForms.add(formDetails);
+
+          newStops[i]['allForms'] = allForms;
+
           newStopNumber += 1;
           foundStop = true;
           break;
@@ -201,7 +220,6 @@ class CurrentStopModel {
 
       }
 
-
       return false;
 
     }catch(error, stack){
@@ -223,24 +241,12 @@ class CurrentStopModel {
 
   }
 
-  Map<String, dynamic>? shouldDeferPayment(stopStatus, currentStop, formDetails, expectedPayment, didPay){
+  static Map<String, dynamic>? shouldDeferPayment(stopStatus, currentStop, formDetails, expectedPayment, didPay){
 
-
-    //has the order been fufilled and were they meant to pay at this stop?
-
-    print("didPay: $didPay");
-    print("stop['stopType']: ${currentStop['stopType']}");
-    print("stopStatus: $stopStatus");
-
-
-    //If the stop was skipped or payment wasnt made when expected on ***delivery*** no adjustments should be made in any circumstance
-    //As if it was skipped on collection no payment is needed as nothing has been fufilled and if payment wasnt made on delivery
-    //When expected there are no stops left to adjust the payment status for
+    //If the stop was skipped no adjustments should be made in any circumstance
     if(stopStatus == "Complete"){
 
       if(expectedPayment != didPay){
-
-        print("Payment wasnt made when it should have been");
 
         String deferredStopType = currentStop['stopType'] == "collection" ? "delivery" : didPay ? "overpaid" : "chase";
 
@@ -249,14 +255,13 @@ class CurrentStopModel {
           
           "orderID": currentStop['orderID'],
           "stopID": "${currentStop['orderID']}_$deferredStopType",//this refers to the stop that it updates
+          "stopIDCreated": "${currentStop['orderID']}_${currentStop['stopType']}",
           "orderData": currentStop['orderData'],
           "formDetails": formDetails,
           "deferredStopType": deferredStopType,
-          "deferredPaymentType": didPay //If true it was an early payment if false its a late payment
+          "deferredPaymentType": didPay, //If true it was an early payment if false its a late payment
 
         };
-
-        print(deferredPayment);
 
         return deferredPayment;
 

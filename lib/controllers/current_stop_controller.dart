@@ -9,12 +9,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CurrentStopController {
 
-  CurrentStopModel model = CurrentStopModel();
+  late CurrentStopModel model;
   final void Function() updateState;
   final void Function(Map<String, dynamic>) updateMapMarker;
   
 
-  CurrentStopController({required this.updateState, required this.updateMapMarker});
+  CurrentStopController({required this.updateState, required this.updateMapMarker, required stop}){
+    model = CurrentStopModel(stop: stop);
+  }
 
   void navigate(Map<String, dynamic> stop, BuildContext context) async{
 
@@ -115,6 +117,7 @@ class CurrentStopController {
   void hideStopFrom(){
 
     model.showStopForm = false;
+    print("model.showStopForm: ${model.showStopForm}");
     updateState();
 
   }
@@ -159,6 +162,7 @@ class CurrentStopController {
     //update map marker
     // model.stop['coordinates'];
     updateMapMarkerNextStop();
+    model.shouldAutoShowForm();
     updateState();
     controller.reset();
     showToastWidget(ToastNotification(message: "Successfully skipped stop", isError: false));

@@ -1,6 +1,7 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:high_flyers_app/components/call_admin_dialog_box.dart';
 import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/stop_form_dialog_model.dart';
 
@@ -76,40 +77,36 @@ class StopFormDialogController {
 
     final completedStopSuccessfully = await model.completeStop();
 
+    if(!completedStopSuccessfully){
+      
+      if(model.shouldCallAdmin){
+
+        showToastWidget(ToastNotification(message: "You must call kev before compeleting this stop", isError: true));
+
+        showDialog(
+          context: context, 
+          builder: (context){
+            return CallAdminDialogBox(callAdmin: model.callAdmin);
+          }
+        );
+
+        controller.reset();
+        return;
+
+      }
+
+      showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
+      controller.reset();
+      return;
+
+    }
+
+    await Future.delayed(Duration(seconds: 1));
+    
     controller.reset();
 
-
-    if(!completedStopSuccessfully){}
-
-      
-    //   if(getShouldCallAdmin()){
-
-    //     showToastWidget(ToastNotification(message: "You must call kev before compeleting this stop", isError: true));
-
-    //     showDialog(
-    //       context: context, 
-    //       builder: (context){
-    //         return CallAdminDialogBox(callAdmin: callAdmin);
-    //       }
-    //     );
-
-    //     controller.reset();
-    //     return;
-
-    //   }
-
-    //   showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
-    //   controller.reset();
-    //   return;
-    // }
-
-    // await Future.delayed(Duration(seconds: 1));
-
-    // showToastWidget(ToastNotification(message: "Successfully completed stop", isError: false));
-
-    // updateMapMarker();
-    // hideStopForm();
-    // updateStopScreenState();
+    showToastWidget(ToastNotification(message: "Successfully completed stop", isError: false));
+    Navigator.of(context).pop();
 
   }
 

@@ -29,3 +29,4 @@ Drivers
   - Fixed estimated run time showing as unknown
   - Changed mode in which navigation is launched in apps. Its now set to navigation rather than marker. This means on opening an app it will immediately calculate the route. Please let me know if this is bothersome
     I can add a setting where you can choose a preference. This is a potential fix for android auto.
+  -

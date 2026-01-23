@@ -10,9 +10,21 @@ class StopForm extends StatefulWidget {
   final void Function() updateMapMarker;
   final bool Function() getShouldCallAdmin;
   final void Function() callAdmin;
+  final Map<String, dynamic>? Function() getStop;
+  final void Function() shouldAutoShowForm;
 
 
-  const StopForm({required this.updateStopScreenState, required this.updateMapMarker, required this.hideStopForm, required this.completeStop, required this.getShouldCallAdmin, required this.callAdmin, super.key});
+  const StopForm({
+    required this.updateStopScreenState, 
+    required this.updateMapMarker, 
+    required this.hideStopForm, 
+    required this.completeStop, 
+    required this.getShouldCallAdmin, 
+    required this.callAdmin,
+    required this.getStop,
+    required this.shouldAutoShowForm,
+    super.key
+  });
 
   @override
   State<StopForm> createState() => _StopFormState();
@@ -26,8 +38,31 @@ class _StopFormState extends State<StopForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    stopFormController = StopFormController(updateStopScreenState: widget.updateStopScreenState, updateMapMarker: widget.updateMapMarker, hideStopForm: widget.hideStopForm, getShouldCallAdmin: widget.getShouldCallAdmin, callAdmin: widget.callAdmin);
-    stopFormController.model.completeStop = widget.completeStop;
+
+    stopFormController = StopFormController(
+      updateState: updateState,
+      updateStopScreenState: widget.updateStopScreenState, 
+      updateMapMarker: widget.updateMapMarker, 
+      hideStopForm: widget.hideStopForm, 
+      getShouldCallAdmin: widget.getShouldCallAdmin, 
+      callAdmin: widget.callAdmin,
+      completeStop: widget.completeStop,
+      getStop: widget.getStop,
+      shouldAutoShowForm: widget.shouldAutoShowForm
+    );
+
+    // stopFormController.model.completeStop = widget.completeStop;
+
+  }
+
+  void updateState(){
+
+    if(mounted){
+      setState(() {
+        
+      });
+    }
+
   }
 
   @override
@@ -115,6 +150,7 @@ class _StopFormState extends State<StopForm> {
         ),
         SizedBox(height: 20),
         TextField(
+          controller: TextEditingController(text: stopFormController.model.quantity?.toString(),),
           style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
           decoration: InputDecoration(
             label: Text("Quantity"),
@@ -137,6 +173,7 @@ class _StopFormState extends State<StopForm> {
         SizedBox(height: 20),
         
         DropdownButtonFormField(
+          value: stopFormController.model.collectedPayment,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible),
           decoration: InputDecoration(
             label: Text("Collected Payment"),
@@ -167,6 +204,7 @@ class _StopFormState extends State<StopForm> {
         ),
         SizedBox(height: 20),
         TextField(
+          controller: TextEditingController(text: stopFormController.model.notes,),
           maxLines: null,
           decoration: InputDecoration(
             label: Text("Notes"),

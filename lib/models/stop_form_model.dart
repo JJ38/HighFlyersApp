@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class StopFormModel {
 
   String? animalType;
@@ -5,7 +7,25 @@ class StopFormModel {
   bool? collectedPayment;
   String? notes;
   Map<String, dynamic>? formDetails;
+  Map<String, dynamic>? Function() getStop;
   Future<bool> Function(Map<String, dynamic>?)? completeStop;
+
+  StopFormModel({required this.getStop, required this.completeStop}){
+    updateStopFormData();
+  }
+
+  void updateStopFormData(){
+
+    formDetails = getStop()?['formDetails'];
+
+    if(formDetails != null){
+      animalType = formDetails!['animalType'];
+      quantity = formDetails!['quantity'];
+      collectedPayment = formDetails!['collectedPayment'];
+      notes = formDetails!['notes'];
+    }
+
+  }
 
   bool isFormValid(){
 
@@ -26,7 +46,8 @@ class StopFormModel {
       'animalType': animalType,
       'quantity': quantity,
       'collectedPayment': collectedPayment,
-      'notes': notes
+      'notes': notes,
+      'updatedAt': Timestamp.now()
     };
   
     return true;
