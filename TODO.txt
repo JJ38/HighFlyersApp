@@ -7,12 +7,6 @@
 
 - Find bug in updating order from run labelling form thats causing the update request to be sent twice
 
-- make form submittable through stop overview list
-
-- store all iterations of forms
-
-- make your runs screen a list
-
 - make run overview stop cards take into account deferred payments
 
 
@@ -20,8 +14,8 @@ Release notes
 
 Staff
 
-  - added prices to label run form. Payment type is now shown. Price of the order will be shown in the collection box if payment is promised on collection and shown in the delivery box if promised on delivery
-  - scroll position is now reinstated when navigating back from the label runs form
+  - Added prices to label run form. Payment type is now shown. Price of the order will be shown in the collection box if payment is promised on collection and shown in the delivery box if promised on delivery
+  - Scroll position is now reinstated when navigating back from the label runs form
 
 Drivers
 
@@ -29,4 +23,6 @@ Drivers
   - Fixed estimated run time showing as unknown
   - Changed mode in which navigation is launched in apps. Its now set to navigation rather than marker. This means on opening an app it will immediately calculate the route. Please let me know if this is bothersome
     I can add a setting where you can choose a preference. This is a potential fix for android auto.
-  -
+  - Forms can now be submitted from the overview tab. Tap to expand the card and select open form.
+  - When moving onto a stop that has had a form completed ahead of schedule the form will show prefilled in as if the arrived button has already been pressed.
+  - All submissions of driver forms are now stored.

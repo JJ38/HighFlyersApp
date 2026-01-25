@@ -66,8 +66,8 @@ class CurrentStopModel {
     //reset value as form could have been misclick on whether payment was collected or not
     shouldCallAdmin = false;
 
-    final expectedPayment = stop['deferredPayment'] == true ? !stop['deferredPaymentDoc']['formDetails']['collectedPayment'] : stop['stopData']['payment'];  
-    final didPay = formDetails?['collectedPayment'] ?? false; //set to false if stop was skipped
+    final bool expectedPayment = stop['deferredPayment'] == true ? !stop['deferredPaymentDoc']['formDetails']['collectedPayment'] : stop['stopData']['payment'];  
+    final bool didPay = (formDetails?['collectedPayment'] == true) && stopStatus == "Complete"; //set to false if stop was skipped
     
     final Map<String, dynamic>? deferredPayment = shouldDeferPayment(stopStatus, stop, formDetails, expectedPayment, didPay);
 
@@ -79,9 +79,10 @@ class CurrentStopModel {
       isLateDeferredPayment = !stop['deferredPaymentDoc']['deferredPaymentType']; //true is early deferred payment. In that case no need to withhold next stop
     }
 
+    final bool createDeferredPayment = expectedPayment != didPay;
 
     //if they didnt pay on delivery and they should have. If theyve not tapped "call kev". If the payment is a late deferred payment rather than an early one
-    if((expectedPayment != didPay) && stop['stopType'] == "delivery" && !calledAdmin){
+    if((createDeferredPayment) && stop['stopType'] == "delivery" && !calledAdmin){
 
       if(isLateDeferredPayment){
         // is updated payment as wasnt paid on collection when they said they would
@@ -98,7 +99,12 @@ class CurrentStopModel {
 
     }
 
-    // return false;
+
+    //Infer if deferred payment already exists - This is to handle edge cases where a form has been updated
+    final bool doesDeferredPaymentExist = stop['formDetails'] == null ? false : (stop['formDetails']['collectedPayment'] != expectedPayment);
+  
+    final bool shouldDeleteDeferredPaymentDoc = (!createDeferredPayment && doesDeferredPaymentExist) || (doesDeferredPaymentExist && stopStatus == "Skipped");
+    final bool shouldCreateNewDeferredPaymentDoc = createDeferredPayment && !doesDeferredPaymentExist;
 
     try{
       
@@ -166,7 +172,9 @@ class CurrentStopModel {
         'updatedAt': FieldValue.serverTimestamp()
       };
 
-      bool runDocExists = true;
+
+      DocumentReference<Map<String, dynamic>>? deferredPaymentRef = await CurrentStopModel.getDeferredPaymentReference(shouldDeleteDeferredPaymentDoc,stop, databaseName);
+
 
       await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).runTransaction((transaction) async {
 
@@ -174,24 +182,23 @@ class CurrentStopModel {
 
         if (!runDoc.exists) {
           Sentry.logger.fmt.info("Run doc was false on next stop attempt", []);
-          runDocExists = false;
-          return false;
+          throw StateError('Run document does not exist');
         }
 
-        if(deferredPayment != null){
+        if(deferredPayment != null && shouldCreateNewDeferredPaymentDoc){
           Sentry.logger.fmt.info("Attempt to create deferred payment %s", [deferredPayment]);
           transaction.set(deferredPaymentDocRef, deferredPayment);
         }
 
         transaction.update(runDocRef, fieldsToUpdate);
 
+        if(shouldDeleteDeferredPaymentDoc && deferredPaymentRef != null){
+          transaction.delete(deferredPaymentRef);
+        }
+
       });
 
-      if(!runDocExists){
-        return false;
-      }
 
-      
       //updates client that holds info for run
       runData['currentStopNumber'] = newStopNumber;
       runData['runStatus'] = runStatus;
@@ -238,6 +245,25 @@ class CurrentStopModel {
       print(error);
       return false;
     }
+
+  }
+
+  static Future<DocumentReference<Map<String, dynamic>>?> getDeferredPaymentReference(shouldDeleteDeferredPaymentDoc, stop, databaseName) async {
+
+    if(shouldDeleteDeferredPaymentDoc){
+
+      //find deferredPaymentDoc
+      final String stopPrimaryKey = "${stop['orderID']}_${stop['stopType']}";
+      Query<Map<String, dynamic>> deferredPaymentQueryRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('DeferredPayments').where("stopIDCreated", isEqualTo: stopPrimaryKey).limit(1);
+      final QuerySnapshot<Map<String, dynamic>> deferredPaymentSnapshot = await deferredPaymentQueryRef.get();
+
+      if(deferredPaymentSnapshot.docs.isNotEmpty){
+        return FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('DeferredPayments').doc(deferredPaymentSnapshot.docs[0].id);
+      }
+
+    }
+
+    return null;
 
   }
 

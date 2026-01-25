@@ -75,7 +75,7 @@ class StopFormDialogModel{
     
     //If is an early deferred payment is associated with this stop(paid on collection when promised on delivery), Then on the current expectedPayment value is false.(The opposite of what the formdetails where
     //when creating the deferred payment)
-    final expectedPayment = stop['deferredPayment'] == true ? !stop['deferredPaymentDoc']['formDetails']['collectedPayment'] : stop['stopData']['payment'];  
+    final expectedPayment = stop['deferredPayment'] == true ? !stop['deferredPaymentDoc']['formDetails']['collectedPayment'] : stop['stopData']['payment'];  //stop['deferredPayment'] will only exist on delivery stops
     final didPay = formDetails?['collectedPayment'] ?? false; //set to false if stop was skipped
     
     final Map<String, dynamic>? deferredPayment = CurrentStopModel.shouldDeferPayment(stopStatus, stop, formDetails, expectedPayment, didPay);
@@ -88,8 +88,12 @@ class StopFormDialogModel{
       isLateDeferredPayment = !stop['deferredPaymentDoc']['deferredPaymentType']; //true is early deferred payment. In that case no need to withhold next stop
     }
 
+
+    final bool createDeferredPayment = expectedPayment != didPay;
+
+
     //if they didnt pay on delivery and they should have. If theyve not tapped "call kev". If the payment is a late deferred payment rather than an early one
-    if((expectedPayment != didPay) && stop['stopType'] == "delivery" && !calledAdmin){
+    if((createDeferredPayment) && stop['stopType'] == "delivery" && !calledAdmin){
 
       if(isLateDeferredPayment){
         // is updated payment as wasnt paid on collection when they said they would
@@ -109,8 +113,15 @@ class StopFormDialogModel{
       return false;
     }
 
-    try{
+    //Infer if deferred payment already exists - This is to handle edge cases where a form has been updated
+    final bool doesDeferredPaymentExist = stop['formDetails'] == null ? false : (stop['formDetails']['collectedPayment'] != expectedPayment);
 
+    // bool doesDeferredPaymentExist = stop['formDetails'] == null ? false : (stop['formDetails']['collectedPayment'] != stop['stopData']['payment']);
+    final bool shouldDeleteDeferredPaymentDoc = !createDeferredPayment && doesDeferredPaymentExist;
+    final bool shouldCreateNewDeferredPaymentDoc = createDeferredPayment && !doesDeferredPaymentExist;
+
+
+    try{
       
       final databaseName = dotenv.env['DATABASE_NAME'];
       
@@ -126,6 +137,9 @@ class StopFormDialogModel{
       final currentStopPrimaryKey = "${stop['orderID']}_${stop['stopType']}";
 
       bool foundStop = false; 
+
+
+
 
       //find stop to update
       for(int i = 0; i < newStops.length; i++){
@@ -161,6 +175,9 @@ class StopFormDialogModel{
       };
 
 
+      //Manage deleting deferred payment
+      DocumentReference<Map<String, dynamic>>? deferredPaymentRef = await CurrentStopModel.getDeferredPaymentReference(shouldDeleteDeferredPaymentDoc, stop, databaseName);
+
       await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).runTransaction((transaction) async {
 
         final runDoc = await transaction.get(runDocRef);
@@ -170,12 +187,16 @@ class StopFormDialogModel{
           throw StateError('Run document does not exist');
         }
 
-        if(deferredPayment != null){
+        if(deferredPayment != null && shouldCreateNewDeferredPaymentDoc){
           Sentry.logger.fmt.info("Attempt to create deferred payment %s", [deferredPayment]);
           transaction.set(deferredPaymentDocRef, deferredPayment);
         }
 
         transaction.update(runDocRef, fieldsToUpdate);
+
+        if(shouldDeleteDeferredPaymentDoc && deferredPaymentRef != null){
+          transaction.delete(deferredPaymentRef);
+        }
 
       });
 
@@ -210,7 +231,7 @@ class StopFormDialogModel{
     }
 
   }
-
+  
   
   Future<bool> callAdmin() async {
 
