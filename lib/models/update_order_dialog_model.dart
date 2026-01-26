@@ -134,7 +134,7 @@ class UpdateOrderDialogModel extends OrderModel{
     }else{
 
       final submittedOrdersSuccessfully = await adminEditOrderScreenModel.submitAuthenticatedRequest(request);
-      print("Updated order only");
+
       if(!submittedOrdersSuccessfully){
         return false;
       }
@@ -275,9 +275,33 @@ class UpdateOrderDialogModel extends OrderModel{
       return null;
     }
 
+    //shuffle up stop order
+    //Explicitly sort just incase. Should be in order already
+    stops.sort(orderStopsByStopNumber);
+
+    for(int i = 0; i < stops.length; i++){
+      stops[i]['stopNumber'] = i + 1;
+    }
+     
     return stops;
 
   }
+
+
+  int orderStopsByStopNumber(a, b){
+
+    if(a['stopNumber'] < b['stopNumber']){
+      return -1;
+    }
+
+    if(b['stopNumber'] < a['stopNumber']){
+      return 1;
+    }
+
+    return 0;
+
+  }
+
 
   List<Map<String, dynamic>>? addStopToUnassignedRunDoc(unassignedRunDoc){
 

@@ -7,7 +7,7 @@
 
 - Find bug in updating order from run labelling form thats causing the update request to be sent twice
 
-- make run overview stop cards take into account deferred payments
+- Fix quantity box on overview not staying focused when tapping on it.
 
 
 Release notes
