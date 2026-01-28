@@ -47,15 +47,6 @@ class AdminLabelOrderFormScreenController {
 
   void onUpdateOrderTap(context) async {
 
-    //check that the forms been fill in as if the order is updated without filling in the form the staff member wont be able to add a label later if they want to.
-
-    final isFormValid = model.validateLabelForm();
-
-    if(!isFormValid){
-      showToastWidget(ToastNotification(message: "Please fill in the label form before updating order details", isError: true));
-      return;
-    }
-
     await showDialog(
       context: context, 
       builder: (context){
@@ -68,8 +59,6 @@ class AdminLabelOrderFormScreenController {
   }
 
   void onSaveTap() async{
-    
-    final successfullySavedLabel = await model.saveLabel();
 
     final isFormValid = model.validateLabelForm();
 
@@ -77,6 +66,9 @@ class AdminLabelOrderFormScreenController {
       showToastWidget(ToastNotification(message: model.errorMessage, isError: true));
       return;
     }
+
+    
+    final successfullySavedLabel = await model.saveLabel();
 
     if(!successfullySavedLabel){
       showToastWidget(ToastNotification(message: "Error saving label to order", isError: true));
@@ -86,4 +78,5 @@ class AdminLabelOrderFormScreenController {
     showToastWidget(ToastNotification(message: "Successfully added label to order", isError: false));
 
   }
+
 }

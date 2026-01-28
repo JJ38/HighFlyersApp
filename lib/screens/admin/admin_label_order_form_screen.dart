@@ -7,11 +7,11 @@ import 'package:high_flyers_app/controllers/admin_label_order_form_screen_contro
 class AdminLabelOrderFormScreen extends StatefulWidget {
 
   static final String id = "Admin label order form screen";
-  Map<String, dynamic>? runData;
-  Map<String, dynamic> stop;
+  final Map<String, dynamic>? runData;
+  final Map<String, dynamic> stop;
   final String runDocID;
 
-  AdminLabelOrderFormScreen({super.key, required this.runDocID, required this.stop, required this.runData});
+  const AdminLabelOrderFormScreen({super.key, required this.runDocID, required this.stop, required this.runData});
 
   @override
   State<AdminLabelOrderFormScreen> createState() => _AdminLabelOrderFormScreenState();

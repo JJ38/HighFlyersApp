@@ -33,16 +33,26 @@ class UpdateOrderDialogController extends OrderController<UpdateOrderDialogModel
   @override
   void submitOrder(context) async {
 
-    print("submitOrder");
     
     if(model.payment == "Collection"){
       model.payment = "Pickup";
     }
 
+    final Map<String, dynamic> formOrder = model.getOrder();
+    final initialOrder = stop['orderData'];
+
+    final hasCriticalStopInfoChanged = model.doRunsNeedUpdating(formOrder, initialOrder);
+
+    if(hasCriticalStopInfoChanged){
+      showToastWidget(ToastNotification(message: "Please complete the label form before changing critical stop info", isError: true));
+      return;
+    }
+
+
     final isValidOrder = model.validateOrder();
 
     if(!isValidOrder){
-      showToastWidget(ToastNotification(message: model.errorMessage, isError: true));
+      showToastWidget(ToastNotification(message: model.errorMessage.toString(), isError: true));
       return;
     }
 
@@ -52,11 +62,10 @@ class UpdateOrderDialogController extends OrderController<UpdateOrderDialogModel
     final successfullyUpdateOrderAndRuns = await model.updateOrderAndRuns();
 
     model.isSubmitting = false;
-    print("ATTEMPING UPDATE STATE");
     updateState();
 
     if(!successfullyUpdateOrderAndRuns){
-      showToastWidget(ToastNotification(message: "Error updating order and runs", isError: true));
+      showToastWidget(ToastNotification(message: "Error updating order and runs - ${model.updateOrderErrorMessage}", isError: true));
       return;
     }
 

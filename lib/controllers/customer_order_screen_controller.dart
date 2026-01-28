@@ -69,7 +69,7 @@ class CustomerOrderScreenController extends OrderController<CustomerOrderModel>{
     final isValidOrder = model.validateOrder();
 
     if(!isValidOrder){
-      showToastWidget(ToastNotification(message: model.errorMessage, isError: true));
+      showToastWidget(ToastNotification(message: model.errorMessage.toString(), isError: true));
       return;
     }
 

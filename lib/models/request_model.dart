@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +8,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 class RequestModel {
 
   http.Response? response;
+  String? responseMessage;
 
   Future<bool> submitAuthenticatedRequest(JSONRequest request) async {
 
@@ -21,8 +24,6 @@ class RequestModel {
 
     final successfullySentRequest = await submitRequest(request);
 
-    print(successfullySentRequest);
-
     if(!successfullySentRequest || response == null){
       return false;
     }
@@ -34,6 +35,17 @@ class RequestModel {
     } else {
 
       print('Error: ${response!.statusCode} - ${response!.body}');
+
+      try{
+
+        Map<String, dynamic>? json = jsonDecode(response!.body);
+        responseMessage = json?['message'];
+        print(responseMessage);
+
+      }catch(error){
+        print(error);
+      }
+
       return false;
 
     }

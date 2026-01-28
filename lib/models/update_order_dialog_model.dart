@@ -13,6 +13,8 @@ class UpdateOrderDialogModel extends OrderModel{
   Map<String, dynamic> runData;
   String orderID;
   String runID;
+  String? updateOrderErrorMessage;
+  
 
   UpdateOrderDialogModel({
     required this.stop, 
@@ -55,10 +57,6 @@ class UpdateOrderDialogModel extends OrderModel{
   }
 
   bool doRunsNeedUpdating(formOrder, initialOrder){
-
-    print(formOrder['deliveryWeek']);
-    print(initialOrder['deliveryWeek']);
-
 
     if(formOrder['deliveryWeek'].toString() != initialOrder['deliveryWeek'].toString()){
       print("formOrder['deliveryWeek'] != initialOrder['deliveryWeek']");
@@ -135,6 +133,7 @@ class UpdateOrderDialogModel extends OrderModel{
 
       final submittedOrdersSuccessfully = await adminEditOrderScreenModel.submitAuthenticatedRequest(request);
 
+      updateOrderErrorMessage = adminEditOrderScreenModel.responseMessage; 
       if(!submittedOrdersSuccessfully){
         return false;
       }

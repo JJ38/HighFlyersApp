@@ -37,11 +37,6 @@ class _UpdateOrderDialogState extends State<UpdateOrderDialog> {
     );
 
     updateOrderDialogController.loadForm();
-
-    print("order");
-
-    print(widget.stop);
-
   }
 
   void updateState(){
