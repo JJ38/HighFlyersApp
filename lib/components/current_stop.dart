@@ -73,7 +73,14 @@ class _CurrentStopState extends State<CurrentStop> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: 
             [
-              Text("#${currentStopController.model.stop['orderData']['ID'].toString()}", style: Theme.of(context).textTheme.titleSmall),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [ 
+                  Text("#${currentStopController.model.stop['orderData']['ID'].toString()}", style: Theme.of(context).textTheme.titleSmall),
+                  Text("Arrival: ${currentStopController.model.stop['stopTime'].toString()}", style: Theme.of(context).textTheme.titleSmall),
+                ]
+              ),
+              SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

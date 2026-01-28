@@ -1,6 +1,3 @@
-- (URGENT!) Reorder stops when an order is removed from a run due to it being updated by staff labelling. 
-  URGENT! as the run wil not start if first stop is missing and will likely crash mid run if N+1 doesnt exist. *Will only show missing stops in order if forgotten to recalculate*
-
 - Storing runs in offline mode to help with bad signal
 
 - Mark stuff as cancelled in staff labelling form
@@ -9,20 +6,8 @@
 
 - Fix quantity box on overview not staying focused when tapping on it.
 
+- Update complete log to completed
+
+- Change request log to user name rather than token
 
 Release notes
-
-Staff
-
-  - Added prices to label run form. Payment type is now shown. Price of the order will be shown in the collection box if payment is promised on collection and shown in the delivery box if promised on delivery
-  - Scroll position is now reinstated when navigating back from the label runs form
-
-Drivers
-
-  - Added start times to driver app
-  - Fixed estimated run time showing as unknown
-  - Changed mode in which navigation is launched in apps. Its now set to navigation rather than marker. This means on opening an app it will immediately calculate the route. Please let me know if this is bothersome
-    I can add a setting where you can choose a preference. This is a potential fix for android auto.
-  - Forms can now be submitted from the overview tab. Tap to expand the card and select open form.
-  - When moving onto a stop that has had a form completed ahead of schedule the form will show prefilled in as if the arrived button has already been pressed.
-  - All submissions of driver forms are now stored.

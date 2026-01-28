@@ -82,6 +82,7 @@ class _StopCardState extends State<StopCard> {
         child: stopCardController.model.expandCard ?
 
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
                 SizedBox(height: 20,),
@@ -94,6 +95,10 @@ class _StopCardState extends State<StopCard> {
                     Text(stopCardController.model.stop['stopNumber'].toString(), style: Theme.of(context).textTheme.labelLarge, selectionColor: Color(0xFF2881FF)),
                   ],
                 ),
+
+                SizedBox(height: 10,),
+
+                Text("Arrival Time: ${stopCardController.model.stop['stopTime']}", style: Theme.of(context).textTheme.labelMedium),
 
                 SizedBox(height: 10,),
 
@@ -436,12 +441,19 @@ class _StopCardState extends State<StopCard> {
                           Text(stopCardController.model.stop['stopData']['address1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 1),
                           Row(
                             children: [
-                              Text(stopCardController.model.stop['stopData']['address2'].trim() + ", ", style: Theme.of(context).textTheme.labelSmall),
-                              Text(stopCardController.model.stop['stopData']['address3'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                              Expanded(
+                                  child: Text(
+                                    "${stopCardController.model.stop['stopData']['address2'].trim()}, "
+                                    "${stopCardController.model.stop['stopData']['address3'].trim()}",
+                                    style: Theme.of(context).textTheme.labelSmall,
+                                    maxLines: 100,
+                                  ),
+                                )                              
                             ],
                           ),
                           Text(stopCardController.model.stop['stopData']['postcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
                           Text("Phone Number: ${stopCardController.model.stop['stopData']['phoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+                          Text("Arrival Time: ${stopCardController.model.stop['stopTime']}", style: Theme.of(context).textTheme.labelSmall),
                           ]
                       )
                     )
