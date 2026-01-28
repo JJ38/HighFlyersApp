@@ -104,12 +104,16 @@ class _AuthBootstrapState extends State<AuthBootstrap> {
 
     switch (userRole) {
       case 'driver':
+        Sentry.logger.fmt.info("%s auto signed in as driver on cold start", [currentUser?.email]);
         return const DriverScreen(key: ValueKey('driver'));
       case 'customer':
+        Sentry.logger.fmt.info("%s auto signed in as customer on cold start", [currentUser?.email]);
         return const CustomerScreen(key: ValueKey('customer'));
       case 'admin':
+        Sentry.logger.fmt.info("%s auto signed in as admin on cold start", [currentUser?.email]);
         return const AdminScreen(key: ValueKey('admin'));
       case 'staff':
+        Sentry.logger.fmt.info("%s auto signed in as staff on cold start", [currentUser?.email]);
         return const AdminScreen(key: ValueKey('admin'));
       default:
         return const LoginScreen(key: ValueKey('login-default'));

@@ -43,7 +43,7 @@ class LoginScreenModel {
     } on FirebaseAuthException catch (e) {
 
       getFirebaseErrorMessage(e.code);
-      Sentry.logger.fmt.info("Failed log in attempt for %s %s", [username, e.toString()]);
+      Sentry.logger.fmt.info("Failed log in attempt for %s %s , username length: %s , username with highlighted spacing %s", [username, e.toString(), username?.length, username?.replaceAll(" ", "~")]);
 
       return false;
 

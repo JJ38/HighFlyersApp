@@ -210,7 +210,7 @@ class CurrentStopModel {
       final user = FirebaseAuth.instance.currentUser;
       final String? username = user?.email?.replaceAll("@placeholder.com", "");
 
-      Sentry.logger.fmt.info("%s Successfully %s stop. Stop data: %s Form details: %s", [username, stopStatus, stop, formDetails]);
+      Sentry.logger.fmt.info("%s Successfully %s stop. Stop data: %s Form details: %s", [username, stopStatus == "Complete" ? "Completed" : stopStatus, stop, formDetails]);
 
       if(runStatus == "Completed"){
         Sentry.logger.fmt.info("%s Successfully completed run %s", [username, runData['runName']]);

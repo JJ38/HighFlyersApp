@@ -14,6 +14,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 
 @pragma('vm:entry-point')
@@ -140,17 +141,18 @@ class DriverScreenModel {
     print(foregroundStatus);
 
     if (foregroundStatus.isDenied){
+      Sentry.logger.fmt.info("Requesting foreground location permissions for %s", [FirebaseAuth.instance.currentUser?.email]);
       foregroundStatus = await Permission.locationWhenInUse.request();
     }
 
     if (foregroundStatus.isPermanentlyDenied){
-      print("foregroundStatus.isPermanentlyDenied");
-
+      Sentry.logger.fmt.info("Foreground location permissions for %s are permanently denied", [FirebaseAuth.instance.currentUser?.email]);
       await openAppSettings();
       return false;
     }
 
     if(!foregroundStatus.isGranted){
+      Sentry.logger.fmt.info("Foreground location permissions are not granted for %s", [FirebaseAuth.instance.currentUser?.email]);
       return false;
     }
 
@@ -161,24 +163,24 @@ class DriverScreenModel {
     PermissionStatus alwaysStatus = await Permission.locationAlways.status;
 
     if (alwaysStatus.isDenied) {
+      Sentry.logger.fmt.info("Requesting background location permissions for %s", [FirebaseAuth.instance.currentUser?.email]);
       alwaysStatus = await Permission.locationAlways.request();
     }
 
     if (alwaysStatus.isPermanentlyDenied) {
-      print("alwaysStatus.isPermanentlyDenied");
+      Sentry.logger.fmt.info("Background location permissions for %s are permanently denied", [FirebaseAuth.instance.currentUser?.email]);
       await openAppSettings();
       return false;
     }
 
     if (!alwaysStatus.isGranted) {
-      print("Always permission denied");
+      Sentry.logger.fmt.info("Background location permissions are not granted for %s", [FirebaseAuth.instance.currentUser?.email]);
       return false;
     }
 
-    print("location permissions granted");
-
     IsolateNameServer.registerPortWithName(port.sendPort, _isolateName);
-    port.listen((dynamic driverLocationData) {
+
+    port.listen((dynamic driverLocationData) async {
 
       if(driverLocationData == null){
         return;
@@ -190,15 +192,23 @@ class DriverScreenModel {
         updateDriverLocation(driverLocationDataMap);
 
       }catch(error, stack){
-        print(error);
+
+        await Sentry.captureException(
+          error,
+          stackTrace: stack,
+          withScope: (scope) {
+            scope.setContexts('driver_location_permissions', {
+              'module': 'port_listener',
+              'details': error.toString(),
+            });
+          },
+        );
+
       }
       
-
     });
 
     try{
-
-      print("attempting location tracking");
 
       BackgroundLocator.registerLocationUpdate(
         callback,
@@ -230,8 +240,17 @@ class DriverScreenModel {
 
 
     }catch(error, stack){
-      print("error ${error}");
-      print(stack);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('driver_location_permissions', {
+            'module': 'location_register',
+            'details': error.toString(),
+          });
+        },
+      );
 
       return false;
     }
