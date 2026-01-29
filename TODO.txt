@@ -10,4 +10,12 @@
 
 - Change request log to user name rather than token
 
+- Create restricted staff account that only shows label runs.
+
+- Send text or notification instead of calling kev - seperate form
+
+- Log when call kev shows up
+
+- Add are you sure dialog when creating deferred payment
+
 Release notes

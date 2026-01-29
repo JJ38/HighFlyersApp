@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CurrentStopModel {
 
-  Map<String, dynamic> stop = {};
+  Map<String, dynamic>? stop = {};
   bool showStopForm = false;
   late String progressedRunID;
   late Map<String, dynamic> runData;
@@ -28,7 +28,7 @@ class CurrentStopModel {
 
   void shouldAutoShowForm(){
 
-    if(stop['formDetails'] != null){
+    if(stop?['formDetails'] != null){
       showStopForm = true;
     }
 
@@ -62,27 +62,31 @@ class CurrentStopModel {
 
 
   Future<bool> nextStop(String stopStatus, [Map<String, dynamic>? formDetails]) async{
+
+    if(stop == null){
+      return false;
+    }
     
     //reset value as form could have been misclick on whether payment was collected or not
     shouldCallAdmin = false;
 
-    final bool expectedPayment = stop['deferredPayment'] == true ? !stop['deferredPaymentDoc']['formDetails']['collectedPayment'] : stop['stopData']['payment'];  
+    final bool expectedPayment = stop?['deferredPayment'] == true ? !stop!['deferredPaymentDoc']['formDetails']['collectedPayment'] : stop!['stopData']['payment'];  
     final bool didPay = (formDetails?['collectedPayment'] == true) && stopStatus == "Complete"; //set to false if stop was skipped
     
     final Map<String, dynamic>? deferredPayment = shouldDeferPayment(stopStatus, stop, formDetails, expectedPayment, didPay);
 
-    final bool isDeferredPayment = stop['deferredPayment'] ?? false;
+    final bool isDeferredPayment = stop?['deferredPayment'] ?? false;
 
     bool isLateDeferredPayment = false;
 
     if(isDeferredPayment){
-      isLateDeferredPayment = !stop['deferredPaymentDoc']['deferredPaymentType']; //true is early deferred payment. In that case no need to withhold next stop
+      isLateDeferredPayment = !stop?['deferredPaymentDoc']['deferredPaymentType']; //true is early deferred payment. In that case no need to withhold next stop
     }
 
     final bool createDeferredPayment = expectedPayment != didPay;
 
     //if they didnt pay on delivery and they should have. If theyve not tapped "call kev". If the payment is a late deferred payment rather than an early one
-    if((createDeferredPayment) && stop['stopType'] == "delivery" && !calledAdmin){
+    if((createDeferredPayment) && stop?['stopType'] == "delivery" && !calledAdmin){
 
       if(isLateDeferredPayment){
         // is updated payment as wasnt paid on collection when they said they would
@@ -90,7 +94,7 @@ class CurrentStopModel {
         return false;
       }
 
-      if(stop['stopData']['payment'] && !isDeferredPayment){
+      if(stop?['stopData']['payment'] && !isDeferredPayment){
         //said they would pay on delivery and wouldnt
         shouldCallAdmin = true;
         return false;
@@ -101,7 +105,7 @@ class CurrentStopModel {
 
 
     //Infer if deferred payment already exists - This is to handle edge cases where a form has been updated
-    final bool doesDeferredPaymentExist = stop['formDetails'] == null ? false : (stop['formDetails']['collectedPayment'] != expectedPayment);
+    final bool doesDeferredPaymentExist = stop?['formDetails'] == null ? false : (stop?['formDetails']['collectedPayment'] != expectedPayment);
   
     final bool shouldDeleteDeferredPaymentDoc = (!createDeferredPayment && doesDeferredPaymentExist) || (doesDeferredPaymentExist && stopStatus == "Skipped");
     final bool shouldCreateNewDeferredPaymentDoc = createDeferredPayment && !doesDeferredPaymentExist;
@@ -119,7 +123,7 @@ class CurrentStopModel {
       List<dynamic> newStops = [...stops];
 
       //find stop to update
-      final currentStopPrimaryKey = "${stop['orderID']}_${stop['stopType']}";
+      final currentStopPrimaryKey = "${stop?['orderID']}_${stop?['stopType']}";
 
       bool foundStop = false; 
 
@@ -221,7 +225,9 @@ class CurrentStopModel {
 
         if(newStopNumber == newStops[i]['stopNumber']){
           stop = newStops[i];
-          updateCurrentStop(stop);
+          if(stop != null){
+            updateCurrentStop(stop!);
+          }
           return true;
         }
 
@@ -253,7 +259,7 @@ class CurrentStopModel {
     if(shouldDeleteDeferredPaymentDoc){
 
       //find deferredPaymentDoc
-      final String stopPrimaryKey = "${stop['orderID']}_${stop['stopType']}";
+      final String stopPrimaryKey = "${stop?['orderID']}_${stop?['stopType']}";
       Query<Map<String, dynamic>> deferredPaymentQueryRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('DeferredPayments').where("stopIDCreated", isEqualTo: stopPrimaryKey).limit(1);
       final QuerySnapshot<Map<String, dynamic>> deferredPaymentSnapshot = await deferredPaymentQueryRef.get();
 
@@ -274,15 +280,15 @@ class CurrentStopModel {
 
       if(expectedPayment != didPay){
 
-        String deferredStopType = currentStop['stopType'] == "collection" ? "delivery" : didPay ? "overpaid" : "chase";
+        String deferredStopType = currentStop?['stopType'] == "collection" ? "delivery" : didPay ? "overpaid" : "chase";
 
         //create a deferred payment document
         final Map<String, dynamic> deferredPayment = {
           
-          "orderID": currentStop['orderID'],
-          "stopID": "${currentStop['orderID']}_$deferredStopType",//this refers to the stop that it updates
-          "stopIDCreated": "${currentStop['orderID']}_${currentStop['stopType']}",
-          "orderData": currentStop['orderData'],
+          "orderID": currentStop?['orderID'],
+          "stopID": "${currentStop?['orderID']}_$deferredStopType",//this refers to the stop that it updates
+          "stopIDCreated": "${currentStop?['orderID']}_${currentStop?['stopType']}",
+          "orderData": currentStop?['orderData'],
           "formDetails": formDetails,
           "deferredStopType": deferredStopType,
           "deferredPaymentType": didPay, //If true it was an early payment if false its a late payment
@@ -356,7 +362,7 @@ class CurrentStopModel {
 
     try{
 
-      final String? customerPhoneNumber = stop['stopData']?['phoneNumber'];
+      final String? customerPhoneNumber = stop?['stopData']?['phoneNumber'];
 
       if(customerPhoneNumber == null){
         return false;

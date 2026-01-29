@@ -9,7 +9,7 @@ class StopScreen extends StatefulWidget {
 
   static const String id = "Stop Screen";
 
-  final Map<String, dynamic> stop;
+  final Map<String, dynamic>? stop;
   final Map<String, dynamic> runData;
   final String? progressedRunID;
   final ScrollController scrollController;

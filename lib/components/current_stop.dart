@@ -40,7 +40,10 @@ class _CurrentStopState extends State<CurrentStop> {
     currentStopController.model.progressedRunID = widget.progressedRunID!;
     currentStopController.model.updateCurrentStop = widget.updateCurrentStop;
 
-    widget.updateMapMarker(currentStopController.model.stop);
+    if(currentStopController.model.stop != null){
+      widget.updateMapMarker(currentStopController.model.stop!);
+    }
+
 
   }
 
@@ -61,6 +64,11 @@ class _CurrentStopState extends State<CurrentStop> {
 
     double screenWidth = MediaQuery.of(context).size.width;
 
+
+    if(currentStopController.model.stop == null){
+      return Text("Error with current stop page. Please use overview tab to complete the run");
+    }
+
     return currentStopController.model.runData['runStatus'] == "Completed" ? 
 
         Center(
@@ -76,8 +84,8 @@ class _CurrentStopState extends State<CurrentStop> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [ 
-                  Text("#${currentStopController.model.stop['orderData']['ID'].toString()}", style: Theme.of(context).textTheme.titleSmall),
-                  Text("Arrival: ${currentStopController.model.stop['stopTime'].toString()}", style: Theme.of(context).textTheme.titleSmall),
+                  Text("#${currentStopController.model.stop?['orderData']['ID'].toString()}", style: Theme.of(context).textTheme.titleSmall),
+                  Text("Arrival: ${currentStopController.model.stop?['stopTime'].toString()}", style: Theme.of(context).textTheme.titleSmall),
                 ]
               ),
               SizedBox(height: 10,),
@@ -89,7 +97,7 @@ class _CurrentStopState extends State<CurrentStop> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Stop Number: ", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                        Text(currentStopController.model.stop['stopNumber'].toString(), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                        Text(currentStopController.model.stop != null ? currentStopController.model.stop!['stopNumber'].toString() : "error", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
                       ],
                     ),
                   ),
@@ -98,7 +106,7 @@ class _CurrentStopState extends State<CurrentStop> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Stop type: ", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                        Text("${currentStopController.model.stop['stopType'][0].toUpperCase()}${currentStopController.model.stop['stopType'].substring(1)}", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                        Text("${currentStopController.model.stop?['stopType'][0].toUpperCase()}${currentStopController.model.stop?['stopType'].substring(1)}", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
                       ],
                     ),
                   )
@@ -117,8 +125,8 @@ class _CurrentStopState extends State<CurrentStop> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${currentStopController.model.stop['stopType'][0].toUpperCase()}${currentStopController.model.stop['stopType'].substring(1)} Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                      Text(currentStopController.model.stop['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                      Text("${currentStopController.model.stop?['stopType'][0].toUpperCase()}${currentStopController.model.stop?['stopType'].substring(1)} Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                      Text(currentStopController.model.stop?['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
                     ],
                   ),
                 ]
@@ -134,21 +142,21 @@ class _CurrentStopState extends State<CurrentStop> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${currentStopController.model.stop['stopType'][0].toUpperCase()}${currentStopController.model.stop['stopType'].substring(1)} Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),                      
-                        Text(currentStopController.model.stop['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
+                        Text("${currentStopController.model.stop?['stopType'][0].toUpperCase()}${currentStopController.model.stop?['stopType'].substring(1)} Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),                      
+                        Text(currentStopController.model.stop?['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
                         Row(
                           children: [
                             Expanded(
                               child: Text(
-                                "${currentStopController.model.stop['stopData']['address2']}, "
-                                "${currentStopController.model.stop['stopData']['address3']}",
+                                "${currentStopController.model.stop?['stopData']['address2']}, "
+                                "${currentStopController.model.stop?['stopData']['address3']}",
                                 style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),
                                 maxLines: 100,
                               ),
                             ),
                           ]
                         ),
-                        Text(currentStopController.model.stop['stopData']['postcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                        Text(currentStopController.model.stop?['stopData']['postcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
                       ]              
                     )
                   ),
@@ -158,7 +166,7 @@ class _CurrentStopState extends State<CurrentStop> {
 
               //if stop is collection need to show delivery address so drivers can write on the boxes
 
-              if(currentStopController.model.stop['stopType'] == "collection") 
+              if(currentStopController.model.stop?['stopType'] == "collection") 
 
                 ...[
                   Divider(height: 1,),
@@ -173,7 +181,7 @@ class _CurrentStopState extends State<CurrentStop> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("Delivery Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                          Text(currentStopController.model.stop['orderData']['deliveryName'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                          Text(currentStopController.model.stop?['orderData']['deliveryName'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
                         ],
                       ),
                     ]
@@ -190,19 +198,19 @@ class _CurrentStopState extends State<CurrentStop> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                            Text(currentStopController.model.stop['orderData']['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
+                            Text(currentStopController.model.stop?['orderData']['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
                             Row(
                               children: [
                                 Expanded(
                                   child:Text(
-                                    "${currentStopController.model.stop['orderData']['deliveryAddress2']}, "
-                                    "${currentStopController.model.stop['orderData']['deliveryAddress3']}", 
+                                    "${currentStopController.model.stop?['orderData']['deliveryAddress2']}, "
+                                    "${currentStopController.model.stop?['orderData']['deliveryAddress3']}", 
                                     style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,
                                   ),
                                 )
                               ]
                             ),
-                            Text(currentStopController.model.stop['orderData']['deliveryPostcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                            Text(currentStopController.model.stop?['orderData']['deliveryPostcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
                           ]              
                         )
                       ),
@@ -248,7 +256,7 @@ class _CurrentStopState extends State<CurrentStop> {
                           child: Text("Animal type:",  style: Theme.of(context).textTheme.labelSmall), 
                         ),
                         Expanded(
-                          child: Text(currentStopController.model.stop['stopData']['animalType'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          child: Text(currentStopController.model.stop?['stopData']['animalType'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                         )
                       ],
                     ),
@@ -259,7 +267,7 @@ class _CurrentStopState extends State<CurrentStop> {
                           child: Text("Quantity:",  style: Theme.of(context).textTheme.labelSmall),
                         ), 
                         Expanded(
-                          child: Text(currentStopController.model.stop['stopData']['quantity'].toString(), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          child: Text(currentStopController.model.stop != null ? currentStopController.model.stop!['stopData']['quantity'].toString() : "error", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                         )                    
                       ],
                     ),
@@ -270,7 +278,7 @@ class _CurrentStopState extends State<CurrentStop> {
                           child: Text("Phone Number:",  style: Theme.of(context).textTheme.labelSmall), 
                         ),
                         Expanded(
-                          child: Text(currentStopController.model.stop['stopData']['phoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          child: Text(currentStopController.model.stop?['stopData']['phoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                         ),
                       ]
                     ),
@@ -281,55 +289,61 @@ class _CurrentStopState extends State<CurrentStop> {
                           child: Text("Collect payment:",  style: Theme.of(context).textTheme.labelSmall), 
                         ),
                         Expanded(
-                          child: currentStopController.model.stop['deferredPayment'] == true ?
+                          child: currentStopController.model.stop?['deferredPayment'] == true ?
 
                             //if deferred payment type of true it means it was paid on collection when it was stated to be paid on delivery
-                            currentStopController.model.stop['deferredPaymentDoc']['deferredPaymentType'] == true ? 
+                            currentStopController.model.stop != null ? 
 
-                                GestureDetector(
-                                  onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Early");});},
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.green
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                                        Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
-                                      ]
+                                currentStopController.model.stop!['deferredPaymentDoc']['deferredPaymentType'] == true ? 
+
+                                    GestureDetector(
+                                      onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Early");});},
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.green
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                            Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
+                                          ]
+                                        )
+                                      )
                                     )
-                                  )
-                                )
 
+                                  :
+
+                                    GestureDetector(
+                                      onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Late");});},
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.red
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Yes", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                            Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
+                                          ]
+                                        )
+                                      )
+                                    )
+                                    
                               :
 
-                                GestureDetector(
-                                  onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Late");});},
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.red
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Yes", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                                        Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
-                                      ]
-                                    )
-                                  )
-                                )
-                              
+                                Text("stop is null")
+
                             :
                           
-                              Text(currentStopController.model.stop['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                Text(currentStopController.model.stop?['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                         ),
                       ],
                     ),
 
-                    if(currentStopController.model.stop['stopData']['payment'])
+                    if(currentStopController.model.stop?['stopData']['payment'])
 
                       Row(
                         children: [
@@ -337,7 +351,7 @@ class _CurrentStopState extends State<CurrentStop> {
                             child: Text("Amount to collect:",  style: Theme.of(context).textTheme.labelSmall), 
                           ),
                           Expanded(
-                            child: Text(currentStopController.model.stop['orderData']['price'] == null ? "N/A" : "£${currentStopController.model.stop['orderData']['price']}",  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)), 
+                            child: Text(currentStopController.model.stop?['orderData']['price'] == null ? "N/A" : "£${currentStopController.model.stop?['orderData']['price']}",  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)), 
                           ),
                         ],
                       ),
@@ -345,7 +359,7 @@ class _CurrentStopState extends State<CurrentStop> {
                     SizedBox(height: 10), 
                         
                     Text("Customer Message:",  style: Theme.of(context).textTheme.labelSmall),                   
-                    Text(currentStopController.model.stop['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
+                    Text(currentStopController.model.stop?['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
                     
                         
                   ],
@@ -359,7 +373,7 @@ class _CurrentStopState extends State<CurrentStop> {
 
               //staff labels 
 
-              if(currentStopController.model.stop['label'] != null)
+              if(currentStopController.model.stop?['label'] != null)
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,7 +389,7 @@ class _CurrentStopState extends State<CurrentStop> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Method of contact", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                            Text(currentStopController.model.stop['label']['methodOfContact'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                            Text(currentStopController.model.stop?['label']['methodOfContact'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
                           ],
                         ),
                       ]
@@ -392,7 +406,7 @@ class _CurrentStopState extends State<CurrentStop> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Call before arrival", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                              Text(currentStopController.model.stop['label']['arrivalNotice'] == "yes" ? (currentStopController.model.stop['label']['noticePeriod'] ?? "N/A") + " mins" : currentStopController.model.stop['label']['arrivalNotice'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                              Text(currentStopController.model.stop?['label']['arrivalNotice'] == "yes" ? (currentStopController.model.stop?['label']['noticePeriod'] ?? "N/A") + " mins" : currentStopController.model.stop?['label']['arrivalNotice'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
                             ]              
                           )
                         ),
@@ -410,7 +424,7 @@ class _CurrentStopState extends State<CurrentStop> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Staff Message", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                              Text(currentStopController.model.stop['label']['message'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),
+                              Text(currentStopController.model.stop?['label']['message'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),
                             ]              
                           )
                         ),

@@ -30,9 +30,13 @@ class _RunScreenState extends State<RunScreen> {
   late String shipmentName;
   late DocumentSnapshot<Object?> runDocument;
   late List<Widget> runInfoView;
-  late CameraPosition _initialCameraPositon;
+  late CameraPosition _initialCameraPositon = CameraPosition(
+      target: LatLng(51, 1),
+      zoom: 8,
+    );
   bool error = false;
   bool loaded = false;
+  bool currentStopError = false;
  
 
   @override
@@ -41,8 +45,6 @@ class _RunScreenState extends State<RunScreen> {
     runScreenController = RunScreenController(updateState: updateState);
   
     run = widget.runDocument.data()! as Map<String, dynamic>;
-
-    print("runSettings: ${run['settings']}");
 
     (run['stops'] as List).sort((a, b) => (a['stopNumber'] as int).compareTo(b['stopNumber'] as int));
 
@@ -85,9 +87,11 @@ class _RunScreenState extends State<RunScreen> {
     final currentStopData = runScreenController.model.getStopByStopNumber(currentStopNumber);
 
     if(currentStopData == false){
+      print("currentStopData == false");
       setState(() {
         error = true;
         loaded = true;
+        currentStopError = true;
       });
       return;
     }
@@ -113,6 +117,7 @@ class _RunScreenState extends State<RunScreen> {
     final successful = await runScreenController.model.getStopsForRun();
 
     if (!successful) {
+      print("!successful");
       setState(() {
         error = true;
         loaded = true;
@@ -124,6 +129,7 @@ class _RunScreenState extends State<RunScreen> {
     final successfullyCreatedMarkers = await runScreenController.model.getMarkersForRun();
 
     if(!successfullyCreatedMarkers){
+      print("!successfullyCreatedMarkers");
       setState(() {
         error = true;
         loaded = true;
@@ -162,8 +168,10 @@ class _RunScreenState extends State<RunScreen> {
 
     return Scaffold(
         body: loaded
-            ? error
+            ? error && !currentStopError
+
                 ? Center(child: Text("Error Loading Run"))
+
                 : Stack(children: [
                     SizedBox(
                       height: screenHeight * 0.9,
@@ -231,8 +239,8 @@ class _RunScreenState extends State<RunScreen> {
 
                                       [
                                         StopScreen(
-                                          stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']), 
-                                          runData: runScreenController.model.run!, 
+                                          stop: runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']) == false ? null : runScreenController.model.getStopByStopNumber(runScreenController.model.run!['currentStopNumber']),
+                                          runData: runScreenController.model.run!,
                                           progressedRunID: runScreenController.model.progressedRunID,
                                           updateMapMarker: runScreenController.updateMapMarker,
                                           updateRunMapMarkers: runScreenController.updateRunMapMarkers,

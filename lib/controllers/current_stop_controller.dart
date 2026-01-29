@@ -18,7 +18,12 @@ class CurrentStopController {
     model = CurrentStopModel(stop: stop);
   }
 
-  void navigate(Map<String, dynamic> stop, BuildContext context) async{
+  void navigate(Map<String, dynamic>? stop, BuildContext context) async{
+
+    if(stop == null){
+      showToastWidget(ToastNotification(message: "Error launching navigation -  stop is null", isError: true));
+      return;
+    }
 
     final coordinates = stop['coordinates'];
 
@@ -186,7 +191,9 @@ class CurrentStopController {
   }
 
   void updateMapMarkerNextStop(){
-    updateMapMarker(model.stop);
+    if(model.stop != null){
+      updateMapMarker(model.stop!);
+    }
   }
 
 }
