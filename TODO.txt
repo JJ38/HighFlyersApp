@@ -19,3 +19,14 @@
 - Add are you sure dialog when creating deferred payment
 
 Release notes
+
+Drivers
+
+    - Arrival time is now shown on the current stop and overview page.
+    - Fix for "error loading run" issue. An error message will now show asking the driver to complete the run from the overview tab if for whatever reason a next stop cant be found. The app may still crash but when reopening the app 
+    the error message will be shown and the run can be completed from the overview tab.
+
+Staff
+
+    - Staff can now edit an order before completing the label form aslong as not critical order data is being changed. Critical order data is any collection or delivery address info aswell as the delivery week
+

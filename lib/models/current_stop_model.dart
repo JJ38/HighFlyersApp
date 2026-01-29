@@ -177,6 +177,11 @@ class CurrentStopModel {
       };
 
 
+      // return false;
+
+      //check if a stop for the newstopnumber exists
+
+
       DocumentReference<Map<String, dynamic>>? deferredPaymentRef = await CurrentStopModel.getDeferredPaymentReference(shouldDeleteDeferredPaymentDoc,stop, databaseName);
 
 
@@ -204,7 +209,6 @@ class CurrentStopModel {
 
 
       //updates client that holds info for run
-      runData['currentStopNumber'] = newStopNumber;
       runData['runStatus'] = runStatus;
       runData['stops'] = newStops;
 
@@ -225,6 +229,7 @@ class CurrentStopModel {
 
         if(newStopNumber == newStops[i]['stopNumber']){
           stop = newStops[i];
+          runData['currentStopNumber'] = newStopNumber; 
           if(stop != null){
             updateCurrentStop(stop!);
           }
