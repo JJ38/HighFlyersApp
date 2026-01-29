@@ -6,8 +6,6 @@
 
 - Fix quantity box on overview not staying focused when tapping on it.
 
-- Update complete log to completed
-
 - Change request log to user name rather than token
 
 - Create restricted staff account that only shows label runs.

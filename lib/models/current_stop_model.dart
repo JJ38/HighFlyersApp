@@ -238,6 +238,9 @@ class CurrentStopModel {
 
       }
 
+      //couldnt find new stop
+      Sentry.logger.fmt.info("%s couldnt find next stop be found. Stop data: %s Form details: %s Run Name: %s", [username, stopStatus == "Complete" ? "Completed" : stopStatus, formDetails, runData['runName']]);
+
       return false;
 
     }catch(error, stack){

@@ -128,8 +128,11 @@ class CurrentStopController {
   }
 
   Future<void> skipStop(controller, BuildContext context) async {
+    
+    if(context.mounted){
+      controller.loading();
+    }
 
-    controller.loading();
 
     //updates document in database
     final skippedStopSuccessfully = await model.skipStop();
@@ -157,7 +160,11 @@ class CurrentStopController {
       }
 
       showToastWidget(ToastNotification(message: "Error skipping stop", isError: true));
-      controller.reset();
+
+      if(context.mounted){
+        controller.reset();
+      }
+
       return;
     }
 
@@ -169,7 +176,11 @@ class CurrentStopController {
     updateMapMarkerNextStop();
     model.shouldAutoShowForm();
     updateState();
-    controller.reset();
+    
+    if(context.mounted){
+      controller.reset();
+    }
+
     showToastWidget(ToastNotification(message: "Successfully skipped stop", isError: false));
 
   }

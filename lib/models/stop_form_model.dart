@@ -9,9 +9,14 @@ class StopFormModel {
   Map<String, dynamic>? formDetails;
   Map<String, dynamic>? Function() getStop;
   Future<bool> Function(Map<String, dynamic>?)? completeStop;
+  bool confirmedPaymentInput = false;
 
   StopFormModel({required this.getStop, required this.completeStop}){
     updateStopFormData();
+  }
+  
+  void setConfirmationAnswer(bool confirmationAnswer){
+    confirmedPaymentInput = confirmationAnswer;
   }
 
   void updateStopFormData(){
@@ -51,6 +56,22 @@ class StopFormModel {
     };
   
     return true;
+
+  }
+
+  bool doesCreateDeferredPayment(){
+
+    final Map<String, dynamic>? stop = getStop();
+
+    if(stop == null){
+      return false;
+    }
+
+    if(stop['stopData']['payment'] != collectedPayment){
+      return true;
+    }   
+
+    return false;
 
   }
   
