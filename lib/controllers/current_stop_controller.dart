@@ -139,25 +139,25 @@ class CurrentStopController {
 
     if(!skippedStopSuccessfully){
 
-      if(model.shouldCallAdmin){
+      // if(model.shouldTextAdmin){
 
-        showToastWidget(ToastNotification(message: "You must call kev before skipping this stop", isError: true));
+      //   showToastWidget(ToastNotification(message: "You must call kev before skipping this stop", isError: true));
         
-        if(context.mounted){
+      //   if(context.mounted){
 
-          showDialog(
-            context: context, 
-            builder: (context){
-              return CallAdminDialogBox(callAdmin: model.callAdmin);
-            }
-          );
+      //     showDialog(
+      //       context: context, 
+      //       builder: (context){
+      //         return CallAdminDialogBox(callAdmin: model.callAdmin);
+      //       }
+      //     );
 
-        }
+      //   }
 
-        controller.reset();
-        return;
+      //   controller.reset();
+      //   return;
 
-      }
+      // }
 
       showToastWidget(ToastNotification(message: "Error skipping stop", isError: true));
 

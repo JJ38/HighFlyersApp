@@ -67,6 +67,16 @@ class StopFormModel {
       return false;
     }
 
+    if(stop['deferredPayment'] == true){
+
+      if(stop['stopData']['payment'] == collectedPayment){
+        return true;
+      }
+
+      return false;
+
+    }
+
     if(stop['stopData']['payment'] != collectedPayment){
       return true;
     }   

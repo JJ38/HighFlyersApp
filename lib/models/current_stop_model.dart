@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:high_flyers_app/models/Requests/send_sms_request.dart';
+import 'package:high_flyers_app/models/request_model.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +21,7 @@ class CurrentStopModel {
   bool isRunCompleted = false;
   String? currentDriverUsername;
   bool calledAdmin = false;
-  bool shouldCallAdmin = false;
+  bool shouldTextAdmin = false;
 
 
   CurrentStopModel({required this.stop}){
@@ -34,9 +36,9 @@ class CurrentStopModel {
 
   }
 
-  bool getShouldCallAdmin(){
-    return shouldCallAdmin;
-  }
+  // bool getShouldCallAdmin(){
+  //   return shouldCallAdmin;
+  // }
 
   void setCalledAdmin(newCalledAdmin){
     calledAdmin = newCalledAdmin;
@@ -68,7 +70,7 @@ class CurrentStopModel {
     }
     
     //reset value as form could have been misclick on whether payment was collected or not
-    shouldCallAdmin = false;
+    shouldTextAdmin = false;
 
     final bool expectedPayment = stop?['deferredPayment'] == true ? !stop!['deferredPaymentDoc']['formDetails']['collectedPayment'] : stop!['stopData']['payment'];  
     final bool didPay = (formDetails?['collectedPayment'] == true) && stopStatus == "Complete"; //set to false if stop was skipped
@@ -86,18 +88,18 @@ class CurrentStopModel {
     final bool createDeferredPayment = expectedPayment != didPay;
 
     //if they didnt pay on delivery and they should have. If theyve not tapped "call kev". If the payment is a late deferred payment rather than an early one
-    if((createDeferredPayment) && stop?['stopType'] == "delivery" && !calledAdmin){
+    if((createDeferredPayment) && stop?['stopType'] == "delivery"){
 
       if(isLateDeferredPayment){
         // is updated payment as wasnt paid on collection when they said they would
-        shouldCallAdmin = true;
-        return false;
+        shouldTextAdmin = true;
+        // return false;
       }
 
       if(stop?['stopData']['payment'] && !isDeferredPayment){
         //said they would pay on delivery and wouldnt
-        shouldCallAdmin = true;
-        return false;
+        shouldTextAdmin = true;
+        // return false;
       }
       //dont allow stop to be passed until they call kev
 
@@ -206,14 +208,18 @@ class CurrentStopModel {
         }
 
       });
+      
+      if(shouldTextAdmin){
+        sendSMS(deferredPayment);
+      }
 
 
       //updates client that holds info for run
       runData['runStatus'] = runStatus;
       runData['stops'] = newStops;
 
-      calledAdmin = false;
-      shouldCallAdmin = false;
+      // calledAdmin = false;
+      shouldTextAdmin = false;
 
       final user = FirebaseAuth.instance.currentUser;
       final String? username = user?.email?.replaceAll("@placeholder.com", "");
@@ -259,6 +265,22 @@ class CurrentStopModel {
       print(error);
       return false;
     }
+
+  }
+
+  void sendSMS(Map<String,dynamic>? deferredPayment){
+
+    final username = FirebaseAuth.instance.currentUser?.email?.replaceAll("@placeholder.com", "");
+
+    final orderID = stop?['stopData']['ID'];
+    final deferredStopType = deferredPayment?['deferredStopType'];  
+    final orderTotal = stop?['orderData']['price'] ?? "unknown";
+
+    final String smsMessage = "$username created a deferred payment of type $deferredStopType for order $orderID. Order total is £$orderTotal";
+
+    SendSMSRequest smsRequest = SendSMSRequest(message: smsMessage);
+    RequestModel requestModel = RequestModel();
+    requestModel.submitAuthenticatedRequest(smsRequest);
 
   }
 

@@ -459,8 +459,8 @@ class _CurrentStopState extends State<CurrentStop> {
                     updateMapMarker: currentStopController.updateMapMarkerNextStop, 
                     hideStopForm: currentStopController.hideStopFrom, 
                     completeStop: currentStopController.model.completeStop, 
-                    getShouldCallAdmin: currentStopController.model.getShouldCallAdmin,
-                    callAdmin: currentStopController.model.callAdmin,
+                    // getShouldCallAdmin: currentStopController.model.getShouldCallAdmin,
+                    // callAdmin: currentStopController.model.callAdmin,
                     getStop: widget.getStop,
                     shouldAutoShowForm: currentStopController.model.shouldAutoShowForm
                   ),

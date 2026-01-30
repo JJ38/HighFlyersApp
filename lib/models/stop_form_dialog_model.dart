@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:high_flyers_app/models/Requests/send_sms_request.dart';
 import 'package:high_flyers_app/models/current_stop_model.dart';
+import 'package:high_flyers_app/models/request_model.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,8 +19,9 @@ class StopFormDialogModel{
   Map<String, dynamic>? runData;
   String? progressedRunID;
   String errorMessage = "";
-  bool shouldCallAdmin = false;
+  bool shouldTextAdmin = false;
   bool calledAdmin = false;
+  bool confirmedPaymentInput = false;
 
 
   StopFormDialogModel({required this.stop, this.runData, this.progressedRunID}){
@@ -34,6 +37,10 @@ class StopFormDialogModel{
     collectedPayment = formDetails['collectedPayment'];
     notes = formDetails['notes'];
 
+  }
+
+  void setConfirmationAnswer(input){
+    confirmedPaymentInput = input;
   }
 
   bool isFormValid(){
@@ -70,7 +77,7 @@ class StopFormDialogModel{
 
     print(stop);
 
-    shouldCallAdmin = false;
+    shouldTextAdmin = false;
     String stopStatus = "Complete";
     
     //If is an early deferred payment is associated with this stop(paid on collection when promised on delivery), Then on the current expectedPayment value is false.(The opposite of what the formdetails where
@@ -97,14 +104,12 @@ class StopFormDialogModel{
 
       if(isLateDeferredPayment){
         // is updated payment as wasnt paid on collection when they said they would
-        shouldCallAdmin = true;
-        return false;
+        shouldTextAdmin = true;
       }
 
       if(stop['stopData']['payment'] && !isDeferredPayment){
         //said they would pay on delivery and wouldnt
-        shouldCallAdmin = true;
-        return false;
+        shouldTextAdmin = true;
       }
 
     }
@@ -137,8 +142,6 @@ class StopFormDialogModel{
       final currentStopPrimaryKey = "${stop['orderID']}_${stop['stopType']}";
 
       bool foundStop = false; 
-
-
 
 
       //find stop to update
@@ -200,11 +203,16 @@ class StopFormDialogModel{
 
       });
 
+      print("shouldTextAdmin: $shouldTextAdmin");
+      if(shouldTextAdmin){
+        sendSMS(deferredPayment);
+      }
+
       //updates client that holds info for run
       runData!['stops'] = newStops;
 
       calledAdmin = false;
-      shouldCallAdmin = false;
+      shouldTextAdmin = false;
 
       final user = FirebaseAuth.instance.currentUser;
       final String? username = user?.email?.replaceAll("@placeholder.com", "");
@@ -229,6 +237,24 @@ class StopFormDialogModel{
       print(error);
       return false;
     }
+
+  }
+
+
+
+  void sendSMS(Map<String,dynamic>? deferredPayment){
+
+    final username = FirebaseAuth.instance.currentUser?.email?.replaceAll("@placeholder.com", "");
+
+    final orderID = stop['stopData']?['ID'];
+    final deferredStopType = deferredPayment?['deferredStopType'];  
+    final orderTotal = stop['orderData']['price'] ?? "unknown";
+
+    final String smsMessage = "$username created a deferred payment of type $deferredStopType for order $orderID. Order total is £$orderTotal";
+
+    SendSMSRequest smsRequest = SendSMSRequest(message: smsMessage);
+    RequestModel requestModel = RequestModel();
+    requestModel.submitAuthenticatedRequest(smsRequest);
 
   }
   
@@ -278,6 +304,26 @@ class StopFormDialogModel{
 
     }
 
+
+  }
+
+  bool doesCreateDeferredPayment(){
+
+    if(stop['deferredPayment'] == true){
+
+      if(stop['stopData']['payment'] == collectedPayment){
+        return true;
+      }
+
+      return false;
+
+    }
+
+    if(stop['stopData']['payment'] != collectedPayment){
+      return true;
+    }   
+
+    return false;
 
   }
 

@@ -8,8 +8,8 @@ class StopForm extends StatefulWidget {
   final void Function() hideStopForm;
   final Future<bool> Function(Map<String, dynamic>?) completeStop;
   final void Function() updateMapMarker;
-  final bool Function() getShouldCallAdmin;
-  final void Function() callAdmin;
+  // final bool Function() getShouldCallAdmin;
+  // final void Function() callAdmin;
   final Map<String, dynamic>? Function() getStop;
   final void Function() shouldAutoShowForm;
 
@@ -19,8 +19,8 @@ class StopForm extends StatefulWidget {
     required this.updateMapMarker, 
     required this.hideStopForm, 
     required this.completeStop, 
-    required this.getShouldCallAdmin, 
-    required this.callAdmin,
+    // required this.getShouldCallAdmin, 
+    // required this.callAdmin,
     required this.getStop,
     required this.shouldAutoShowForm,
     super.key
@@ -44,8 +44,8 @@ class _StopFormState extends State<StopForm> {
       updateStopScreenState: widget.updateStopScreenState, 
       updateMapMarker: widget.updateMapMarker, 
       hideStopForm: widget.hideStopForm, 
-      getShouldCallAdmin: widget.getShouldCallAdmin, 
-      callAdmin: widget.callAdmin,
+      // getShouldCallAdmin: widget.getShouldCallAdmin, 
+      // callAdmin: widget.callAdmin,
       completeStop: widget.completeStop,
       getStop: widget.getStop,
       shouldAutoShowForm: widget.shouldAutoShowForm
