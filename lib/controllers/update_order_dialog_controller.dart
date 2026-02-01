@@ -42,8 +42,9 @@ class UpdateOrderDialogController extends OrderController<UpdateOrderDialogModel
     final initialOrder = stop['orderData'];
 
     final hasCriticalStopInfoChanged = model.doRunsNeedUpdating(formOrder, initialOrder);
+    final doesStopHaveLabel = stop['label'] != null ? true : false;
 
-    if(hasCriticalStopInfoChanged){
+    if(hasCriticalStopInfoChanged && !doesStopHaveLabel){
       showToastWidget(ToastNotification(message: "Please complete the label form before changing critical stop info", isError: true));
       return;
     }
