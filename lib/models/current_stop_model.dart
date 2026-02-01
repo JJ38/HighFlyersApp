@@ -210,7 +210,7 @@ class CurrentStopModel {
       });
       
       if(shouldTextAdmin){
-        sendSMS(deferredPayment);
+        sendSMS(deferredPayment, formDetails?['notes']);
       }
 
 
@@ -268,7 +268,9 @@ class CurrentStopModel {
 
   }
 
-  void sendSMS(Map<String,dynamic>? deferredPayment){
+  void sendSMS(Map<String,dynamic>? deferredPayment, String? driverMessage){
+
+    Sentry.logger.fmt.info("Attempting to send text for stop %s", [stop]);
 
     final username = FirebaseAuth.instance.currentUser?.email?.replaceAll("@placeholder.com", "");
 
@@ -276,7 +278,9 @@ class CurrentStopModel {
     final deferredStopType = deferredPayment?['deferredStopType'];  
     final orderTotal = stop?['orderData']['price'] ?? "unknown";
 
-    final String smsMessage = "$username created a deferred payment of type $deferredStopType for order $orderID. Order total is £$orderTotal";
+    driverMessage ??= "";
+
+    final String smsMessage = "$username created a deferred payment of type $deferredStopType for order $orderID. Order total is £$orderTotal. Driver message: $driverMessage";
 
     SendSMSRequest smsRequest = SendSMSRequest(message: smsMessage);
     RequestModel requestModel = RequestModel();

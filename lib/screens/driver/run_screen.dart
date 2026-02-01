@@ -245,7 +245,6 @@ class _RunScreenState extends State<RunScreen> {
                                           updateMapMarker: runScreenController.updateMapMarker,
                                           updateRunMapMarkers: runScreenController.updateRunMapMarkers,
                                           scrollController: scrollController,
-
                                         ),
                                       ]
                                     :          

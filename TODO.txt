@@ -10,11 +10,7 @@
 
 - Create restricted staff account that only shows label runs.
 
-- Send text or notification instead of calling kev - seperate form
 
-- Log when call kev shows up
-
-- Add are you sure dialog when creating deferred payment
 
 Release notes
 
@@ -23,8 +19,11 @@ Drivers
     - Arrival time is now shown on the current stop and overview page.
     - Fix for "error loading run" issue. An error message will now show asking the driver to complete the run from the overview tab if for whatever reason a next stop cant be found. The app may still crash but when reopening the app 
     the error message will be shown and the run can be completed from the overview tab.
+    - Added "are you sure" dialog if a deferred payment is about to be created
+    - Removed call kev button. A text is now sent in the background instead.
+
 
 Staff
 
-    - Staff can now edit an order before completing the label form aslong as not critical order data is being changed. Critical order data is any collection or delivery address info aswell as the delivery week
+    - Staff can now edit an order before completing the label form aslong as non critical order data is being changed. Critical order data is any collection or delivery address info aswell as the delivery week
 
