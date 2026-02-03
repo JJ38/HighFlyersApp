@@ -476,6 +476,7 @@ class RunModel {
 
       newProgressedRuns.add({
         "progressedRunID": progressedRunDocRef.id,
+        "runID": runID,
         "runName": run!['runName'],
         "shipmentName": shipmentName
       });
