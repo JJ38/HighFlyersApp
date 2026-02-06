@@ -208,10 +208,22 @@ class CurrentStopModel {
         }
 
       });
+
+      // await runDocRef.set(fieldsToUpdate, SetOptions(merge: true)); //updates local cache.
       
       if(shouldTextAdmin){
         sendSMS(deferredPayment, formDetails?['notes']);
       }
+
+
+
+      final cached = await runDocRef.get(const GetOptions(source: Source.cache)); 
+      final server = await runDocRef.get(const GetOptions(source: Source.server));
+
+      print("CACHE stopNumber: ${cached['currentStopNumber']}");
+      print("SERVER stopNumber: ${server['currentStopNumber']}");
+
+
 
 
       //updates client that holds info for run

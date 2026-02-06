@@ -128,6 +128,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: kReleaseMode ? const AuthBootstrap() : const LoginScreen(),
+        // home: const AuthBootstrap(),
         routes: {
           // AuthBootstrap.id: (context) => AuthBootstrap(),
           LoginScreen.id: (context) => LoginScreen(),

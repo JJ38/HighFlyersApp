@@ -30,7 +30,6 @@ class _CurrentStopState extends State<CurrentStop> {
     super.initState();
 
     debugPrint("initstate current stop");
-    debugPrint(widget.runData['runStatus']);
 
     final stop = widget.getStop();
 
@@ -59,8 +58,6 @@ class _CurrentStopState extends State<CurrentStop> {
 
   @override
   Widget build(BuildContext context) {
-
-    print(currentStopController.model.stop);
 
     double screenWidth = MediaQuery.of(context).size.width;
 

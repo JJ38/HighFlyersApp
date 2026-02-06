@@ -23,7 +23,6 @@ class DriverModel {
 
     print("fetching driver doc");
 
-
     if (FirebaseAuth.instance.currentUser == null) {
       return false;
     }
@@ -100,17 +99,18 @@ class DriverModel {
 
   Future<bool> fetchDriverDoc() async {
 
-    final databaseName = dotenv.env['DATABASE_NAME'];
-
-    if(databaseName == null){
-      return false;
-    }
-
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Drivers').doc(uid);
-
     try {
 
+      final databaseName = dotenv.env['DATABASE_NAME'];
+
+      if(databaseName == null){
+        return false;
+      }
+
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentReference<Map<String, dynamic>> driverDocRef = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Drivers').doc(uid);
+
+    
       final response = await driverDocRef.get();
 
       if (response.data() == null) {

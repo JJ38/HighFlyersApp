@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show CollectionReference, DocumentReference, DocumentSnapshot, FieldValue, FirebaseFirestore, QuerySnapshot;
+import 'package:cloud_firestore/cloud_firestore.dart' show CollectionReference, DocumentReference, DocumentSnapshot, FieldValue, FirebaseFirestore, QuerySnapshot, SetOptions;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -501,6 +501,21 @@ class RunModel {
         });
 
       });
+
+      await driverDocRef.set({
+          'assignedRuns': newAssignedRuns,
+          'progressedRuns': newProgressedRuns,
+          'driverStatus': "En Route",
+          'updatedAt': FieldValue.serverTimestamp(),
+        }, 
+        SetOptions(merge: true)
+      ); //updates local cache.
+
+
+      await progressedRunDocRef.set(progressedRunDocument, SetOptions(merge: true));
+
+
+      print("CACHED DOCUMENTS");
 
       progressedRunID = progressedRunDocRef.id;
       run!['currentStopNumber'] = 1;

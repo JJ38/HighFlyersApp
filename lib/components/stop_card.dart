@@ -238,13 +238,17 @@ class _StopCardState extends State<StopCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Collection Address", style: Theme.of(context).textTheme.labelMedium, maxLines: 1),
+                      Text("Collection", style: Theme.of(context).textTheme.labelMedium, maxLines: 1),
                       SizedBox(height: 5,),
                       Padding(
                         padding: EdgeInsetsGeometry.only(left: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Padding(
+                              padding: EdgeInsetsGeometry.symmetric(vertical: 5),
+                              child: Text(stopCardController.model.stop['orderData']['collectionName'].trim(), style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18), maxLines: 10),
+                            ),
                             Text(stopCardController.model.stop['orderData']['collectionAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
                             Row(
                               children: [
@@ -261,6 +265,8 @@ class _StopCardState extends State<StopCard> {
                             
                             Text(stopCardController.model.stop['orderData']['collectionPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
                             Text("Phone Number: ${stopCardController.model.stop['orderData']['collectionPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+                            if(stopCardController.model.stop['stopType'] == "collection")
+                              SizedBox(height: 5,)
                           ]
                         ),
                       ),
@@ -284,13 +290,17 @@ class _StopCardState extends State<StopCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Delivery Address", style: Theme.of(context).textTheme.labelMedium, maxLines: 1),
+                      Text("Delivery", style: Theme.of(context).textTheme.labelMedium, maxLines: 1),
                       SizedBox(height: 5,),
                       Padding(
                         padding: EdgeInsetsGeometry.only(left: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Padding(
+                              padding:EdgeInsetsGeometry.symmetric(vertical: 5),
+                              child: Text(stopCardController.model.stop['orderData']['deliveryName'].trim(), style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18), maxLines: 10),
+                            ),
                             Text(stopCardController.model.stop['orderData']['deliveryAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
                             Row(
                               children: [
@@ -306,6 +316,8 @@ class _StopCardState extends State<StopCard> {
                             ),
                             Text(stopCardController.model.stop['orderData']['deliveryPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
                             Text("Phone Number: ${stopCardController.model.stop['orderData']['deliveryPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+                            if(stopCardController.model.stop['stopType'] == "delivery")
+                              SizedBox(height: 5,)
                           ]
                         ),
                       ),

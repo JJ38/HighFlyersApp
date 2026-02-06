@@ -6,9 +6,17 @@
 
 - Fix quantity box on overview not staying focused when tapping on it.
 
-- Change request log to user name rather than token
-
 - Create restricted staff account that only shows label runs.
+
+
+
+- add connection issue error message when logging in and for completing/skipping stops
+
+- reproduce and fix "dissapearing forms" and duplicate runs being created - poor connection issue most likely, look at caching
+
+- add names to stop overview cards.
+
+- add better logging to see if people are opening stops based on cached or server data.
 
 
 
@@ -16,14 +24,8 @@ Release notes
 
 Drivers
 
-    - Arrival time is now shown on the current stop and overview page.
-    - Fix for "error loading run" issue. An error message will now show asking the driver to complete the run from the overview tab if for whatever reason a next stop cant be found. The app may still crash but when reopening the app 
-    the error message will be shown and the run can be completed from the overview tab.
-    - Added "are you sure" dialog if a deferred payment is about to be created
-    - Removed call kev button. A text is now sent in the background instead.
-
+    
 
 Staff
 
-    - Staff can now edit an order before completing the label form aslong as non critical order data is being changed. Critical order data is any collection or delivery address info aswell as the delivery week
 
