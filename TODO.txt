@@ -14,8 +14,6 @@
 
 - reproduce and fix "dissapearing forms" and duplicate runs being created - poor connection issue most likely, look at caching
 
-- add names to stop overview cards.
-
 - add better logging to see if people are opening stops based on cached or server data.
 
 
@@ -24,7 +22,8 @@ Release notes
 
 Drivers
 
-    
+  - added names to stop overview cards.
+
 
 Staff
 

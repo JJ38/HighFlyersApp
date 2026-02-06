@@ -48,8 +48,8 @@ class LoginScreenModel {
       return false;
 
     } catch (error, stack) {
-
-      errorMessage = "Invalid Credentials";
+    
+      errorMessage = "Error";
 
       await Sentry.captureException(
         error,
@@ -62,7 +62,6 @@ class LoginScreenModel {
         },
       );
       
-      print(error);
 
       return false;
 
@@ -70,6 +69,8 @@ class LoginScreenModel {
   }
 
   void getFirebaseErrorMessage(errorType) {
+
+    print(errorType);
 
     switch (errorType) {
 
@@ -82,8 +83,12 @@ class LoginScreenModel {
         errorMessage = 'This account has been disabled';
         break;
 
+      case 'network-request-failed':
+        errorMessage = "Error - Connection Issue";
+        break;
+
       default:
-        errorMessage = 'Invalid Credentials';
+        errorMessage = 'Error';
     }
   }
 }
