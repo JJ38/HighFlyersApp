@@ -70,7 +70,6 @@ class LoginScreenModel {
 
   void getFirebaseErrorMessage(errorType) {
 
-    print(errorType);
 
     switch (errorType) {
 

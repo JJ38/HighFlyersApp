@@ -12,6 +12,7 @@ class StopForm extends StatefulWidget {
   // final void Function() callAdmin;
   final Map<String, dynamic>? Function() getStop;
   final void Function() shouldAutoShowForm;
+  final String Function() getErrorMessage;
 
 
   const StopForm({
@@ -19,10 +20,9 @@ class StopForm extends StatefulWidget {
     required this.updateMapMarker, 
     required this.hideStopForm, 
     required this.completeStop, 
-    // required this.getShouldCallAdmin, 
-    // required this.callAdmin,
     required this.getStop,
     required this.shouldAutoShowForm,
+    required this.getErrorMessage,
     super.key
   });
 
@@ -44,11 +44,10 @@ class _StopFormState extends State<StopForm> {
       updateStopScreenState: widget.updateStopScreenState, 
       updateMapMarker: widget.updateMapMarker, 
       hideStopForm: widget.hideStopForm, 
-      // getShouldCallAdmin: widget.getShouldCallAdmin, 
-      // callAdmin: widget.callAdmin,
       completeStop: widget.completeStop,
       getStop: widget.getStop,
-      shouldAutoShowForm: widget.shouldAutoShowForm
+      shouldAutoShowForm: widget.shouldAutoShowForm,
+      getErrorMessage: widget.getErrorMessage
     );
 
     // stopFormController.model.completeStop = widget.completeStop;

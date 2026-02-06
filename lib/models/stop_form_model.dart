@@ -9,9 +9,10 @@ class StopFormModel {
   Map<String, dynamic>? formDetails;
   Map<String, dynamic>? Function() getStop;
   Future<bool> Function(Map<String, dynamic>?)? completeStop;
+  String Function() getErrorMessage;
   bool confirmedPaymentInput = false;
 
-  StopFormModel({required this.getStop, required this.completeStop}){
+  StopFormModel({required this.getStop, required this.completeStop, required this.getErrorMessage}){
     updateStopFormData();
   }
   

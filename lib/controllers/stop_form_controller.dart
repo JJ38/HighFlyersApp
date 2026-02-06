@@ -12,9 +12,8 @@ class StopFormController {
   final void Function() updateStopScreenState;
   final void Function() hideStopForm;
   final void Function() updateMapMarker;
-  // final bool Function() getShouldCallAdmin;
-  // final void Function() callAdmin;
   final void Function() shouldAutoShowForm;
+  final String Function() getErrorMessage;
 
 
 
@@ -23,14 +22,13 @@ class StopFormController {
     required this.updateStopScreenState, 
     required this.updateMapMarker, 
     required this.hideStopForm, 
-    // required this.getShouldCallAdmin, 
-    // required this.callAdmin,
     required completeStop,
     required getStop,
-    required this.shouldAutoShowForm
+    required this.shouldAutoShowForm,
+    required this.getErrorMessage
   }){
 
-    model = StopFormModel(getStop: getStop, completeStop: completeStop);
+    model = StopFormModel(getStop: getStop, completeStop: completeStop, getErrorMessage: getErrorMessage);
 
   }
 
@@ -134,29 +132,7 @@ class StopFormController {
 
     if(!completedStopSuccessfully){
 
-      
-      // if(getShouldCallAdmin()){
-
-      //   showToastWidget(ToastNotification(message: "You must call kev before compeleting this stop", isError: true));
-        
-      //   if(context.mounted){
-      //     showDialog(
-      //       context: context, 
-      //       builder: (context){
-      //         return CallAdminDialogBox(callAdmin: callAdmin);
-      //       }
-      //     );
-
-      //   }
-
-      //   if(context.mounted){
-      //     controller.reset();
-      //   }
-      //   return;
-
-      // }
-
-      showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
+      showToastWidget(ToastNotification(message: model.getErrorMessage(), isError: true));
       if(context.mounted){
         controller.reset();
       }

@@ -101,30 +101,11 @@ class StopFormDialogController {
      
     }
 
-
-    print("completeStopCOntroller");
-
     final completedStopSuccessfully = await model.completeStop();
 
     if(!completedStopSuccessfully){
       
-      // if(model.shouldCallAdmin){
-
-      //   showToastWidget(ToastNotification(message: "You must call kev before compeleting this stop", isError: true));
-
-      //   showDialog(
-      //     context: context, 
-      //     builder: (context){
-      //       return CallAdminDialogBox(callAdmin: model.callAdmin);
-      //     }
-      //   );
-
-      //   controller.reset();
-      //   return;
-
-      // }
-
-      showToastWidget(ToastNotification(message: "Error completing stop", isError: true));
+      showToastWidget(ToastNotification(message: model.errorMessage, isError: true));
       controller.reset();
       return;
 

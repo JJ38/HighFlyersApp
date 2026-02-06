@@ -221,6 +221,23 @@ class StopFormDialogModel{
 
       return true;
 
+    }on FirebaseException catch (error, stack){
+
+      setErrorMessage(error.code);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('current_stop_error', {
+            'module': 'current_stop_firebase_exception',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      return false;
+
     }catch(error, stack){
 
       await Sentry.captureException(
@@ -240,6 +257,21 @@ class StopFormDialogModel{
 
   }
 
+
+  
+  void setErrorMessage(errorType) {
+
+    switch (errorType) {
+
+      case 'unavailable':
+        errorMessage = "Error - Connection Issue";
+        break;
+
+      default:
+        errorMessage = 'Error';
+
+    }
+  }
 
 
   void sendSMS(Map<String,dynamic>? deferredPayment){

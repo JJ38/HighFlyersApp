@@ -22,10 +22,15 @@ class CurrentStopModel {
   String? currentDriverUsername;
   bool calledAdmin = false;
   bool shouldTextAdmin = false;
+  String errorMessage = "";
 
 
   CurrentStopModel({required this.stop}){
     shouldAutoShowForm();
+  }
+
+  String getErrorMessage(){
+    return errorMessage;
   }
 
   void shouldAutoShowForm(){
@@ -261,7 +266,25 @@ class CurrentStopModel {
 
       return false;
 
+    } on FirebaseException catch (error, stack){
+
+      setErrorMessage(error.code);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+        withScope: (scope) {
+          scope.setContexts('current_stop_error', {
+            'module': 'current_stop_firebase_exception',
+            'details': error.toString(),
+          });
+        },
+      );
+
+      return false;
     }catch(error, stack){
+
+      setErrorMessage(error);
 
       await Sentry.captureException(
         error,
@@ -273,11 +296,25 @@ class CurrentStopModel {
           });
         },
       );
-      
-      print(error);
+
       return false;
     }
 
+  }
+
+
+  void setErrorMessage(errorType) {
+
+    switch (errorType) {
+
+      case 'unavailable':
+        errorMessage = "Error - Connection Issue";
+        break;
+
+      default:
+        errorMessage = 'Error';
+
+    }
   }
 
   void sendSMS(Map<String,dynamic>? deferredPayment, String? driverMessage){
