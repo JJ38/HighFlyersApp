@@ -538,7 +538,7 @@ class RunModel {
 
     }
 
-    Sentry.logger.fmt.info("%s Started run %s", [currentUser?.email?.replaceAll("@placeholder.com", ""), run?['runName']]);
+    Sentry.logger.fmt.info("%s Started run %s", [currentUser.email?.replaceAll("@placeholder.com", ""), run?['runName']]);
 
     return true;
 

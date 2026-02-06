@@ -21,8 +21,6 @@ class DriverModel {
 
   Future<bool> initialiseDriver() async {
 
-    print("fetching driver doc");
-
     if (FirebaseAuth.instance.currentUser == null) {
       return false;
     }

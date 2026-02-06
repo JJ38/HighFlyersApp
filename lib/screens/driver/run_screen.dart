@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/stop.dart';
 import 'package:high_flyers_app/components/stop_card.dart';
 import 'package:high_flyers_app/controllers/run_screen_controller.dart';
 import 'package:high_flyers_app/screens/driver/stop_screen.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RunScreen extends StatefulWidget {
 
@@ -28,7 +30,7 @@ class _RunScreenState extends State<RunScreen> {
   late Map<String, dynamic> run;
   late String runID;
   late String shipmentName;
-  late DocumentSnapshot<Object?> runDocument;
+  late DocumentSnapshot runDocument;
   late List<Widget> runInfoView;
   late CameraPosition _initialCameraPositon = CameraPosition(
       target: LatLng(51, 1),
@@ -42,6 +44,8 @@ class _RunScreenState extends State<RunScreen> {
   @override
   void initState() {
     super.initState();
+
+
     runScreenController = RunScreenController(updateState: updateState);
   
     run = widget.runDocument.data()! as Map<String, dynamic>;
@@ -75,6 +79,8 @@ class _RunScreenState extends State<RunScreen> {
     }
 
     _initialiseCurrentStopPage();
+    print("initialised run from ${runDocument.metadata.isFromCache ? "cache" : "server"}");
+    Sentry.logger.fmt.info("%s initialised run %s from %s starting at stop number %s", [FirebaseAuth.instance.currentUser?.email?.replaceAll("@placeholder.com", ""), run['runName'], runDocument.metadata.isFromCache ? "cache" : "server", run['currentStopNumber']]);
 
   }
 
