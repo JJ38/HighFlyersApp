@@ -1,6 +1,7 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/deferred_payment_hint.dart';
+import 'package:high_flyers_app/components/double_tap_zoom_wrapper.dart';
 import 'package:high_flyers_app/controllers/stop_card_controller.dart';
 
 class StopCard extends StatefulWidget {
@@ -108,118 +109,111 @@ class _StopCardState extends State<StopCard> {
                     borderRadius: BorderRadiusGeometry.circular(20),
                     color: const Color.fromARGB(255, 246, 246, 246)                                       
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text("Animal type:",  style: Theme.of(context).textTheme.labelSmall), 
-                          ),
-                          Expanded(
-                            child: Text(stopCardController.model.stop['stopData']['animalType'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                          )
-                        ],
-                      ),
-
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text("Quantity:",  style: Theme.of(context).textTheme.labelSmall),
-                          ), 
-                          Expanded(
-                            child: Text(stopCardController.model.stop['stopData']['quantity'].toString(), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                          )                    
-                        ],
-                      ),
-
-                      Row(
-                        children:[
-                          Expanded(
-                            child: Text("Phone Number:",  style: Theme.of(context).textTheme.labelSmall), 
-                          ),
-                          Expanded(
-                            child: Text(stopCardController.model.stop['stopData']['phoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                          ),
-                        ]
-                      ),
-
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text("Collect payment:",  style: Theme.of(context).textTheme.labelSmall), 
-                          ),
-                          Expanded(
-                            child: stopCardController.model.stop['deferredPayment'] == true ?
-
-                              //if deferred payment type of true it means it was paid on collection when it was stated to be paid on delivery
-                              stopCardController.model.stop['deferredPaymentDoc']['deferredPaymentType'] == true ? 
-
-                                  GestureDetector(
-                                    onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Early");});},
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.green
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                                          Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
-                                        ]
-                                      )
-                                    )
-                                  )
-
-                                :
-
-                                  GestureDetector(
-                                    onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Late");});},
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.red
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Yes", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                                          Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
-                                        ]
-                                      )
-                                    )
-                                  )
-                                
-                              :
-                            
-                                Text(stopCardController.model.stop['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                          ),
-                        ],
-                      ),
-
-                      if(stopCardController.model.stop['stopData']['payment'])
-
-                        Row(
+                  child: DoubleTapZoomWrapper(
+                    longTap: true,
+                    padding: 20,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                          Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Text("Amount to collect:",  style: Theme.of(context).textTheme.labelSmall), 
+                              child: Text("Animal type:",  style: Theme.of(context).textTheme.labelSmall), 
                             ),
                             Expanded(
-                              child: Text(stopCardController.model.stop['orderData']['price'] == null ? "N/A" : "£${stopCardController.model.stop['orderData']['price']}",  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)), 
+                              child: Text(stopCardController.model.stop['stopData']['animalType'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                            )
+                          ],
+                        ),
+                          Row(
+                          children: [
+                            Expanded(
+                              child: Text("Quantity:",  style: Theme.of(context).textTheme.labelSmall),
+                            ), 
+                            Expanded(
+                              child: Text(stopCardController.model.stop['stopData']['quantity'].toString(), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                            )                    
+                          ],
+                        ),
+                          Row(
+                          children:[
+                            Expanded(
+                              child: Text("Phone Number:",  style: Theme.of(context).textTheme.labelSmall), 
+                            ),
+                            Expanded(
+                              child: Text(stopCardController.model.stop['stopData']['phoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                            ),
+                          ]
+                        ),
+                          Row(
+                          children: [
+                            Expanded(
+                              child: Text("Collect payment:",  style: Theme.of(context).textTheme.labelSmall), 
+                            ),
+                            Expanded(
+                              child: stopCardController.model.stop['deferredPayment'] == true ?
+                                  //if deferred payment type of true it means it was paid on collection when it was stated to be paid on delivery
+                                stopCardController.model.stop['deferredPaymentDoc']['deferredPaymentType'] == true ? 
+                                      GestureDetector(
+                                      onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Early");});},
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.green
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                            Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
+                                          ]
+                                        )
+                                      )
+                                    )
+                                    :
+                                      GestureDetector(
+                                      onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Late");});},
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.red
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Yes", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                            Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
+                                          ]
+                                        )
+                                      )
+                                    )
+                                  
+                                :
+                              
+                                  Text(stopCardController.model.stop['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                             ),
                           ],
                         ),
-
-                      SizedBox(height: 10), 
-                          
-                      Text("Customer Message:",  style: Theme.of(context).textTheme.labelSmall),                   
-                      Text(stopCardController.model.stop['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
-                      
-                          
-                    ],
+                          if(stopCardController.model.stop['stopData']['payment'])
+                            Row(
+                            children: [
+                              Expanded(
+                                child: Text("Amount to collect:",  style: Theme.of(context).textTheme.labelSmall), 
+                              ),
+                              Expanded(
+                                child: Text(stopCardController.model.stop['orderData']['price'] == null ? "N/A" : "£${stopCardController.model.stop['orderData']['price']}",  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)), 
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10), 
+                            
+                        Text("Customer Message:",  style: Theme.of(context).textTheme.labelSmall),                   
+                        Text(stopCardController.model.stop['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
+                        
+                            
+                      ],
+                    ),
                   ),
                 ),
 
@@ -235,42 +229,46 @@ class _StopCardState extends State<StopCard> {
                       color: stopCardController.model.stop['stopType'] == "collection" ? Colors.red : const Color.fromARGB(0, 33, 149, 243)
                     )
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Collection", style: Theme.of(context).textTheme.labelMedium, maxLines: 1),
-                      SizedBox(height: 5,),
-                      Padding(
-                        padding: EdgeInsetsGeometry.only(left: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsGeometry.symmetric(vertical: 5),
-                              child: Text(stopCardController.model.stop['orderData']['collectionName'].trim(), style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18), maxLines: 10),
-                            ),
-                            Text(stopCardController.model.stop['orderData']['collectionAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "${stopCardController.model.stop['orderData']['collectionAddress2']}, "
-                                    "${stopCardController.model.stop['orderData']['collectionAddress3']}",
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                    maxLines: 100,
-                                  ),
-                                )                      
-                              ]
-                            ),
-                            
-                            Text(stopCardController.model.stop['orderData']['collectionPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
-                            Text("Phone Number: ${stopCardController.model.stop['orderData']['collectionPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
-                            if(stopCardController.model.stop['stopType'] == "collection")
-                              SizedBox(height: 5,)
-                          ]
+                  child: DoubleTapZoomWrapper(
+                    longTap: true,
+                    padding: 20,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Collection", style: Theme.of(context).textTheme.labelMedium, maxLines: 1),
+                        SizedBox(height: 5,),
+                        Padding(
+                          padding: EdgeInsetsGeometry.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsGeometry.symmetric(vertical: 5),
+                                child: Text(stopCardController.model.stop['orderData']['collectionName'].trim(), style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18), maxLines: 10),
+                              ),
+                              Text(stopCardController.model.stop['orderData']['collectionAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "${stopCardController.model.stop['orderData']['collectionAddress2']}, "
+                                      "${stopCardController.model.stop['orderData']['collectionAddress3']}",
+                                      style: Theme.of(context).textTheme.labelSmall,
+                                      maxLines: 100,
+                                    ),
+                                  )                      
+                                ]
+                              ),
+                              
+                              Text(stopCardController.model.stop['orderData']['collectionPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                              Text("Phone Number: ${stopCardController.model.stop['orderData']['collectionPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+                              if(stopCardController.model.stop['stopType'] == "collection")
+                                SizedBox(height: 5,)
+                            ]
+                          ),
                         ),
-                      ),
-                    ]
+                      ]
+                    ),
                   ),
                 ),
                 
@@ -287,41 +285,45 @@ class _StopCardState extends State<StopCard> {
                       color: stopCardController.model.stop['stopType'] == "delivery" ? Colors.blue : const Color.fromARGB(0, 33, 149, 243)
                     )
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Delivery", style: Theme.of(context).textTheme.labelMedium, maxLines: 1),
-                      SizedBox(height: 5,),
-                      Padding(
-                        padding: EdgeInsetsGeometry.only(left: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:EdgeInsetsGeometry.symmetric(vertical: 5),
-                              child: Text(stopCardController.model.stop['orderData']['deliveryName'].trim(), style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18), maxLines: 10),
-                            ),
-                            Text(stopCardController.model.stop['orderData']['deliveryAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "${stopCardController.model.stop['orderData']['deliveryAddress2']}, "
-                                    "${stopCardController.model.stop['orderData']['deliveryAddress3']}",
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                    maxLines: 100,
-                                  ),
-                                )                      
-                              ]
-                            ),
-                            Text(stopCardController.model.stop['orderData']['deliveryPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
-                            Text("Phone Number: ${stopCardController.model.stop['orderData']['deliveryPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
-                            if(stopCardController.model.stop['stopType'] == "delivery")
-                              SizedBox(height: 5,)
-                          ]
+                  child: DoubleTapZoomWrapper(
+                    longTap: true,
+                    padding: 20,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Delivery", style: Theme.of(context).textTheme.labelMedium, maxLines: 1),
+                        SizedBox(height: 5,),
+                        Padding(
+                          padding: EdgeInsetsGeometry.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:EdgeInsetsGeometry.symmetric(vertical: 5),
+                                child: Text(stopCardController.model.stop['orderData']['deliveryName'].trim(), style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18), maxLines: 10),
+                              ),
+                              Text(stopCardController.model.stop['orderData']['deliveryAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "${stopCardController.model.stop['orderData']['deliveryAddress2']}, "
+                                      "${stopCardController.model.stop['orderData']['deliveryAddress3']}",
+                                      style: Theme.of(context).textTheme.labelSmall,
+                                      maxLines: 100,
+                                    ),
+                                  )                      
+                                ]
+                              ),
+                              Text(stopCardController.model.stop['orderData']['deliveryPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+                              Text("Phone Number: ${stopCardController.model.stop['orderData']['deliveryPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
+                              if(stopCardController.model.stop['stopType'] == "delivery")
+                                SizedBox(height: 5,)
+                            ]
+                          ),
                         ),
-                      ),
-                    ]
+                      ]
+                    ),
                   ),
                 ),
 

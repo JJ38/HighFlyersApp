@@ -5,6 +5,7 @@ class DoubleTapZoomWrapper extends StatefulWidget {
   final double maxScale;
   final double padding;
   final double initialScale;
+  final bool longTap;
 
 
   const DoubleTapZoomWrapper({
@@ -12,7 +13,8 @@ class DoubleTapZoomWrapper extends StatefulWidget {
     required this.child,
     this.maxScale = 3.0,
     this.padding = 10.0,
-    this.initialScale = 1.2
+    this.initialScale = 1.2,
+    this.longTap = false
   });
 
   @override
@@ -45,16 +47,15 @@ class _DoubleTapZoomWrapperState extends State<DoubleTapZoomWrapper> {
 
     if (_childSize == null) return;
 
-    final double paddedWidth =
-        _childSize!.width + (widget.padding * 2);
-    final double paddedHeight =
-        _childSize!.height + (widget.padding * 2);
+    final paddedWidth = _childSize!.width + (widget.padding * 2);
+    final paddedHeight = _childSize!.height + (widget.padding * 2);
 
-    // Centering math:
-    // When scaling from top-left, we must translate
-    // by half the extra size to keep it centered.
-    final double dx = -(paddedWidth * (widget.initialScale - 1)) / 2;
-    final double dy = -(paddedHeight * (widget.initialScale - 1)) / 2;
+    // 👇 This is the missing piece:
+    // we must centre inside the viewport,
+    // not inside the child.
+
+    final dx = (paddedWidth * (1 - widget.initialScale)) / 2;
+    final dy = (paddedHeight * (1 - widget.initialScale)) / 2;
 
     _controller.value = Matrix4.identity()
       ..translate(dx, dy)
@@ -63,8 +64,7 @@ class _DoubleTapZoomWrapperState extends State<DoubleTapZoomWrapper> {
 
 
   void _measureAndShow() {
-    final renderBox =
-        _childKey.currentContext!.findRenderObject() as RenderBox;
+    final renderBox = _childKey.currentContext!.findRenderObject() as RenderBox;
 
     _childSize = renderBox.size;
 
@@ -95,6 +95,7 @@ class _DoubleTapZoomWrapperState extends State<DoubleTapZoomWrapper> {
                       clipBehavior: Clip.none,
                       transformationController: _controller,
                       constrained: false, // 👈 IMPORTANT
+                      boundaryMargin: EdgeInsets.zero,
                       minScale: 1,
                       maxScale: widget.maxScale,
                       child: SizedBox(
@@ -139,16 +140,33 @@ class _DoubleTapZoomWrapperState extends State<DoubleTapZoomWrapper> {
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
       link: _link,
-      child: GestureDetector(
-        onDoubleTap: _toggleZoom,
-        child: Opacity(
-          opacity: _zoomed ? 0 : 1,
-          child: Container(
-            key: _childKey,
-            child: widget.child,
-          ),
-        ),
-      ),
+      child: widget.longTap ? 
+
+          GestureDetector(
+            onLongPress: _toggleZoom,
+            child: Opacity(
+              opacity: _zoomed ? 0 : 1,
+              child: Container(
+                key: _childKey,
+                child: widget.child,
+              ),
+            ),
+          )
+
+        :
+
+          GestureDetector(
+            onDoubleTap: _toggleZoom,
+            onLongPress: _toggleZoom,
+            child: Opacity(
+              opacity: _zoomed ? 0 : 1,
+              child: Container(
+                key: _childKey,
+                child: widget.child,
+              ),
+            ),
+          )
+
     );
   }
 }
