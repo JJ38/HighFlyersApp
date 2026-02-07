@@ -80,7 +80,7 @@ class _RunScreenState extends State<RunScreen> {
 
     _initialiseCurrentStopPage();
     print("initialised run from ${runDocument.metadata.isFromCache ? "cache" : "server"}");
-    Sentry.logger.fmt.info("%s initialised run %s from %s starting at stop number %s", [FirebaseAuth.instance.currentUser?.email?.replaceAll("@placeholder.com", ""), run['runName'], runDocument.metadata.isFromCache ? "cache" : "server", run['currentStopNumber']]);
+    Sentry.logger.fmt.info("%s initialised run %s from %s starting at stop number %s runDoc: %s", [FirebaseAuth.instance.currentUser?.email?.replaceAll("@placeholder.com", ""), run['runName'], runDocument.metadata.isFromCache ? "cache" : "server", run['currentStopNumber'], runDocument.data()]);
 
   }
 

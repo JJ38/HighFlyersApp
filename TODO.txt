@@ -10,19 +10,15 @@
 
 
 
-- add connection issue error message when logging in and for completing/skipping stops
-
-- reproduce and fix "dissapearing forms" and duplicate runs being created - poor connection issue most likely, look at caching
-
-- add better logging to see if people are opening stops based on cached or server data.
-
-
+- reproduce and fix "disappearing forms" and duplicate runs being created - poor connection issue most likely, look at caching
 
 Release notes
 
 Drivers
 
   - added names to stop overview cards.
+  - added logging to see if runs are loaded in offline or online mode to help identify duplicate stop and "disappearing form" issue.
+  - added connection issue error messaging when completing a stop or logging in
 
 
 Staff

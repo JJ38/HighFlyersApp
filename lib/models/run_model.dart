@@ -514,9 +514,6 @@ class RunModel {
 
       await progressedRunDocRef.set(progressedRunDocument, SetOptions(merge: true));
 
-
-      print("CACHED DOCUMENTS");
-
       progressedRunID = progressedRunDocRef.id;
       run!['currentStopNumber'] = 1;
 

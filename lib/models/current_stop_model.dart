@@ -214,20 +214,18 @@ class CurrentStopModel {
 
       });
 
-      // await runDocRef.set(fieldsToUpdate, SetOptions(merge: true)); //updates local cache.
       
       if(shouldTextAdmin){
         sendSMS(deferredPayment, formDetails?['notes']);
       }
 
 
-
+      await runDocRef.set(fieldsToUpdate, SetOptions(merge: true)); //updates local cache.
       final cached = await runDocRef.get(const GetOptions(source: Source.cache)); 
-      final server = await runDocRef.get(const GetOptions(source: Source.server));
 
       print("CACHE stopNumber: ${cached['currentStopNumber']}");
-      print("SERVER stopNumber: ${server['currentStopNumber']}");
 
+      Sentry.logger.fmt.info("Cached run document with stop number %s runDoc: %s ", [cached.data()?['currentStopNumber'], cached.data()]);
 
 
 

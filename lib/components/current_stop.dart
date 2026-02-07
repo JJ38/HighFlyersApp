@@ -1,8 +1,11 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/deferred_payment_hint.dart';
+import 'package:high_flyers_app/components/double_tap_zoom_wrapper.dart';
 import 'package:high_flyers_app/components/stop_form.dart';
 import 'package:high_flyers_app/controllers/current_stop_controller.dart';
+import 'package:photo_view/photo_view.dart';
+
 
 class CurrentStop extends StatefulWidget {
 
@@ -23,6 +26,7 @@ class CurrentStop extends StatefulWidget {
 class _CurrentStopState extends State<CurrentStop> {
 
   late CurrentStopController currentStopController;
+
 
   @override
   void initState() {
@@ -113,52 +117,65 @@ class _CurrentStopState extends State<CurrentStop> {
               SizedBox(height: 10),
 
 
-              Row(
-                children:[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    child: Icon(Icons.person),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("${currentStopController.model.stop?['stopType'][0].toUpperCase()}${currentStopController.model.stop?['stopType'].substring(1)} Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                      Text(currentStopController.model.stop?['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
-                    ],
-                  ),
-                ]
-              ),
-              SizedBox(height: 10),
-              Row(
-                children:[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    child: Icon(Icons.location_on),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("${currentStopController.model.stop?['stopType'][0].toUpperCase()}${currentStopController.model.stop?['stopType'].substring(1)} Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),                      
-                        Text(currentStopController.model.stop?['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "${currentStopController.model.stop?['stopData']['address2']}, "
-                                "${currentStopController.model.stop?['stopData']['address3']}",
-                                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),
-                                maxLines: 100,
-                              ),
-                            ),
-                          ]
+              DoubleTapZoomWrapper(
+
+                child: Column(
+                  children: [ 
+                    Row(
+                      children:[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(Icons.person),
                         ),
-                        Text(currentStopController.model.stop?['stopData']['postcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${currentStopController.model.stop?['stopType'][0].toUpperCase()}${currentStopController.model.stop?['stopType'].substring(1)} Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                            Text(currentStopController.model.stop?['stopData']['name'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                          ],
+                        ),
+                      ]
+                    ),
+
+                    SizedBox(height: 10),
+                  
+                    Row(
+                      children:[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(Icons.location_on),
+                        ),
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${currentStopController.model.stop?['stopType'][0].toUpperCase()}${currentStopController.model.stop?['stopType'].substring(1)} Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),                      
+                              Text(currentStopController.model.stop?['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
+                              Row(
+                                children: [
+                                  Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Text(
+                                      "${currentStopController.model.stop?['stopData']['address2']}, "
+                                      "${currentStopController.model.stop?['stopData']['address3']}",
+                                      style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),
+                                      maxLines: 100,
+                                    ),
+                                  ),
+                                ]
+                              ),
+                              Text(currentStopController.model.stop?['stopData']['postcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                            ]              
+                          )
+                        ),
                       ]              
-                    )
-                  ),
-                ]              
+                    ),
+                  ]
+                ),
               ),
+              
+
               SizedBox(height: 10),
 
               //if stop is collection need to show delivery address so drivers can write on the boxes
@@ -168,50 +185,56 @@ class _CurrentStopState extends State<CurrentStop> {
                 ...[
                   Divider(height: 1,),
                   SizedBox(height: 10,),
-                  Row(
-                    children:[
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                        child: Icon(Icons.person),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Delivery Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                          Text(currentStopController.model.stop?['orderData']['deliveryName'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
-                        ],
-                      ),
-                    ]
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children:[
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                        child: Icon(Icons.location_on),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                            Text(currentStopController.model.stop?['orderData']['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
-                            Row(
-                              children: [
-                                Expanded(
-                                  child:Text(
-                                    "${currentStopController.model.stop?['orderData']['deliveryAddress2']}, "
-                                    "${currentStopController.model.stop?['orderData']['deliveryAddress3']}", 
-                                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,
-                                  ),
-                                )
-                              ]
+                  DoubleTapZoomWrapper(
+                    child: Column(
+                      children: [
+                        Row(
+                          children:[
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(Icons.person),
                             ),
-                            Text(currentStopController.model.stop?['orderData']['deliveryPostcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Delivery Customer", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                                Text(currentStopController.model.stop?['orderData']['deliveryName'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),)
+                              ],
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children:[
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(Icons.location_on),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                                  Text(currentStopController.model.stop?['orderData']['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child:Text(
+                                          "${currentStopController.model.stop?['orderData']['deliveryAddress2']}, "
+                                          "${currentStopController.model.stop?['orderData']['deliveryAddress3']}", 
+                                          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,
+                                        ),
+                                      )
+                                    ]
+                                  ),
+                                  Text(currentStopController.model.stop?['orderData']['deliveryPostcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
+                                ]              
+                              )
+                            ),
                           ]              
-                        )
-                      ),
-                    ]              
+                        ),
+                      ]
+                    ),
                   ),
                   
                   SizedBox(height: 10),
@@ -242,124 +265,113 @@ class _CurrentStopState extends State<CurrentStop> {
                   borderRadius: BorderRadiusGeometry.circular(20),
                   color: const Color.fromARGB(255, 246, 246, 246)
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text("Animal type:",  style: Theme.of(context).textTheme.labelSmall), 
-                        ),
-                        Expanded(
-                          child: Text(currentStopController.model.stop?['stopData']['animalType'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        )
-                      ],
-                    ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text("Quantity:",  style: Theme.of(context).textTheme.labelSmall),
-                        ), 
-                        Expanded(
-                          child: Text(currentStopController.model.stop != null ? currentStopController.model.stop!['stopData']['quantity'].toString() : "error", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        )                    
-                      ],
-                    ),
-
-                    Row(
-                      children:[
-                        Expanded(
-                          child: Text("Phone Number:",  style: Theme.of(context).textTheme.labelSmall), 
-                        ),
-                        Expanded(
-                          child: Text(currentStopController.model.stop?['stopData']['phoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        ),
-                      ]
-                    ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text("Collect payment:",  style: Theme.of(context).textTheme.labelSmall), 
-                        ),
-                        Expanded(
-                          child: currentStopController.model.stop?['deferredPayment'] == true ?
-
-                            //if deferred payment type of true it means it was paid on collection when it was stated to be paid on delivery
-                            currentStopController.model.stop != null ? 
-
-                                currentStopController.model.stop!['deferredPaymentDoc']['deferredPaymentType'] == true ? 
-
-                                    GestureDetector(
-                                      onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Early");});},
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Colors.green
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                                            Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
-                                          ]
-                                        )
-                                      )
-                                    )
-
-                                  :
-
-                                    GestureDetector(
-                                      onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Late");});},
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Colors.red
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("Yes", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                                            Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
-                                          ]
-                                        )
-                                      )
-                                    )
-                                    
-                              :
-
-                                Text("stop is null")
-
-                            :
-                          
-                                Text(currentStopController.model.stop?['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
-                        ),
-                      ],
-                    ),
-
-                    if(currentStopController.model.stop?['stopData']['payment'])
-
-                      Row(
+                child: DoubleTapZoomWrapper(
+                  padding: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                        Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: Text("Amount to collect:",  style: Theme.of(context).textTheme.labelSmall), 
+                            child: Text("Animal type:",  style: Theme.of(context).textTheme.labelSmall), 
                           ),
                           Expanded(
-                            child: Text(currentStopController.model.stop?['orderData']['price'] == null ? "N/A" : "£${currentStopController.model.stop?['orderData']['price']}",  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)), 
+                            child: Text(currentStopController.model.stop?['stopData']['animalType'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          )
+                        ],
+                      ),
+                        Row(
+                        children: [
+                          Expanded(
+                            child: Text("Quantity:",  style: Theme.of(context).textTheme.labelSmall),
+                          ), 
+                          Expanded(
+                            child: Text(currentStopController.model.stop != null ? currentStopController.model.stop!['stopData']['quantity'].toString() : "error", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          )                    
+                        ],
+                      ),
+                        Row(
+                        children:[
+                          Expanded(
+                            child: Text("Phone Number:",  style: Theme.of(context).textTheme.labelSmall), 
+                          ),
+                          Expanded(
+                            child: Text(currentStopController.model.stop?['stopData']['phoneNumber'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                          ),
+                        ]
+                      ),
+                        Row(
+                        children: [
+                          Expanded(
+                            child: Text("Collect payment:",  style: Theme.of(context).textTheme.labelSmall), 
+                          ),
+                          Expanded(
+                            child: currentStopController.model.stop?['deferredPayment'] == true ?
+                                //if deferred payment type of true it means it was paid on collection when it was stated to be paid on delivery
+                              currentStopController.model.stop != null ? 
+                                    currentStopController.model.stop!['deferredPaymentDoc']['deferredPaymentType'] == true ? 
+                                        GestureDetector(
+                                        onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Early");});},
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            color: Colors.green
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                              Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
+                                            ]
+                                          )
+                                        )
+                                      )
+                                      :
+                                        GestureDetector(
+                                        onTap: (){showDialog(context: context, builder: (context){return DeferredPaymentHint(hintType: "Late");});},
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            color: Colors.red
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Yes", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
+                                              Icon(Icons.warning_amber_rounded, color: Colors.amber,),  
+                                            ]
+                                          )
+                                        )
+                                      )
+                                      
+                                :
+                                    Text("stop is null")
+                                :
+                            
+                                  Text(currentStopController.model.stop?['stopData']['payment'] ? "Yes" : "No", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)),
                           ),
                         ],
                       ),
-
-                    SizedBox(height: 10), 
-                        
-                    Text("Customer Message:",  style: Theme.of(context).textTheme.labelSmall),                   
-                    Text(currentStopController.model.stop?['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
-                    
-                        
-                  ],
+                        if(currentStopController.model.stop?['stopData']['payment'])
+                          Row(
+                          children: [
+                            Expanded(
+                              child: Text("Amount to collect:",  style: Theme.of(context).textTheme.labelSmall), 
+                            ),
+                            Expanded(
+                              child: Text(currentStopController.model.stop?['orderData']['price'] == null ? "N/A" : "£${currentStopController.model.stop?['orderData']['price']}",  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15)), 
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10), 
+                          
+                      Text("Customer Message:",  style: Theme.of(context).textTheme.labelSmall),                   
+                      Text(currentStopController.model.stop?['orderData']['message'] ?? "", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 15, overflow: TextOverflow.visible), softWrap: true),
+                      
+                          
+                    ],
+                  ),
                 ),
               ),
 
