@@ -1,6 +1,5 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:high_flyers_app/components/stop_form.dart';
 import 'package:high_flyers_app/controllers/stop_form_dialog_controller.dart';
 
 class StopFormDialog extends StatefulWidget {

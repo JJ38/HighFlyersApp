@@ -236,7 +236,7 @@ class UpdateOrderDialogModel extends OrderModel{
       });
 
 
-    }catch(error, stack){
+    }catch(error){
 
       print(error);
       return false;

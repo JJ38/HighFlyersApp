@@ -10,7 +10,7 @@ class AuthModel {
 
       await FirebaseAuth.instance.signOut();
 
-    }catch(error, stack){
+    }catch(error){
       print(error);
       return false;
     }

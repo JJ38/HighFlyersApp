@@ -37,7 +37,7 @@ class DriverScreenModel {
 
       send?.send(jsonEncode(locationDto));
 
-    }catch(error, stack){
+    }catch(error){
       print(error);
     }
 
@@ -79,7 +79,7 @@ class DriverScreenModel {
         }
       );
 
-    }catch(error, stack){
+    }catch(error){
       print(error);
     }
 

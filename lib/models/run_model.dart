@@ -128,7 +128,7 @@ class RunModel {
 
       return "${numberOfHours}h ${numberOfRemainingMinutes}m";
 
-    }catch(error, stack){
+    }catch(error){
       print(error);
       return "unknown";
     }
@@ -166,7 +166,7 @@ class RunModel {
 
       return startTime;
 
-    }catch(error, stack){
+    }catch(error){
 
       print(error);
       return "unknown";
@@ -576,7 +576,7 @@ class RunModel {
 
       return deferredPayments;
 
-    }catch(error, stack){
+    }catch(error){
       
       print("error: $error");
       return null;

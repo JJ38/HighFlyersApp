@@ -8,7 +8,6 @@ import 'package:high_flyers_app/models/order_model_abstract.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
 
 class CustomerOrderModel extends OrderModel{
 

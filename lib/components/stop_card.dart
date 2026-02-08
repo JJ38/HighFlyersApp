@@ -1,5 +1,6 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:high_flyers_app/components/copyable_stop_card_address.dart';
 import 'package:high_flyers_app/components/deferred_payment_hint.dart';
 import 'package:high_flyers_app/components/double_tap_zoom_wrapper.dart';
 import 'package:high_flyers_app/controllers/stop_card_controller.dart';
@@ -246,21 +247,14 @@ class _StopCardState extends State<StopCard> {
                                 padding: EdgeInsetsGeometry.symmetric(vertical: 5),
                                 child: Text(stopCardController.model.stop['orderData']['collectionName'].trim(), style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18), maxLines: 10),
                               ),
-                              Text(stopCardController.model.stop['orderData']['collectionAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "${stopCardController.model.stop['orderData']['collectionAddress2']}, "
-                                      "${stopCardController.model.stop['orderData']['collectionAddress3']}",
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                      maxLines: 100,
-                                    ),
-                                  )                      
-                                ]
+
+                              CopyableStopCardAddress(
+                                address1: stopCardController.model.stop['orderData']['collectionAddress1'],
+                                address2: stopCardController.model.stop['orderData']['collectionAddress2'],
+                                address3: stopCardController.model.stop['orderData']['collectionAddress3'],
+                                postcode: stopCardController.model.stop['orderData']['collectionPostcode'],
                               ),
-                              
-                              Text(stopCardController.model.stop['orderData']['collectionPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
+
                               Text("Phone Number: ${stopCardController.model.stop['orderData']['collectionPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
                               if(stopCardController.model.stop['stopType'] == "collection")
                                 SizedBox(height: 5,)
@@ -302,20 +296,12 @@ class _StopCardState extends State<StopCard> {
                                 padding:EdgeInsetsGeometry.symmetric(vertical: 5),
                                 child: Text(stopCardController.model.stop['orderData']['deliveryName'].trim(), style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18), maxLines: 10),
                               ),
-                              Text(stopCardController.model.stop['orderData']['deliveryAddress1'].trim(), style: Theme.of(context).textTheme.titleSmall, maxLines: 10),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "${stopCardController.model.stop['orderData']['deliveryAddress2']}, "
-                                      "${stopCardController.model.stop['orderData']['deliveryAddress3']}",
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                      maxLines: 100,
-                                    ),
-                                  )                      
-                                ]
+                              CopyableStopCardAddress(
+                                address1: stopCardController.model.stop['orderData']['deliveryAddress1'],
+                                address2: stopCardController.model.stop['orderData']['deliveryAddress2'],
+                                address3: stopCardController.model.stop['orderData']['deliveryAddress3'],
+                                postcode: stopCardController.model.stop['orderData']['deliveryPostcode'],
                               ),
-                              Text(stopCardController.model.stop['orderData']['deliveryPostcode'].trim(), style: Theme.of(context).textTheme.labelSmall),
                               Text("Phone Number: ${stopCardController.model.stop['orderData']['deliveryPhoneNumber'].trim()}", style: Theme.of(context).textTheme.labelSmall),
                               if(stopCardController.model.stop['stopType'] == "delivery")
                                 SizedBox(height: 5,)

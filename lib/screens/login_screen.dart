@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:high_flyers_app/controllers/login_screen_controller.dart';
 import 'package:high_flyers_app/components/button_pill.dart';
 import 'package:high_flyers_app/components/input_pill.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 
 class LoginScreen extends StatefulWidget {

@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:high_flyers_app/components/toast_notification.dart';
 import 'package:high_flyers_app/models/driver_model.dart';
 import 'package:high_flyers_app/screens/driver/run_screen.dart';
 

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/request_model.dart';
 import 'package:high_flyers_app/models/validator.dart';
-import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 abstract class OrderModel extends RequestModel{

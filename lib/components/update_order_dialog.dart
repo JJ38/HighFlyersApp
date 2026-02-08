@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/admin_order_form.dart';
-import 'package:high_flyers_app/components/squared_input.dart';
 import 'package:high_flyers_app/controllers/update_order_dialog_controller.dart';
 
 class UpdateOrderDialog extends StatefulWidget {

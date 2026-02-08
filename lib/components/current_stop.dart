@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:high_flyers_app/components/deferred_payment_hint.dart';
 import 'package:high_flyers_app/components/double_tap_zoom_wrapper.dart';
 import 'package:high_flyers_app/components/stop_form.dart';
+import 'package:high_flyers_app/components/copyable_address.dart';
 import 'package:high_flyers_app/controllers/current_stop_controller.dart';
-import 'package:photo_view/photo_view.dart';
 
 
 class CurrentStop extends StatefulWidget {
@@ -138,39 +138,15 @@ class _CurrentStopState extends State<CurrentStop> {
                     ),
 
                     SizedBox(height: 10),
-                  
-                    Row(
-                      children:[
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          child: Icon(Icons.location_on),
-                        ),
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("${currentStopController.model.stop?['stopType'][0].toUpperCase()}${currentStopController.model.stop?['stopType'].substring(1)} Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),                      
-                              Text(currentStopController.model.stop?['stopData']['address1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
-                              Row(
-                                children: [
-                                  Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Text(
-                                      "${currentStopController.model.stop?['stopData']['address2']}, "
-                                      "${currentStopController.model.stop?['stopData']['address3']}",
-                                      style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),
-                                      maxLines: 100,
-                                    ),
-                                  ),
-                                ]
-                              ),
-                              Text(currentStopController.model.stop?['stopData']['postcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
-                            ]              
-                          )
-                        ),
-                      ]              
+
+                    CopyableAddress(
+                      stopType: currentStopController.model.stop?['stopType'],
+                      address1: currentStopController.model.stop?['stopData']['address1'],
+                      address2: currentStopController.model.stop?['stopData']['address2'],
+                      address3: currentStopController.model.stop?['stopData']['address3'],
+                      postcode: currentStopController.model.stop?['stopData']['postcode'],
                     ),
+
                   ]
                 ),
               ),
@@ -204,35 +180,14 @@ class _CurrentStopState extends State<CurrentStop> {
                           ]
                         ),
                         SizedBox(height: 10),
-                        Row(
-                          children:[
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              child: Icon(Icons.location_on),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Delivery Address", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
-                                  Text(currentStopController.model.stop?['orderData']['deliveryAddress1'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,),                         
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child:Text(
-                                          "${currentStopController.model.stop?['orderData']['deliveryAddress2']}, "
-                                          "${currentStopController.model.stop?['orderData']['deliveryAddress3']}", 
-                                          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18), maxLines: 100,
-                                        ),
-                                      )
-                                    ]
-                                  ),
-                                  Text(currentStopController.model.stop?['orderData']['deliveryPostcode'], style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
-                                ]              
-                              )
-                            ),
-                          ]              
+                        CopyableAddress(
+                          stopType: "delivery",
+                          address1: currentStopController.model.stop?['orderData']['deliveryAddress1'],
+                          address2: currentStopController.model.stop?['orderData']['deliveryAddress2'],
+                          address3: currentStopController.model.stop?['orderData']['deliveryAddress3'],
+                          postcode: currentStopController.model.stop?['orderData']['deliveryPostcode'],
                         ),
+                        
                       ]
                     ),
                   ),

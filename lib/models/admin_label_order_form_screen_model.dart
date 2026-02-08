@@ -188,7 +188,7 @@ class AdminLabelOrderFormScreenModel {
       //update client
 
 
-    }catch(error, stack){
+    }catch(error){
 
       return false;
     }
