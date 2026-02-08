@@ -208,6 +208,12 @@ class StopFormDialogModel{
         sendSMS(deferredPayment);
       }
 
+
+      await runDocRef.set(fieldsToUpdate, SetOptions(merge: true)); //updates local cache.
+      final cached = await runDocRef.get(const GetOptions(source: Source.cache)); 
+
+      Sentry.logger.fmt.info("Cached run document with stop number %s from overview form runDoc: %s ", [cached.data()?['currentStopNumber'], cached.data()]);
+
       //updates client that holds info for run
       runData!['stops'] = newStops;
 

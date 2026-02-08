@@ -1,5 +1,3 @@
-- Storing runs in offline mode to help with bad signal
-
 - Mark stuff as cancelled in staff labelling form
 
 - Find bug in updating order from run labelling form thats causing the update request to be sent twice
@@ -8,9 +6,9 @@
 
 - Create restricted staff account that only shows label runs.
 
-
-
 - reproduce and fix "disappearing forms" and duplicate runs being created - poor connection issue most likely, look at caching
+
+- fiox bug that turns overview card green when failing to submit form on connection issue.
 
 Release notes
 
@@ -19,7 +17,8 @@ Drivers
   - added names to stop overview cards.
   - added logging to see if runs are loaded in offline or online mode to help identify duplicate stop and "disappearing form" issue.
   - added connection issue error messaging when completing a stop or logging in
-
+  - can now zoom in on address and order info by double tapping or holding the text.
+  - can now copy address info by tapping the address text
 
 Staff
 
