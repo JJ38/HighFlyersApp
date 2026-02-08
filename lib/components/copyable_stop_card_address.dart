@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:high_flyers_app/components/toast_notification.dart';
 
 class CopyableStopCardAddress extends StatelessWidget {
   final String address1;
@@ -27,9 +29,8 @@ class CopyableStopCardAddress extends StatelessWidget {
       onTap: () {
         Clipboard.setData(ClipboardData(text: fullAddress));
 
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(content: Text("Address copied")),
-        // );
+        showToastWidget(ToastNotification(message: "Copied address to clipboard", isError: false));
+
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
