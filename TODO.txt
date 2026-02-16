@@ -8,18 +8,17 @@
 
 - reproduce and fix "disappearing forms" and duplicate runs being created - poor connection issue most likely, look at caching
 
-- fiox bug that turns overview card green when failing to submit form on connection issue.
+- fix bug that turns overview card green when failing to submit form on connection issue.
+
 
 Release notes
 
 Drivers
 
-  - added names to stop overview cards.
-  - added logging to see if runs are loaded in offline or online mode to help identify duplicate stop and "disappearing form" issue.
-  - added connection issue error messaging when completing a stop or logging in
-  - can now zoom in on address and order info by double tapping or holding the text.
-  - can now copy address info by tapping the address text
 
 Staff
+
+  - Can now create restricted staff member account
+  - Restricted staff members can now only have access to labelling of runs
 
 

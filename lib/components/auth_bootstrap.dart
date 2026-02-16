@@ -115,6 +115,9 @@ class _AuthBootstrapState extends State<AuthBootstrap> {
       case 'staff':
         Sentry.logger.fmt.info("%s auto signed in as staff on cold start", [currentUser?.email]);
         return const AdminScreen(key: ValueKey('admin'));
+      case 'restricted_staff':
+        Sentry.logger.fmt.info("%s auto signed in as restricted staff on cold start", [currentUser?.email]);
+        return const AdminScreen(key: ValueKey('admin'));
       default:
         return const LoginScreen(key: ValueKey('login-default'));
     }

@@ -162,6 +162,7 @@ class _CurrentStopState extends State<CurrentStop> {
                   Divider(height: 1,),
                   SizedBox(height: 10,),
                   DoubleTapZoomWrapper(
+                    longTap: true,
                     child: Column(
                       children: [
                         Row(

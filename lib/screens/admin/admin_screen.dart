@@ -16,12 +16,13 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
 
-  var currentPageIndex = 0;
+  int currentPageIndex = 0;
   late final String role;
   bool hasLoaded = false;
 
   List<Widget> adminScreens = [AdminManageOrdersScreen(), AdminLabelRunsScreen(), AdminManageUsersScreen(), AdminSettingsScreen()];
   List<Widget> staffScreens = [AdminManageOrdersScreen(), AdminLabelRunsScreen(), AdminSettingsScreen()];
+  List<Widget> restrictedStaffScreens = [AdminLabelRunsScreen(), AdminSettingsScreen()];
 
 
   @override
@@ -82,23 +83,44 @@ class _AdminScreenState extends State<AdminScreen> {
 
           :
 
-            Scaffold(
-              body: staffScreens[currentPageIndex],
-              bottomNavigationBar: NavigationBar(
-                destinations: [
-                  NavigationDestination(icon: Icon(Icons.receipt), label: "Orders"),
-                  NavigationDestination(icon: Icon(Icons.discount), label: "Label Runs"),
-                  NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
-                ],
-                selectedIndex: currentPageIndex,
-                onDestinationSelected: (int index) {
-                  setState(() {
-                    currentPageIndex = index;
-                  });
-                },
-                indicatorColor: Theme.of(context).colorScheme.secondary,
-              ),
-            )
+            role == "staff" ? 
+
+                Scaffold(
+                  body: staffScreens[currentPageIndex],
+                  bottomNavigationBar: NavigationBar(
+                    destinations: [
+                      NavigationDestination(icon: Icon(Icons.receipt), label: "Orders"),
+                      NavigationDestination(icon: Icon(Icons.discount), label: "Label Runs"),
+                      NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
+                    ],
+                    selectedIndex: currentPageIndex,
+                    onDestinationSelected: (int index) {
+                      setState(() {
+                        currentPageIndex = index;
+                      });
+                    },
+                    indicatorColor: Theme.of(context).colorScheme.secondary,
+                  ),
+                )
+
+              :
+
+                Scaffold(
+                  body: restrictedStaffScreens[currentPageIndex],
+                  bottomNavigationBar: NavigationBar(
+                    destinations: [
+                      NavigationDestination(icon: Icon(Icons.discount), label: "Label Runs"),
+                      NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
+                    ],
+                    selectedIndex: currentPageIndex,
+                    onDestinationSelected: (int index) {
+                      setState(() {
+                        currentPageIndex = index;
+                      });
+                    },
+                    indicatorColor: Theme.of(context).colorScheme.secondary,
+                  ),
+                )
       :
 
         Center(

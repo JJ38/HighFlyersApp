@@ -31,6 +31,8 @@ class LoginScreenModel {
       final jwt = await user.getIdTokenResult();
       role = jwt.claims?['role'];
 
+      print("role: $role");
+
       if (role == null) {
         errorMessage = "Invalid Credentials";
         return false;

@@ -93,6 +93,10 @@ class _AddUserDialogBoxState extends State<AddUserDialogBox> {
                         value: "staff",
                         child: Text('Staff'),
                       ),
+                      DropdownMenuItem(
+                        value: "restricted_staff",
+                        child: Text('Restricted Staff'),
+                      ),
                     ],
                   ),
                   addUserDialogBoxController.model.isCreatingUser?

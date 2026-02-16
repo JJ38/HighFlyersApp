@@ -61,7 +61,7 @@ class LoginScreenController {
 
       Navigator.pushNamed(context, CustomerScreen.id);
 
-    } else if (model.role == "admin" || model.role == "staff") {
+    } else if (model.role == "admin" || model.role == "staff" || model.role == "restricted_staff") {
 
       Navigator.pushNamed(context, AdminScreen.id);
 
