@@ -20,19 +20,19 @@ class CurrentStopController {
   void navigate(Map<String, dynamic>? stop, BuildContext context) async{
 
     if(stop == null){
-      showToastWidget(ToastNotification(message: "Error launching navigation -  stop is null", isError: true));
+      showToastWidget(ToastNotification(message: "Error launching navigation - stop is unknown", isError: true));
       return;
     }
 
     final coordinates = stop['coordinates'];
 
     if(coordinates == null){
-      showToastWidget(ToastNotification(message: "Error launching navigation", isError: true));
+      showToastWidget(ToastNotification(message: "Error launching navigation - coordinates are unknown", isError: true));
       return;
     }
 
     if(coordinates['lat'] == null || coordinates['lng'] == null){
-      showToastWidget(ToastNotification(message: "Error launching navigation", isError: true));
+      showToastWidget(ToastNotification(message: "Error launching navigation - latitude or longitude is unknown", isError: true));
       return;
     }
 

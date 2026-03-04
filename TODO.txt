@@ -22,3 +22,51 @@ Staff
   - Restricted staff members can now only have access to labelling of runs
 
 
+collections duplicated stops with *
+
+
+YO306JZ - 41026
+IP300BS - 40902* Norfolk 
+PE305LG - 40860*norfolk 
+PE134DH - 40878
+HU89TL - 41006
+PL144NH - 40987 *cornwall 
+PL68TW - 40882*cornwall 
+SO402GZ - 41046
+PE251BG -40804
+EH331RD -40843
+RG27HE - 40953*mercia
+RG27HE - 40924
+DH63DF - 40856
+DL12SB - 41008
+DL12SB - 41047
+BA45UZ - 40963*mercia
+
+
+
+deliveries duplicated stops with *
+
+41118 - NR319EU 
+41089 - NR192NQ * Norfolk 
+41022 - CV345NL
+40865 - PL26 8BA * Cornwall
+41040 - SN105SF * Colin
+40939 - SO507HH
+40968 - BN26QH *Essex
+40979 - BD146ES* South Yorkshire 
+41129 - BD232RU
+40620 - KA152LE* Scotland 2
+
+
+
+I/flutter (16174): Submit Order
+I/flutter (16174): formOrder['collectionAddress1'] != initialOrder['collectionAddress1']
+I/flutter (16174): udpateOrderAndRuns
+I/flutter (16174): formOrder['collectionAddress1'] != initialOrder['collectionAddress1']
+I/flutter (16174): doesRunNeedUpdating && !hasPreviouslyBeenMarkedAsUnassigned
+I/flutter (16174): submit authenticated request
+I/flutter (16174): submit request
+I/flutter (16174): Response: {"error":false,"message":"Successfully updated order"}
+I/flutter (16174): submit authenticated request
+I/flutter (16174): submit request
+I/flutter (16174): Response: {"error":false,"message":"Successfully updated order"}

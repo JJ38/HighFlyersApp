@@ -115,7 +115,10 @@ class StopFormDialogController {
     controller.reset();
 
     showToastWidget(ToastNotification(message: "Successfully completed stop", isError: false));
-    Navigator.of(context).pop();
+    
+    if(context.mounted){
+      Navigator.of(context).pop();
+    }
 
   }
 

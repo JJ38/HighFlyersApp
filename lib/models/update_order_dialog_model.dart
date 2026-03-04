@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:high_flyers_app/models/admin_edit_order_screen_model.dart';
 import 'package:high_flyers_app/models/order_model_abstract.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class UpdateOrderDialogModel extends OrderModel{
 
@@ -13,7 +14,6 @@ class UpdateOrderDialogModel extends OrderModel{
   Map<String, dynamic> runData;
   String orderID;
   String runID;
-  String? updateOrderErrorMessage;
   
 
   UpdateOrderDialogModel({
@@ -57,6 +57,8 @@ class UpdateOrderDialogModel extends OrderModel{
   }
 
   bool doRunsNeedUpdating(formOrder, initialOrder){
+
+    print("doRunsNeedUpdating");
 
     if(formOrder['deliveryWeek'].toString() != initialOrder['deliveryWeek'].toString()){
       print("formOrder['deliveryWeek'] != initialOrder['deliveryWeek']");
@@ -113,7 +115,6 @@ class UpdateOrderDialogModel extends OrderModel{
     final Map<String, dynamic> formOrder = getOrder();
     final initialOrder = stop['orderData'];
 
-
     AdminEditOrderScreenModel adminEditOrderScreenModel = AdminEditOrderScreenModel(order: formOrder, uuid: orderID);
     final JSONRequest request = adminEditOrderScreenModel.getEditOrderRequest();
 
@@ -127,13 +128,12 @@ class UpdateOrderDialogModel extends OrderModel{
         return false;
       }
 
-      markAsUnassignedCallback();
-
     }else{
 
       final submittedOrdersSuccessfully = await adminEditOrderScreenModel.submitAuthenticatedRequest(request);
 
-      updateOrderErrorMessage = adminEditOrderScreenModel.responseMessage; 
+      errorMessage = adminEditOrderScreenModel.responseMessage ?? "unknown"; 
+
       if(!submittedOrdersSuccessfully){
         return false;
       }
@@ -154,8 +154,6 @@ class UpdateOrderDialogModel extends OrderModel{
 
   Future<bool> updateRuns(formOrder, AdminEditOrderScreenModel adminEditOrderScreenModel, request) async {
 
-    print('updateRuns');
-
     try{
       
       final databaseName = dotenv.env['DATABASE_NAME'];
@@ -174,7 +172,6 @@ class UpdateOrderDialogModel extends OrderModel{
       final unassignedRunDoc = await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).collection('Runs').where('runName', isNull: true).where('shipmentName', isEqualTo: shipmentName).get();
 
       if(unassignedRunDoc.docs.isEmpty){
-        print("unassignedRunDoc.docs.isEmpty");
         return false;
       }
 
@@ -186,7 +183,7 @@ class UpdateOrderDialogModel extends OrderModel{
 
 
       await FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: databaseName).runTransaction((transaction) async {
-       
+        
         final unassignedRunDoc = await transaction.get(unassignedRunDocRef);
  
         if (!unassignedRunDoc.exists) {
@@ -226,19 +223,21 @@ class UpdateOrderDialogModel extends OrderModel{
           'stops': newUnassignedRunStops,
         });
 
-
-        final submittedOrdersSuccessfully = await adminEditOrderScreenModel.submitAuthenticatedRequest(request);
-      
-        if(!submittedOrdersSuccessfully){
-          throw Exception('Error removing stop from run doc');
-        }
+        Sentry.logger.fmt.info("Attempting to update order in run %s. Unassigned doc stops %s. Run doc stops %s", [runID, newUnassignedRunStops, newRunStops]);
+        Sentry.logger.fmt.info("Attempting to update order in run %s. Unassigned doc stops length %s. Run doc stops length %s", [runID, newUnassignedRunStops.length, newRunStops.length]);
 
       });
+
+      final submittedOrdersSuccessfully = await adminEditOrderScreenModel.submitAuthenticatedRequest(request);
+
+      if(!submittedOrdersSuccessfully){
+        throw Exception('Error removing stop from run doc');
+      }
 
 
     }catch(error){
 
-      print(error);
+      errorMessage = error.toString();
       return false;
 
     }
@@ -253,11 +252,12 @@ class UpdateOrderDialogModel extends OrderModel{
     final Map<String, dynamic> runData = runDoc.data();
 
     if(orderDocID == null || runData['stops'] == null){
-      print("orderDocID == null || stops == null");
       return null;
     } 
 
     final List<Map<String, dynamic>> stops = (runData['stops'] as List<dynamic>? ?? []).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+
+    Sentry.logger.fmt.info("Removing stop %s from run %s. Original stops %s. Stops length %s", [orderDocID, runDoc.id, stops, stops.length]);
 
     bool foundStop = false;
 
@@ -281,6 +281,10 @@ class UpdateOrderDialogModel extends OrderModel{
     for(int i = 0; i < stops.length; i++){
       stops[i]['stopNumber'] = i + 1;
     }
+
+
+    Sentry.logger.fmt.info("Removing stop %s from run %s. New stops stops %s. Stops length %s", [orderDocID, runDoc.id, stops, stops.length]);
+
      
     return stops;
 
@@ -307,11 +311,13 @@ class UpdateOrderDialogModel extends OrderModel{
     final Map<String, dynamic> runData = unassignedRunDoc.data();
 
     if(runData['stops'] == null){
-      print("stops == null");
       return null;
     }   
 
     final List<Map<String, dynamic>> stops = (runData['stops'] as List<dynamic>? ?? []).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+
+    Sentry.logger.fmt.info("Adding stop to unassigned run %s. Original stops %s. Stops length %s", [unassignedRunDoc.id, stops, stops.length]);
+
 
     final Map<String, dynamic> stopToAdd = Map<String,dynamic>.from(stop);
     stopToAdd.remove('orderData');
@@ -320,6 +326,9 @@ class UpdateOrderDialogModel extends OrderModel{
 
 
     stops.add(stopToAdd);
+
+
+    Sentry.logger.fmt.info("Adding stop to unassigned run %s. New stops %s. Stops length %s", [unassignedRunDoc.id, stops, stops.length]);
 
     return stops;
   }

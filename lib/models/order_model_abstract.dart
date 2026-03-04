@@ -76,8 +76,7 @@ abstract class OrderModel extends RequestModel{
           });
         },
       );
-      
-      print(error);
+
       return false;
     }
 
@@ -103,8 +102,6 @@ abstract class OrderModel extends RequestModel{
       birdSpeciesSet.add(species[i]['name']);
 
     }
-
-    print(birdSpeciesSet);
 
   }
 
@@ -138,8 +135,7 @@ abstract class OrderModel extends RequestModel{
           });
         },
       );
-      
-      print(error);
+
       return false;
     }
 
@@ -272,7 +268,6 @@ abstract class OrderModel extends RequestModel{
   Map<String, dynamic> getOrder(){
 
     account ??= "";
-    print(account);
 
     Map<String, dynamic> order = {
 
@@ -306,8 +301,6 @@ abstract class OrderModel extends RequestModel{
     if(price != null){
       order['price'] = price;
     }
-
-    print(order);
 
     return order;
 

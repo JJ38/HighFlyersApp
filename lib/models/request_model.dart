@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:high_flyers_app/models/Requests/request_abstract.dart';
 import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -11,6 +12,9 @@ class RequestModel {
   String? responseMessage;
 
   Future<bool> submitAuthenticatedRequest(JSONRequest request) async {
+
+    print("submit authenticated request");
+    print(StackTrace.current);
 
     final user = FirebaseAuth.instance.currentUser;
     String? token = await user?.getIdToken();
@@ -30,20 +34,20 @@ class RequestModel {
 
     if (response!.statusCode == 200) {
 
-      print('Response: ${response!.body}');
+      debugPrint('Response: ${response!.body}');
 
     } else {
 
-      print('Error: ${response!.statusCode} - ${response!.body}');
+      debugPrint('Error: ${response!.statusCode} - ${response!.body}');
 
       try{
 
         Map<String, dynamic>? json = jsonDecode(response!.body);
         responseMessage = json?['message'];
-        print("responseMessage: $responseMessage");
+        debugPrint("responseMessage: $responseMessage");
 
       }catch(error){
-        print(error);
+        debugPrint(error.toString());
       }
 
       return false;
@@ -88,7 +92,7 @@ class RequestModel {
         },
       );
       
-      print(error);
+      debugPrint(error.toString());
       
       return false;
     }

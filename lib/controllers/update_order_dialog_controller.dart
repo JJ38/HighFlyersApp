@@ -33,7 +33,8 @@ class UpdateOrderDialogController extends OrderController<UpdateOrderDialogModel
   @override
   void submitOrder(context) async {
 
-    
+    print("Submit Order");
+
     if(model.payment == "Collection"){
       model.payment = "Pickup";
     }
@@ -62,11 +63,15 @@ class UpdateOrderDialogController extends OrderController<UpdateOrderDialogModel
 
     final successfullyUpdateOrderAndRuns = await model.updateOrderAndRuns();
 
+    if(successfullyUpdateOrderAndRuns && !model.hasPreviouslyBeenMarkedAsUnassigned){
+      markAsUnassignedCallback();
+    }
+
     model.isSubmitting = false;
     updateState();
 
     if(!successfullyUpdateOrderAndRuns){
-      showToastWidget(ToastNotification(message: "Error updating order and runs - ${model.updateOrderErrorMessage}", isError: true));
+      showToastWidget(ToastNotification(message: "Error updating order and runs - ${model.errorMessage}", isError: true));
       return;
     }
 

@@ -33,7 +33,6 @@ class AdminLabelOrderFormScreenModel {
     final initialLabelData = stop['label'];
 
     if(initialLabelData == null){
-      print("No previous label data");
       return;
     }
 
@@ -184,8 +183,6 @@ class AdminLabelOrderFormScreenModel {
           "stops": stopsCopy
         }
       );
-
-      //update client
 
 
     }catch(error){

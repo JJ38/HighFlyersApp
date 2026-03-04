@@ -79,7 +79,7 @@ class _AdminLabelOrderFormScreenState extends State<AdminLabelOrderFormScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Estimated Arrival Time:", style: Theme.of(context).textTheme.titleSmall),
-                      Text(stop['stopTime']?.toString() ?? "unknown", style: Theme.of(context).textTheme.titleSmall),
+                      Text(stop['stopTime'] == null ? "unknown" : stop['stopTime'].toString(), style: Theme.of(context).textTheme.titleSmall),
                     ],
                   ),
                   SizedBox(height: 10,),

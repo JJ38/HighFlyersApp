@@ -34,9 +34,7 @@ abstract class JSONRequest{
           });
         },
       );
-      
-      print(error);
-      
+            
     }
 
     requestBody.addAll({'environment': environment});

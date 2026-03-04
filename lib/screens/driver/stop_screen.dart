@@ -100,7 +100,6 @@ class _StopScreenState extends State<StopScreen> {
                   children: [
                     Text('Current'),
                     Text('Overview'),
-                    // Text('Completed'),
                   ],
                 ),
               ),
